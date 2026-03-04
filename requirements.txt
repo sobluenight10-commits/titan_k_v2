@@ -1,0 +1,14 @@
+streamlit
+openai
+requests
+beautifulsoup4
+lxml
+feedparser
+yfinance
+pandas
+plotly
+python-telegram-bot==20.7
+schedule
+python-dotenv
+fake-useragent
+pytz
