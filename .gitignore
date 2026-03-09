@@ -15,3 +15,5 @@ titan_k.log
 # OS
 .DS_Store
 Thumbs.db
+
+.env
