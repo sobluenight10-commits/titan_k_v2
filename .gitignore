@@ -1,0 +1,17 @@
+# Environment
+.env
+__pycache__/
+*.pyc
+*.pyo
+
+# Data (local only)
+data/
+titan_k.log
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

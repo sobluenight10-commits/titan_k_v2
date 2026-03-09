@@ -355,6 +355,86 @@
       "title": "천궁-Ⅱ, UAE에서 이란 탄도미사일에 첫번째 실전 투입, 결과는?",
       "date": "2026-03-03",
       "url": "https://blog.naver.com/ranto28/224203210813?fromRss=true&trackingCode=rss"
+    },
+    {
+      "title": "What is the Oil Price Cap to be Implemented This Week Amidst International Oil Price Surge?",
+      "date": "2026-03-09",
+      "url": "https://blog.naver.com/ranto28/224210135513?fromRss=true&trackingCode=rss",
+      "summary_en": "The post discusses the historical context of oil price controls during the Yom Kippur War and compares it to the current situation where oil supply is constrained due to the Hormuz Strait blockade. It suggests that while price caps are being considered, demand reduction measures may also be necessary soon.",
+      "investment_insight": "Monitor companies involved in oil supply and demand management, as upcoming policies may impact their operations significantly.",
+      "watch_signal": "WATCH",
+      "paradigm_shift": true,
+      "paradigm_description": "The structural change involves a shift from price control to demand management in response to supply constraints, indicating a potential shift in energy policy focus.",
+      "global_macro_context": "The current global macro trend involves geopolitical tensions affecting oil supply, leading to potential policy shifts towards managing demand rather than just controlling prices.",
+      "keywords": [
+        "oil price cap",
+        "demand management",
+        "Hormuz Strait",
+        "OPEC",
+        "energy policy"
+      ],
+      "titan_k_indicators": [
+        "Geopolitical Tensions",
+        "Energy Supply Constraints",
+        "Policy Shifts"
+      ],
+      "companies": [
+        {
+          "name": "SK Innovation",
+          "ticker": "096770",
+          "future_state_category": "Energy",
+          "titan_k_score": 7,
+          "sentiment": "neutral",
+          "why_mentioned": "Potential impact from changes in oil supply and demand management policies.",
+          "when_to_buy": "Consider entry if oil prices stabilize and demand management policies are clarified.",
+          "target_price": "$200 or 15% upside",
+          "risk": "Geopolitical tensions and policy changes affecting oil supply.",
+          "hidden_gem": false,
+          "available_trade_republic": "Unknown",
+          "available_kiwoom": "Yes",
+          "date_mentioned": "2026-03-09"
+        }
+      ]
+    },
+    {
+      "title": "Trump Furious with Israel, Circuit Breaker Activated",
+      "date": "2026-03-09",
+      "url": "https://blog.naver.com/ranto28/224209693122?fromRss=true&trackingCode=rss",
+      "summary_en": "The blog discusses Israel's airstrike on Iranian oil storage facilities, leading to a significant spike in oil prices and triggering a circuit breaker on the Korean stock market. The geopolitical tension could escalate further, affecting global energy markets.",
+      "investment_insight": "Investors should closely monitor energy stocks and oil futures, as further geopolitical tensions could drive oil prices even higher.",
+      "watch_signal": "WATCH",
+      "paradigm_shift": true,
+      "paradigm_description": "The attack on Iranian oil facilities signifies a potential shift in geopolitical dynamics, leading to increased volatility in global energy markets and impacting oil-dependent economies.",
+      "global_macro_context": "This event ties into the broader trend of geopolitical instability affecting energy prices, with potential repercussions for inflation and economic growth globally.",
+      "keywords": [
+        "oil prices",
+        "geopolitical tension",
+        "circuit breaker",
+        "Iran",
+        "Israel"
+      ],
+      "titan_k_indicators": [
+        "Geopolitical Risk",
+        "Energy Prices",
+        "Market Volatility"
+      ],
+      "companies": [
+        {
+          "name": "ExxonMobil",
+          "ticker": "XOM",
+          "future_state_category": "Energy",
+          "titan_k_score": 8,
+          "sentiment": "bullish",
+          "why_mentioned": "Rising oil prices could benefit major oil producers like ExxonMobil.",
+          "when_to_buy": "Consider entry if oil prices stabilize above $100/barrel.",
+          "target_price": "$120 or 15% upside",
+          "risk": "Geopolitical de-escalation leading to rapid oil price decline.",
+          "hidden_gem": false,
+          "available_trade_republic": "Yes",
+          "available_kiwoom": "Yes",
+          "date_mentioned": "2026-03-09"
+        }
+      ]
     }
   ],
   "stocks": [
@@ -514,7 +594,37 @@
       "source_url": "https://blog.naver.com/ranto28/224203030508?fromRss=true&trackingCode=rss",
       "available_trade_republic": "Check manually",
       "available_kiwoom": "Check manually"
+    },
+    {
+      "name": "SK Innovation",
+      "ticker": "096770",
+      "future_state_category": "Energy",
+      "titan_k_score": 7,
+      "sentiment": "neutral",
+      "why_mentioned": "Potential impact from changes in oil supply and demand management policies.",
+      "when_to_buy": "Consider entry if oil prices stabilize and demand management policies are clarified.",
+      "target_price": "$200 or 15% upside",
+      "risk": "Geopolitical tensions and policy changes affecting oil supply.",
+      "hidden_gem": false,
+      "available_trade_republic": "Unknown",
+      "available_kiwoom": "Yes",
+      "date_mentioned": "2026-03-09"
+    },
+    {
+      "name": "ExxonMobil",
+      "ticker": "XOM",
+      "future_state_category": "Energy",
+      "titan_k_score": 8,
+      "sentiment": "bullish",
+      "why_mentioned": "Rising oil prices could benefit major oil producers like ExxonMobil.",
+      "when_to_buy": "Consider entry if oil prices stabilize above $100/barrel.",
+      "target_price": "$120 or 15% upside",
+      "risk": "Geopolitical de-escalation leading to rapid oil price decline.",
+      "hidden_gem": false,
+      "available_trade_republic": "Yes",
+      "available_kiwoom": "Yes",
+      "date_mentioned": "2026-03-09"
     }
   ],
-  "last_run": "2026-03-03 23:18"
+  "last_run": "2026-03-09 20:22"
 }

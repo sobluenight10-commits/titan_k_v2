@@ -1,0 +1,26 @@
+{
+  "automations": [
+    {
+      "name": "titan_K Daily Briefing",
+      "description": "Run both blog + macro briefings at 7am Berlin time",
+      "schedule": {
+        "cron": "0 7 * * *",
+        "timezone": "Europe/Berlin"
+      },
+      "command": "python main.py --test",
+      "enabled": true
+    },
+    {
+      "name": "titan_K Blog Only",
+      "description": "Run blog analysis on demand",
+      "trigger": "manual",
+      "command": "python main.py --blog"
+    },
+    {
+      "name": "titan_K Macro Only",
+      "description": "Run macro digest on demand",
+      "trigger": "manual",
+      "command": "python main.py --macro"
+    }
+  ]
+}

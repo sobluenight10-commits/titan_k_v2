@@ -1,116 +1,322 @@
-import yfinance as yf
-import requests
-from datetime import datetime
+"""
+🔱 titan_K v2 — Market Data Engine
+Fetches the 30-indicator composite score and individual stock data via yfinance.
+"""
+import logging
+from typing import Dict, Tuple
 
-# Map titan_K indicators to yfinance tickers where possible
-TICKER_MAP = {
-    "SOX":    "^SOX",
-    "VIX":    "^VIX",
-    "DXY":    "DX-Y.NYB",
-    "TNX":    "^TNX",
-    "BCOM":   "^BCOM",
-    "WTI":    "CL=F",
-    "SPXEW":  "RSP",
-    "RUT":    "^RUT",
-    "BTC":    "BTC-USD",
-    "Gold":   "GC=F",
-    "Copper": "HG=F",
-    "Nikkei": "^N225",
-    "FANG":   "NYFANG",
-    "Uranium":"URA",
-    "MSCI_EM":"EEM",
+import yfinance as yf
+
+from config import WEIGHTS, VIX_REGIMES
+
+logger = logging.getLogger("titan_k.market_data")
+
+# ── Ticker Mapping for 30 Indicators ─────────────────────────────────────────
+INDICATOR_TICKERS = {
+    # Fear & Volatility
+    "VIX":       {"ticker": "^VIX",       "invert": True,  "thresholds": (15, 20, 30)},
+    "VVIX":      {"ticker": "^VVIX",      "invert": True,  "thresholds": (80, 100, 120)},
+    "SKEW":      {"ticker": "^SKEW",      "invert": True,  "thresholds": (120, 135, 150)},
+    "Put/Call":  {"ticker": None,          "invert": True,  "thresholds": (0.7, 0.9, 1.2)},  # manual
+    "VIX_Term":  {"ticker": None,          "invert": False, "thresholds": (0.85, 0.95, 1.05)},  # VIX/VIX3M
+    "MOVE":      {"ticker": "^MOVE",       "invert": True,  "thresholds": (80, 110, 140)},
+
+    # Rates & Liquidity
+    "US10Y":     {"ticker": "^TNX",        "invert": True,  "thresholds": (3.5, 4.2, 4.8)},
+    "US2Y":      {"ticker": "^IRX",        "invert": True,  "thresholds": (3.0, 4.0, 5.0)},
+    "Yield_Curve": {"ticker": None,        "invert": False, "thresholds": (-0.5, 0, 0.5)},  # 10Y-2Y
+    "DXY":       {"ticker": "DX-Y.NYB",   "invert": True,  "thresholds": (100, 104, 108)},
+    "Fed_Funds": {"ticker": None,          "invert": True,  "thresholds": (3.0, 4.5, 5.5)},  # manual
+
+    # Equity Internals
+    "SPX":       {"ticker": "^GSPC",       "invert": False, "thresholds": None},
+    "NDX":       {"ticker": "^NDX",        "invert": False, "thresholds": None},
+    "SOX":       {"ticker": "^SOX",        "invert": False, "thresholds": None},
+    "RSP_SPY":   {"ticker": None,          "invert": False, "thresholds": None},  # RSP/SPY ratio
+    "Adv_Dec":   {"ticker": None,          "invert": False, "thresholds": None},  # manual
+    "52W_HL":    {"ticker": None,          "invert": False, "thresholds": None},  # manual
+
+    # Commodities & Macro
+    "Gold":      {"ticker": "GC=F",        "invert": False, "thresholds": None},
+    "Oil":       {"ticker": "CL=F",        "invert": False, "thresholds": (60, 75, 90)},
+    "Copper":    {"ticker": "HG=F",        "invert": False, "thresholds": None},
+    "Uranium":   {"ticker": "URA",         "invert": False, "thresholds": None},  # ETF proxy
+    "Nat_Gas":   {"ticker": "NG=F",        "invert": True,  "thresholds": (2.5, 3.5, 5.0)},
+
+    # Credit & Risk
+    "HYG_Spread": {"ticker": "HYG",       "invert": True,  "thresholds": None},
+    "IG_Spread":  {"ticker": "LQD",       "invert": True,  "thresholds": None},
+    "TED_Spread": {"ticker": None,         "invert": True,  "thresholds": None},  # manual
+    "LIBOR_OIS":  {"ticker": None,         "invert": True,  "thresholds": None},  # manual
+
+    # Geopolitical & Sentiment
+    "AAII_Bull":  {"ticker": None,         "invert": False, "thresholds": (25, 35, 45)},  # manual
+    "CNN_FG":     {"ticker": None,         "invert": False, "thresholds": (25, 45, 60)},  # manual
+    "Geopolitical": {"ticker": None,       "invert": True,  "thresholds": None},  # manual
+    "BTC":        {"ticker": "BTC-USD",    "invert": False, "thresholds": None},
 }
 
-def fetch_market_snapshot() -> dict:
+
+def fetch_market_snapshot() -> Dict:
     """
-    Fetch current values for all titan_K indicators.
-    Returns dict of indicator -> {value, change_pct, signal}
+    Fetch current values for all 30 indicators.
+    Returns dict: {indicator_name: {value, change_pct, signal}}
     """
     snapshot = {}
-
-    for name, ticker in TICKER_MAP.items():
+    
+    # Batch fetch all available tickers
+    fetchable = {
+        name: info["ticker"]
+        for name, info in INDICATOR_TICKERS.items()
+        if info["ticker"] is not None
+    }
+    
+    tickers_str = " ".join(fetchable.values())
+    logger.info(f"Fetching {len(fetchable)} indicators via yfinance...")
+    
+    try:
+        data = yf.download(tickers_str, period="5d", interval="1d", group_by="ticker", progress=False)
+    except Exception as e:
+        logger.error(f"yfinance batch download failed: {e}")
+        data = None
+    
+    for name, ticker in fetchable.items():
+        info = INDICATOR_TICKERS[name]
         try:
-            t = yf.Ticker(ticker)
-            hist = t.history(period="2d")
-            if hist.empty:
-                snapshot[name] = {"value": None, "change_pct": None, "signal": "N/A"}
-                continue
-            current = float(hist["Close"].iloc[-1])
-            prev    = float(hist["Close"].iloc[-2]) if len(hist) > 1 else current
-            chg     = round((current - prev) / prev * 100, 2)
-            signal  = _signal(name, current, chg)
-            snapshot[name] = {
-                "value":      round(current, 2),
-                "change_pct": chg,
-                "signal":     signal
-            }
+            if data is not None and len(fetchable) > 1:
+                # Multi-ticker download
+                if ticker in data.columns.get_level_values(0):
+                    col = data[ticker]["Close"].dropna()
+                else:
+                    col = _fetch_single(ticker)
+            else:
+                col = _fetch_single(ticker)
+            
+            if col is not None and len(col) >= 2:
+                current = float(col.iloc[-1])
+                prev = float(col.iloc[-2])
+                change_pct = round(((current - prev) / prev) * 100, 2) if prev != 0 else 0
+                
+                signal = _generate_signal(name, current, change_pct, info)
+                
+                snapshot[name] = {
+                    "value": round(current, 2),
+                    "change_pct": change_pct,
+                    "signal": signal,
+                }
+            elif col is not None and len(col) == 1:
+                current = float(col.iloc[-1])
+                snapshot[name] = {
+                    "value": round(current, 2),
+                    "change_pct": 0,
+                    "signal": "Data limited",
+                }
+            else:
+                snapshot[name] = {"value": "N/A", "change_pct": 0, "signal": "No data"}
+                
         except Exception as e:
-            snapshot[name] = {"value": None, "change_pct": None, "signal": "N/A"}
-
-    # Fill remaining indicators with neutral placeholder
-    all_indicators = [
-        "PMI","GPR","FearGreed","HYSpread","InstRisk","BDI","BDI2",
-        "CPI","PPI","UMich","Housing","FedRate","ECBRate","TradeBalance",
-        "Jobless","HICP","DataCenter"
-    ]
-    for ind in all_indicators:
-        if ind not in snapshot:
-            snapshot[ind] = {"value": None, "change_pct": None, "signal": "Manual update needed"}
-
+            logger.warning(f"Failed to fetch {name} ({ticker}): {e}")
+            snapshot[name] = {"value": "N/A", "change_pct": 0, "signal": "Error"}
+    
+    # Add manual/computed indicators with placeholder
+    for name, info in INDICATOR_TICKERS.items():
+        if info["ticker"] is None and name not in snapshot:
+            snapshot[name] = {"value": "Manual", "change_pct": 0, "signal": "Requires manual input"}
+    
+    # Compute VIX Term Structure if possible
+    if "VIX" in snapshot and isinstance(snapshot["VIX"]["value"], (int, float)):
+        vix_val = snapshot["VIX"]["value"]
+        # Estimate VIX term (VIX / VIX3M ~ 0.85-1.1 range)
+        snapshot["VIX_Term"] = {
+            "value": "~0.95",
+            "change_pct": 0,
+            "signal": "Contango" if vix_val < 25 else "Backwardation — fear elevated",
+        }
+    
+    # Compute Yield Curve if we have both
+    if (isinstance(snapshot.get("US10Y", {}).get("value"), (int, float)) and
+        isinstance(snapshot.get("US2Y", {}).get("value"), (int, float))):
+        spread = snapshot["US10Y"]["value"] - snapshot["US2Y"]["value"]
+        snapshot["Yield_Curve"] = {
+            "value": round(spread, 2),
+            "change_pct": 0,
+            "signal": "Normal" if spread > 0 else "INVERTED — recession signal",
+        }
+    
     return snapshot
 
 
-def calculate_titan_k_index(snapshot: dict, weights: dict) -> float:
-    """
-    Calculate titan_K composite score (0-100).
-    Normalizes each indicator to 0-100 scale then weights.
-    """
-    from config import WEIGHTS
-    total, w_sum = 0.0, 0.0
+def _fetch_single(ticker: str):
+    """Fetch a single ticker's close prices."""
+    try:
+        t = yf.Ticker(ticker)
+        hist = t.history(period="5d", interval="1d")
+        if hist is not None and len(hist) > 0:
+            return hist["Close"]
+    except Exception as e:
+        logger.warning(f"Single fetch failed for {ticker}: {e}")
+    return None
 
-    for ind, weight in WEIGHTS.items():
-        data = snapshot.get(ind, {})
-        val  = data.get("value")
-        chg  = data.get("change_pct")
 
-        if val is None:
-            normalized = 50.0  # neutral if no data
+def _generate_signal(name: str, value: float, change_pct: float, info: dict) -> str:
+    """Generate a human-readable signal for an indicator."""
+    thresholds = info.get("thresholds")
+    invert = info.get("invert", False)
+    
+    if thresholds:
+        low, mid, high = thresholds
+        if invert:
+            if value >= high:
+                return f"EXTREME — deploy zone"
+            elif value >= mid:
+                return f"Elevated — watch"
+            elif value >= low:
+                return f"Normal range"
+            else:
+                return f"Low — caution (complacency)"
         else:
-            # Normalize change_pct to 0-100 (0% change = 50, +5% = ~75, -5% = ~25)
-            normalized = 50.0 + (chg or 0) * 5
-            normalized = max(0, min(100, normalized))
+            if value >= high:
+                return f"Strong — bullish momentum"
+            elif value >= mid:
+                return f"Normal"
+            elif value >= low:
+                return f"Weakening"
+            else:
+                return f"Weak — bearish"
+    
+    # Generic signal based on change
+    if abs(change_pct) < 0.3:
+        return "Flat"
+    elif change_pct > 2:
+        return f"Sharp move +{change_pct}%"
+    elif change_pct < -2:
+        return f"Sharp drop {change_pct}%"
+    elif change_pct > 0:
+        return f"Up {change_pct}%"
+    else:
+        return f"Down {change_pct}%"
 
-            # Invert for fear indicators (high VIX = bad = low score)
-            if ind in ["VIX", "HYSpread", "Jobless", "CPI", "PPI"]:
-                normalized = 100 - normalized
 
-        total += normalized * weight
-        w_sum += weight
+def calculate_titan_k_index(snapshot: Dict, weights: Dict) -> int:
+    """
+    Calculate the composite titan_K index (0-100).
+    Higher = more favorable for deployment.
+    """
+    total_score = 0
+    total_weight = 0
+    
+    for indicator, weight in weights.items():
+        data = snapshot.get(indicator, {})
+        value = data.get("value")
+        change_pct = data.get("change_pct", 0)
+        
+        if not isinstance(value, (int, float)):
+            continue
+        
+        info = INDICATOR_TICKERS.get(indicator, {})
+        thresholds = info.get("thresholds")
+        invert = info.get("invert", False)
+        
+        # Score each indicator 0-100
+        if thresholds:
+            low, mid, high = thresholds
+            if invert:
+                # Higher value = more fear = better for buying
+                if value >= high:
+                    score = 90
+                elif value >= mid:
+                    score = 60
+                elif value >= low:
+                    score = 40
+                else:
+                    score = 15  # Complacent market = caution
+            else:
+                if value >= high:
+                    score = 80
+                elif value >= mid:
+                    score = 55
+                elif value >= low:
+                    score = 35
+                else:
+                    score = 20
+        else:
+            # Use change direction as proxy
+            if invert:
+                score = 60 + min(change_pct * 5, 30)  # Rising fear = good for buyers
+            else:
+                score = 50 + min(change_pct * 3, 30)
+        
+        score = max(0, min(100, score))
+        total_score += score * weight
+        total_weight += weight
+    
+    if total_weight == 0:
+        return 50  # neutral
+    
+    return round(total_score / total_weight)
 
-    score = round(total / w_sum, 1) if w_sum > 0 else 50.0
-    return score
+
+def get_vix_regime(vix_value: float) -> Tuple[str, int, str]:
+    """Determine current VIX regime. Returns (regime_name, deploy_pct, label)."""
+    for regime, config in VIX_REGIMES.items():
+        low, high = config["range"]
+        if low <= vix_value < high:
+            return regime, config["deploy_pct"], config["label"]
+    return "CRISIS", 100, "FULL DEPLOY"
 
 
-def _signal(name: str, value: float, chg: float) -> str:
-    """Generate human-readable signal for each indicator"""
-    if name == "VIX":
-        if value > 30: return "🔴 FEAR — Deploy cash"
-        if value > 20: return "🟡 Caution"
-        return "🟢 Calm market"
-    if name == "BTC":
-        if chg < -5: return "⚠️ Tech drop likely in 24h"
-        if chg > 5:  return "🟢 Risk-on sentiment"
-        return "🟡 Neutral"
-    if name == "Gold":
-        if chg > 1:  return "⚠️ Chaos hedge active"
-        return "🟢 Stable"
-    if name == "TNX":
-        if value > 4.5: return "🔴 High gravity — growth stocks under pressure"
-        return "🟢 Manageable yield"
-    if name == "SOX":
-        if chg > 2:  return "🟢 AI/Chip bull signal"
-        if chg < -2: return "🔴 Chip weakness"
-        return "🟡 Neutral"
-    if chg > 2:  return "🟢 Bullish"
-    if chg < -2: return "🔴 Bearish"
-    return "🟡 Neutral"
+def fetch_stock_prices(tickers: list) -> Dict:
+    """Fetch current prices and daily changes for a list of tickers."""
+    results = {}
+    
+    if not tickers:
+        return results
+    
+    tickers_str = " ".join(tickers)
+    
+    try:
+        data = yf.download(tickers_str, period="5d", interval="1d", progress=False)
+    except Exception as e:
+        logger.error(f"Stock price fetch failed: {e}")
+        return results
+    
+    for ticker in tickers:
+        try:
+            if len(tickers) > 1:
+                close = data[ticker]["Close"].dropna() if ticker in data.columns.get_level_values(0) else None
+            else:
+                close = data["Close"].dropna()
+            
+            if close is not None and len(close) >= 2:
+                current = float(close.iloc[-1])
+                prev = float(close.iloc[-2])
+                change_pct = round(((current - prev) / prev) * 100, 2)
+                results[ticker] = {
+                    "price": round(current, 2),
+                    "change_pct": change_pct,
+                    "prev_close": round(prev, 2),
+                }
+            elif close is not None and len(close) == 1:
+                results[ticker] = {
+                    "price": round(float(close.iloc[-1]), 2),
+                    "change_pct": 0,
+                    "prev_close": round(float(close.iloc[-1]), 2),
+                }
+        except Exception as e:
+            logger.warning(f"Failed to get price for {ticker}: {e}")
+    
+    return results
+
+
+def fetch_fx_rate() -> float:
+    """Fetch EUR/USD exchange rate."""
+    try:
+        t = yf.Ticker("EURUSD=X")
+        hist = t.history(period="1d")
+        if hist is not None and len(hist) > 0:
+            return round(float(hist["Close"].iloc[-1]), 4)
+    except Exception as e:
+        logger.warning(f"FX rate fetch failed: {e}")
+    
+    from config import DEFAULT_EUR_USD
+    return DEFAULT_EUR_USD
