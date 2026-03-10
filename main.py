@@ -1,12 +1,14 @@
 """
-🔱 titan_K v2 — Main Entry Point
-Orchestrates both daily missions and runs the scheduler.
+🔱 titan_K v2 — Main Entry Point (v3 Upgrade)
+Fixes: message duplication, timezone drift, slow responses, process conflicts.
 
 Usage:
-    python main.py              # Start scheduler (7am Berlin daily)
-    python main.py --test       # Run both briefings now
-    python main.py --blog       # Run blog briefing only
-    python main.py --macro      # Run macro briefing only
+    python main.py              # Full system: bot + 9 scheduled briefings
+    python main.py --test       # Send morning_macro briefing now
+    python main.py --blog       # Send blog briefing now
+    python main.py --macro      # Send macro briefing now
+    python main.py --schedule   # Scheduler only (no interactive bot)
+    python main.py --listen     # Interactive bot only (no scheduler)
     python main.py --ping       # Test Telegram connection
 """
 import sys
@@ -14,32 +16,75 @@ import json
 import os
 import logging
 import argparse
+import threading
+import time
+import signal
 from datetime import datetime
+from pathlib import Path
 
 import schedule
-import time
 import pytz
 
-from config import (
-    BRIEFING_HOUR, BRIEFING_MINUTE, TIMEZONE,
-    OPENAI_API_KEY, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, DATA_FILE,
-)
+from config import TIMEZONE, OPENAI_API_KEY, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, DATA_FILE
 
-# ── Logging Setup ─────────────────────────────────────────────────────────────
+# ── Logging ───────────────────────────────────────────────────────────────────
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(name)s] %(levelname)s: %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler("titan_k.log", encoding="utf-8"),
+        logging.FileHandler("titan_k.log", encoding="utf-8", errors="replace"),
     ],
 )
 logger = logging.getLogger("titan_k.main")
 
+# ── Process Lock (prevents duplicate bots) ────────────────────────────────────
+LOCK_FILE = Path("titan_k.lock")
 
+
+def _acquire_lock():
+    """Prevent multiple instances from running simultaneously."""
+    if LOCK_FILE.exists():
+        try:
+            old_pid = int(LOCK_FILE.read_text().strip())
+            # Check if process is still alive
+            try:
+                os.kill(old_pid, 0)
+                logger.error(f"Another titan_K is running (PID {old_pid}). Kill it first:")
+                logger.error(f"  taskkill /F /PID {old_pid}")
+                sys.exit(1)
+            except OSError:
+                pass  # Old process is dead — stale lock
+        except (ValueError, OSError):
+            pass
+
+    LOCK_FILE.write_text(str(os.getpid()))
+    logger.info(f"Lock acquired (PID {os.getpid()})")
+
+
+def _release_lock():
+    try:
+        if LOCK_FILE.exists():
+            LOCK_FILE.unlink()
+    except:
+        pass
+
+
+def _cleanup(signum=None, frame=None):
+    logger.info("Shutting down...")
+    _release_lock()
+    sys.exit(0)
+
+
+signal.signal(signal.SIGINT, _cleanup)
+signal.signal(signal.SIGTERM, _cleanup)
+import atexit
+atexit.register(_release_lock)
+
+
+# ── Config Validation ─────────────────────────────────────────────────────────
 def validate_config():
-    """Check that all required config values are set."""
     missing = []
     if not OPENAI_API_KEY or OPENAI_API_KEY.startswith("sk-your"):
         missing.append("OPENAI_API_KEY")
@@ -47,175 +92,143 @@ def validate_config():
         missing.append("TELEGRAM_BOT_TOKEN")
     if not TELEGRAM_CHAT_ID or TELEGRAM_CHAT_ID.startswith("your"):
         missing.append("TELEGRAM_CHAT_ID")
-    
     if missing:
         logger.error(f"Missing config: {', '.join(missing)}")
-        logger.error("Copy .env.example to .env and fill in your keys.")
         sys.exit(1)
-    
-    logger.info("✅ Configuration validated")
+    logger.info("Config validated")
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# MISSION 1: Blog Briefing
+# BRIEFING EXECUTION (with deduplication)
 # ══════════════════════════════════════════════════════════════════════════════
 
-def run_blog_briefing():
-    """
-    Mission 1: Scrape ranto28 blog → GPT-4o analysis → Telegram briefing.
-    """
-    logger.info("=" * 60)
-    logger.info("🔱 MISSION 1: Blog Intelligence Briefing")
-    logger.info("=" * 60)
-    
-    from scraper import fetch_posts
-    from analyzer import analyze_post, generate_blog_summary
-    from telegram_bot import send_blog_briefing
-    
+_last_sent = {}
+
+
+def run_briefing(briefing_id: str, description: str = ""):
+    """Execute a briefing with deduplication guard."""
+    now = _berlin_now()
+    key = f"{briefing_id}_{now.strftime('%Y-%m-%d_%H')}"
+
+    if key in _last_sent:
+        logger.warning(f"SKIP duplicate: {briefing_id} already sent this hour")
+        return
+
+    logger.info(f"[{now.strftime('%H:%M Berlin')}] Running: {briefing_id}")
+
+    if briefing_id == "blog":
+        _run_blog()
+    else:
+        _run_battle_rhythm(briefing_id)
+
+    _last_sent[key] = now.strftime("%H:%M")
+
+
+def _run_blog():
     try:
-        # Step 1: Fetch recent posts
-        logger.info("Fetching ranto28 blog posts (last 24h)...")
-        posts = fetch_posts(days_back=1, max_posts=5)
-        
+        from scraper import fetch_blog_posts
+        from analyzer import analyze_post, generate_blog_summary
+        from telegram_bot import send_blog_briefing
+
+        posts = fetch_blog_posts(days_back=1, max_posts=3)
         if not posts:
-            logger.warning("No new posts found. Trying 3-day window...")
-            posts = fetch_posts(days_back=3, max_posts=5)
-        
+            posts = fetch_blog_posts(days_back=3, max_posts=3)
         if not posts:
-            logger.warning("No posts found even in 3-day window. Sending notification.")
             from telegram_bot import send_telegram
-            send_telegram(
-                "🔱 <b>titan_K Blog Briefing</b>\n\n"
-                "📭 No new posts from ranto28 in the past 3 days.\n"
-                "Blog may be on hiatus. Manual check recommended."
-            )
+            send_telegram("🔱 📭 No new ranto28 posts in 3 days.")
             return
-        
-        logger.info(f"Found {len(posts)} posts. Analyzing...")
-        
-        # Step 2: Analyze each post
-        analyses = []
-        for post in posts:
-            result = analyze_post(post)
-            if not result.get("error"):
-                analyses.append(result)
-            else:
-                logger.warning(f"Analysis failed for: {post.get('title', '?')}")
-        
-        # Step 3: Generate executive summary
-        summary = generate_blog_summary(analyses)
-        
-        # Step 4: Save to data file
+
+        analyses = [r for p in posts if not (r := analyze_post(p)).get("error")]
+        summary = generate_blog_summary(analyses) if analyses else "Analysis failed."
+        send_blog_briefing({
+            "timestamp": _berlin_now().strftime("%Y-%m-%d %H:%M"),
+            "posts": analyses, "summary": summary,
+        })
         _save_analyses(analyses)
-        
-        # Step 5: Send Telegram
-        briefing = {
-            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M"),
-            "posts": analyses,
-            "summary": summary,
-        }
-        send_blog_briefing(briefing)
-        
-        logger.info(f"✅ Blog briefing sent: {len(analyses)} posts analyzed")
-        
+        logger.info(f"Blog sent: {len(analyses)} posts")
     except Exception as e:
-        logger.error(f"Blog briefing failed: {e}", exc_info=True)
+        logger.error(f"Blog failed: {e}", exc_info=True)
         try:
             from telegram_bot import send_telegram
-            send_telegram(f"🔱 ⚠️ Blog briefing error: {str(e)[:200]}")
+            send_telegram(f"🔱 ⚠️ Blog error: {str(e)[:200]}")
         except:
             pass
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# MISSION 2: Macro + Portfolio Briefing
-# ══════════════════════════════════════════════════════════════════════════════
-
-def run_macro_briefing():
-    """
-    Mission 2: Global macro digest + portfolio impact → Telegram briefing.
-    """
-    logger.info("=" * 60)
-    logger.info("🔱 MISSION 2: Macro + Portfolio Digest")
-    logger.info("=" * 60)
-    
-    from macro_briefing import generate_full_macro_briefing
-    from telegram_bot import send_macro_briefing
-    
+def _run_battle_rhythm(briefing_id: str):
     try:
-        briefing = generate_full_macro_briefing()
-        send_macro_briefing(briefing)
-        logger.info("✅ Macro briefing sent")
-        
+        from battle_rhythm import generate_briefing
+        from telegram_bot import send_telegram
+        msg = generate_briefing(briefing_id)
+        if msg:
+            send_telegram(msg)
+            logger.info(f"{briefing_id} sent")
     except Exception as e:
-        logger.error(f"Macro briefing failed: {e}", exc_info=True)
+        logger.error(f"{briefing_id} failed: {e}", exc_info=True)
         try:
             from telegram_bot import send_telegram
-            send_telegram(f"🔱 ⚠️ Macro briefing error: {str(e)[:200]}")
+            send_telegram(f"🔱 ⚠️ {briefing_id} error: {str(e)[:200]}")
         except:
             pass
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# COMBINED DAILY JOB
+# SCHEDULER (Berlin timezone — independent of system clock)
 # ══════════════════════════════════════════════════════════════════════════════
 
-def run_daily_briefing():
-    """Execute both missions in sequence."""
-    berlin = pytz.timezone(TIMEZONE)
-    now = datetime.now(berlin)
-    logger.info(f"🔱 Daily briefing triggered at {now.strftime('%Y-%m-%d %H:%M %Z')}")
-    
-    # Mission 1: Blog
-    run_blog_briefing()
-    
-    # Small pause between missions
-    time.sleep(5)
-    
-    # Mission 2: Macro + Portfolio
-    run_macro_briefing()
-    
-    logger.info("🔱 Both missions complete. Minerva standing by.")
+def _setup_schedule():
+    """Register briefings using schedule library with Berlin timezone."""
+    from config import DAILY_SCHEDULE
+    schedule.clear()
+    for sched_time, briefing_id, description in DAILY_SCHEDULE:
+        schedule.every().day.at(sched_time, "Europe/Berlin").do(
+            run_briefing, briefing_id, description
+        )
+    logger.info(f"Registered {len(DAILY_SCHEDULE)} briefings (Berlin time)")
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# SCHEDULER
-# ══════════════════════════════════════════════════════════════════════════════
+def _berlin_now():
+    """Get current Berlin time."""
+    return datetime.now(pytz.timezone(TIMEZONE))
+
 
 def start_scheduler():
-    """Start the daily scheduler. Runs at BRIEFING_HOUR:BRIEFING_MINUTE Berlin time."""
+    from config import DAILY_SCHEDULE
+    _setup_schedule()
     berlin = pytz.timezone(TIMEZONE)
     now = datetime.now(berlin)
-    
-    briefing_time = f"{BRIEFING_HOUR:02d}:{BRIEFING_MINUTE:02d}"
-    
-    logger.info("═" * 60)
-    logger.info("🔱 titan_K v2 — SCHEDULER ACTIVE")
-    logger.info(f"   Time now: {now.strftime('%Y-%m-%d %H:%M %Z')}")
-    logger.info(f"   Daily briefing at: {briefing_time} Berlin")
-    logger.info(f"   Missions: Blog + Macro/Portfolio → Telegram")
-    logger.info("═" * 60)
-    
-    # Schedule uses local time — we need to convert Berlin time to system time
-    # On Termux/Android, system time might differ from Berlin
-    schedule.every().day.at(briefing_time).do(_scheduled_job)
-    
-    logger.info(f"Scheduler running. Next briefing at {briefing_time}. Ctrl+C to stop.")
-    
+    logger.info("=" * 50)
+    logger.info(f"🔱 SCHEDULER ONLY — {now.strftime('%H:%M %Z')}")
+    for t, _, desc in DAILY_SCHEDULE:
+        logger.info(f"  ⏰ {t} {desc}")
+    logger.info("=" * 50)
     while True:
         schedule.run_pending()
-        time.sleep(30)  # Check every 30 seconds
+        time.sleep(10)
 
 
-def _scheduled_job():
-    """Wrapper for scheduled execution with timezone check."""
+def start_full_system():
+    from config import DAILY_SCHEDULE
+    _acquire_lock()
+    _setup_schedule()
     berlin = pytz.timezone(TIMEZONE)
     now = datetime.now(berlin)
-    
-    # Only run on weekdays (markets closed on weekends, but macro still matters)
-    # We run every day — weekend briefings are still valuable for preparation
-    logger.info(f"Scheduled job triggered: {now.strftime('%A %Y-%m-%d %H:%M %Z')}")
-    run_daily_briefing()
+    logger.info("=" * 50)
+    logger.info(f"🔱 FULL SYSTEM — {now.strftime('%H:%M %Z')}")
+    logger.info(f"  📡 Bot: LISTENING")
+    logger.info(f"  ⏰ {len(DAILY_SCHEDULE)} daily briefings")
+    for t, _, desc in DAILY_SCHEDULE:
+        logger.info(f"     {t} {desc}")
+    logger.info("=" * 50)
+
+    def scheduler_loop():
+        while True:
+            schedule.run_pending()
+            time.sleep(10)
+
+    threading.Thread(target=scheduler_loop, daemon=True).start()
+    from interactive_bot import start_interactive_bot
+    start_interactive_bot()
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -223,9 +236,7 @@ def _scheduled_job():
 # ══════════════════════════════════════════════════════════════════════════════
 
 def _save_analyses(new_analyses: list):
-    """Save new analyses to the data file."""
     os.makedirs("data", exist_ok=True)
-    
     data = {"analyses": [], "stocks": [], "last_run": None}
     if os.path.exists(DATA_FILE):
         try:
@@ -233,30 +244,19 @@ def _save_analyses(new_analyses: list):
                 data = json.load(f)
         except:
             pass
-    
-    # Deduplicate by URL
     existing_urls = {a.get("url") for a in data.get("analyses", [])}
     new_unique = [a for a in new_analyses if a.get("url") not in existing_urls]
-    
     data["analyses"] = data.get("analyses", []) + new_unique
-    
-    # Extract stocks
     new_stocks = []
     for a in new_unique:
         new_stocks.extend(a.get("companies", []))
-    
     existing_keys = {(s.get("name"), s.get("date_mentioned")) for s in data.get("stocks", [])}
     data["stocks"] = data.get("stocks", []) + [
-        s for s in new_stocks
-        if (s.get("name"), s.get("date_mentioned")) not in existing_keys
+        s for s in new_stocks if (s.get("name"), s.get("date_mentioned")) not in existing_keys
     ]
-    
     data["last_run"] = datetime.now().strftime("%Y-%m-%d %H:%M")
-    
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
-    
-    logger.info(f"Saved {len(new_unique)} new analyses, {len(new_stocks)} new stocks")
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -264,30 +264,34 @@ def _save_analyses(new_analyses: list):
 # ══════════════════════════════════════════════════════════════════════════════
 
 def main():
-    parser = argparse.ArgumentParser(description="🔱 titan_K v2 — Investment Intelligence System")
-    parser.add_argument("--test", action="store_true", help="Run both briefings immediately")
-    parser.add_argument("--blog", action="store_true", help="Run blog briefing only")
-    parser.add_argument("--macro", action="store_true", help="Run macro briefing only")
-    parser.add_argument("--ping", action="store_true", help="Test Telegram connection")
-    
+    parser = argparse.ArgumentParser(description="🔱 titan_K v2")
+    parser.add_argument("--test", action="store_true")
+    parser.add_argument("--blog", action="store_true")
+    parser.add_argument("--macro", action="store_true")
+    parser.add_argument("--listen", action="store_true")
+    parser.add_argument("--schedule", action="store_true")
+    parser.add_argument("--ping", action="store_true")
     args = parser.parse_args()
-    
-    # Always validate
+
     validate_config()
-    
+
     if args.ping:
         from telegram_bot import send_test_ping
         send_test_ping()
-        logger.info("✅ Ping sent. Check Telegram.")
     elif args.test:
-        run_daily_briefing()
+        run_briefing("morning_macro", "Test")
     elif args.blog:
-        run_blog_briefing()
+        run_briefing("blog", "Manual")
     elif args.macro:
-        run_macro_briefing()
-    else:
-        # Default: start scheduler
+        run_briefing("morning_macro", "Manual")
+    elif args.listen:
+        _acquire_lock()
+        from interactive_bot import start_interactive_bot
+        start_interactive_bot()
+    elif args.schedule:
         start_scheduler()
+    else:
+        start_full_system()
 
 
 if __name__ == "__main__":

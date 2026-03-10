@@ -266,7 +266,8 @@ def get_vix_regime(vix_value: float) -> Tuple[str, int, str]:
 
 
 def fetch_stock_prices(tickers: list) -> Dict:
-    """Fetch current prices and daily changes for a list of tickers."""
+    """Fetch current prices and daily changes for a list of tickers.
+    Uses batch download first, then individual fallback for any missing."""
     results = {}
     
     if not tickers:
@@ -277,15 +278,21 @@ def fetch_stock_prices(tickers: list) -> Dict:
     try:
         data = yf.download(tickers_str, period="5d", interval="1d", progress=False)
     except Exception as e:
-        logger.error(f"Stock price fetch failed: {e}")
-        return results
+        logger.error(f"Stock price batch download failed: {e}")
+        data = None
     
+    # Parse batch results
     for ticker in tickers:
         try:
-            if len(tickers) > 1:
-                close = data[ticker]["Close"].dropna() if ticker in data.columns.get_level_values(0) else None
-            else:
+            if data is not None and len(tickers) > 1:
+                if ticker in data.columns.get_level_values(0):
+                    close = data[ticker]["Close"].dropna()
+                else:
+                    close = None
+            elif data is not None and len(tickers) == 1:
                 close = data["Close"].dropna()
+            else:
+                close = None
             
             if close is not None and len(close) >= 2:
                 current = float(close.iloc[-1])
@@ -303,7 +310,36 @@ def fetch_stock_prices(tickers: list) -> Dict:
                     "prev_close": round(float(close.iloc[-1]), 2),
                 }
         except Exception as e:
-            logger.warning(f"Failed to get price for {ticker}: {e}")
+            logger.warning(f"Batch parse failed for {ticker}: {e}")
+    
+    # Individual fallback for any tickers that batch missed
+    missing = [t for t in tickers if t not in results]
+    if missing:
+        logger.info(f"Fetching {len(missing)} missing tickers individually: {missing}")
+        for ticker in missing:
+            try:
+                t = yf.Ticker(ticker)
+                hist = t.history(period="5d")
+                if hist is not None and len(hist) >= 2:
+                    close = hist["Close"].dropna()
+                    current = float(close.iloc[-1])
+                    prev = float(close.iloc[-2])
+                    change_pct = round(((current - prev) / prev) * 100, 2)
+                    results[ticker] = {
+                        "price": round(current, 2),
+                        "change_pct": change_pct,
+                        "prev_close": round(prev, 2),
+                    }
+                elif hist is not None and len(hist) == 1:
+                    results[ticker] = {
+                        "price": round(float(hist["Close"].iloc[-1]), 2),
+                        "change_pct": 0,
+                        "prev_close": round(float(hist["Close"].iloc[-1]), 2),
+                    }
+                else:
+                    logger.warning(f"No data returned for {ticker}")
+            except Exception as e:
+                logger.warning(f"Individual fetch failed for {ticker}: {e}")
     
     return results
 

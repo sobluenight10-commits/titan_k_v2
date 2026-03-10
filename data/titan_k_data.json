@@ -435,6 +435,46 @@
           "date_mentioned": "2026-03-09"
         }
       ]
+    },
+    {
+      "title": "Trump's 'War Will End Soon' Causes Oil Price Drop, Iran Halts Sub-1-Ton Missile Launches",
+      "date": "2026-03-09",
+      "url": "https://blog.naver.com/ranto28/224210842703?fromRss=true&trackingCode=rss",
+      "summary_en": "The post discusses recent statements by Trump and Iran's Revolutionary Guard, leading to a significant drop in oil prices. Trump's comments about the imminent end of the war and Iran's decision to halt sub-1-ton missile launches have impacted the market.",
+      "investment_insight": "Monitor oil-related stocks for potential volatility as geopolitical tensions influence oil prices.",
+      "watch_signal": "WATCH",
+      "paradigm_shift": true,
+      "paradigm_description": "The structural change involves the potential de-escalation of Middle Eastern conflicts, impacting global oil supply and prices.",
+      "global_macro_context": "The situation ties into ongoing geopolitical tensions affecting global energy markets, with potential implications for inflation and economic stability.",
+      "keywords": [
+        "Trump",
+        "Iran",
+        "oil prices",
+        "geopolitical tensions",
+        "missile launches"
+      ],
+      "titan_k_indicators": [
+        "Geopolitical Risk",
+        "Oil Price Volatility",
+        "Defense Spending"
+      ],
+      "companies": [
+        {
+          "name": "ExxonMobil",
+          "ticker": "XOM",
+          "future_state_category": "Energy",
+          "titan_k_score": 6,
+          "sentiment": "neutral",
+          "why_mentioned": "Oil price fluctuations due to geopolitical events.",
+          "when_to_buy": "Consider entry if oil prices stabilize below $80.",
+          "target_price": "$100 or 15% upside",
+          "risk": "Prolonged geopolitical tensions could disrupt oil supply.",
+          "hidden_gem": false,
+          "available_trade_republic": "Yes",
+          "available_kiwoom": "Yes",
+          "date_mentioned": "2026-03-09"
+        }
+      ]
     }
   ],
   "stocks": [
@@ -626,5 +666,5 @@
       "date_mentioned": "2026-03-09"
     }
   ],
-  "last_run": "2026-03-09 20:22"
+  "last_run": "2026-03-10 11:17"
 }

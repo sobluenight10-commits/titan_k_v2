@@ -14,9 +14,21 @@ TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN") or os.getenv("TELEGRAM_TOKE
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")
 
 # ── Timing ────────────────────────────────────────────────────────────────────
-BRIEFING_HOUR = int(os.getenv("BRIEFING_HOUR", "7"))
-BRIEFING_MINUTE = int(os.getenv("BRIEFING_MINUTE", "0"))
 TIMEZONE = "Europe/Berlin"
+
+# ── DAILY BATTLE RHYTHM (all times Berlin) ────────────────────────────────────
+# Each entry: (time, briefing_id, description)
+DAILY_SCHEDULE = [
+    ("07:00", "blog",         "📰 Blog Summary"),
+    ("08:30", "morning_macro","🌅 Late Night Global Issues → Portfolio Insights → Today's Plan"),
+    ("12:30", "kr_close",     "🇰🇷 Korean Market Close Summary → Portfolio Impact"),
+    ("15:00", "us_premarket", "🇺🇸 Final Check Before US Open → Preparation"),
+    ("15:40", "us_open_40",   "⚡ 40min After US Open → Status + Actions"),
+    ("17:30", "us_midday_1",  "📊 US Mid-Session Check #1"),
+    ("19:30", "us_midday_2",  "📊 US Mid-Session Check #2"),
+    ("22:00", "us_late",      "📊 US Late Session Check"),
+    ("23:00", "us_close",     "🏁 US Market Close → Summary + Review"),
+]
 
 # ── Data Storage ──────────────────────────────────────────────────────────────
 DATA_FILE = os.path.join("data", "titan_k_data.json")
