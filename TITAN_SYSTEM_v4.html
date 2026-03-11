@@ -881,8 +881,8 @@
   <!-- Row 1: Title + Lang button -->
   <div class="header-row1">
     <div class="header-left">
-      <h1 id="txt-sys-title">TITAN INVESTMENT SYSTEM</h1>
-      <p id="txt-sys-sub">MINERVA PROTOCOL &nbsp;·&nbsp; v4.0 &nbsp;·&nbsp; LAST UPDATED: 09 MAR 2026</p>
+      <h1 id="txt-sys-title">OLYMPUS</h1>
+      <p id="txt-sys-sub">TITAN INVESTMENT SYSTEM &nbsp;·&nbsp; MINERVA PROTOCOL &nbsp;·&nbsp; v4.2 &nbsp;·&nbsp; LIVE UPDATE: 2026-03-11 20:52 CET</p>
     </div>
     <button id="lang-toggle" onclick="toggleLang()" style="
       background: transparent;
@@ -905,11 +905,11 @@
   <div class="header-row2">
     <div class="stat-pill">
       <span id="txt-lbl-vix" class="label">VIX</span>
-      <span class="val warn">29.48</span>
+      <span class="val warn">24.61</span>
     </div>
     <div class="stat-pill">
       <span id="txt-lbl-comp" class="label">COMPOSITE</span>
-      <span class="val warn">56</span>
+      <span class="val warn">54</span>
     </div>
     <div class="stat-pill">
       <span id="txt-lbl-regime" class="label">REGIME</span>
@@ -917,116 +917,78 @@
     </div>
     <div class="stat-pill">
       <span id="txt-lbl-env" class="label">ENVIRONMENT</span>
-      <span id="txt-env-val" class="val warn">US-IRAN WAR D8</span>
+      <span id="txt-env-val" class="val warn">US-IRAN DAY 10 + FED WEEK</span>
     </div>
   </div>
 </header>
 
 <nav>
-  <a id="nav-arch" href="#architecture">SYSTEM ARCHITECTURE</a>
-  <a id="nav-regime" href="#regime">REGIME MATRIX</a>
-  <a id="nav-score" href="#scorecard">STOCK SCORECARD ★ NEW</a>
-    <a id="nav-matrix" href="#matrix">PRICE MATRIX ★ NEW</a>
+  <a id="nav-score" href="#scorecard">⭐ STOCK SCORECARD</a>
+  <a id="nav-matrix" href="#matrix">📊 PRICE MATRIX</a>
+  <a id="nav-regime" href="#regime">🎯 REGIME MATRIX</a>
+  <a id="nav-cal" href="#calendar">📅 EARNINGS CALENDAR</a>
+  <a id="nav-cap" href="#capital">💰 CAPITAL MAP</a>
   <a id="nav-layers" href="#layers">3-LAYER SYSTEM</a>
-  <a id="nav-cal" href="#calendar">EARNINGS CALENDAR</a>
-  <a id="nav-cap" href="#capital">CAPITAL MAP</a>
+  <a id="nav-arch" href="#architecture">SYSTEM ARCHITECTURE</a>
   <a id="nav-proto" href="#protocol">MINERVA PROTOCOL</a>
+  <a id="nav-tuition" href="#tuition" style="color: var(--warn);">📖 TUITION LOG</a>
 </nav>
 
 <div class="container">
 
-<!-- ===== SYSTEM ARCHITECTURE ===== -->
-<section id="architecture">
+<!-- ===== CRITICAL ALERTS (LIVE) ===== -->
+<section id="alerts">
   <div class="section-header">
-    <span id="s01-num" class="num">§01</span>
-    <h2 id="s01-title">SYSTEM ARCHITECTURE — TWO LAYERS, ONE DECISION</h2>
+    <span class="num" style="background:rgba(255,59,59,0.2);border-color:var(--red);color:var(--red);">ALERT</span>
+    <h2 style="color:var(--red) !important;">CRITICAL ALERTS — IMMEDIATE ATTENTION REQUIRED</h2>
   </div>
+    <div style="background:var(--bg2);border:1px solid var(--red);border-left:5px solid var(--red);border-radius:4px;padding:18px;margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+        <div>
+          <span style="font-family:'Orbitron',monospace;font-size:16px;color:var(--red);font-weight:900;">CRITICAL</span>
+          <span style="font-family:'Orbitron',monospace;font-size:16px;color:var(--gold);margin-left:12px;">AVAV</span>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <div style="text-align:center;">
+            <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-dim);">OLD SCORE</div>
+            <span class="score-badge mid" style="font-size:14px;">8/10</span>
+          </div>
+          <span style="font-size:20px;color:var(--red);">→</span>
+          <div style="text-align:center;">
+            <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-dim);">NEW SCORE</div>
+            <span class="score-badge low" style="font-size:14px;background:rgba(255,59,59,0.15);color:var(--warn);border:1px solid var(--warn);">6/10</span>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:14px;color:var(--text);line-height:1.7;margin-bottom:8px;"><strong style="color:var(--red);">EVENT:</strong> Q3 earnings miss and weak outlook</div>
+      <div style="font-size:13px;color:var(--green);line-height:1.6;margin-bottom:6px;"><strong>ACTION:</strong> Reassess position, consider reducing exposure</div>
+      <div style="font-size:12px;color:var(--warn);line-height:1.6;"><strong>FORECAST IMPACT:</strong> 1w est dropped from $190 to $180, 1m from $195 to $185</div>
+    </div>
+    <div style="background:var(--bg2);border:1px solid var(--red);border-left:5px solid var(--red);border-radius:4px;padding:18px;margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+        <div>
+          <span style="font-family:'Orbitron',monospace;font-size:16px;color:var(--red);font-weight:900;">CRITICAL</span>
+          <span style="font-family:'Orbitron',monospace;font-size:16px;color:var(--gold);margin-left:12px;">CRSP</span>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <div style="text-align:center;">
+            <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-dim);">OLD SCORE</div>
+            <span class="score-badge mid" style="font-size:14px;">8/10</span>
+          </div>
+          <span style="font-size:20px;color:var(--red);">→</span>
+          <div style="text-align:center;">
+            <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-dim);">NEW SCORE</div>
+            <span class="score-badge low" style="font-size:14px;background:rgba(255,59,59,0.15);color:var(--warn);border:1px solid var(--warn);">5/10</span>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:14px;color:var(--text);line-height:1.7;margin-bottom:8px;"><strong style="color:var(--red);">EVENT:</strong> Announced $350M convertible notes offering — dilutive to shareholders</div>
+      <div style="font-size:13px;color:var(--green);line-height:1.6;margin-bottom:6px;"><strong>ACTION:</strong> REMOVE limit order. Wait for stabilization below $40.</div>
+      <div style="font-size:12px;color:var(--warn);line-height:1.6;"><strong>FORECAST IMPACT:</strong> 1w est dropped from $45 to $40, 1m from $50 to $42</div>
+    </div>
 
-  <div class="arch-diagram">
-    <div class="arch-box">
-      <div id="arch-a-title" class="arch-title">LAYER A — MACRO ENGINE</div>
-      <div id="arch-a-desc" class="arch-desc">
-        Composite Score 0–100<br>
-        Built from VIX + 30 macro signals<br>
-        <br>
-        <span class="c-gold">→ WHEN to deploy capital</span><br>
-        Controls deployment %, regime, timing
-      </div>
-    </div>
-    <div class="arch-arrow">×</div>
-    <div class="arch-box" style="border-color: var(--gold);">
-      <div id="arch-b-title" class="arch-title" style="color: var(--green);">LAYER B — STOCK SCORECARD</div>
-      <div id="arch-b-desc" class="arch-desc">
-        Per-stock 5-filter score 0–10<br>
-        <span class="c-gold">Filter #1: Analyst Consensus</span> ← <span style="color: var(--green);">NEW</span><br>
-        Filter #2: Thesis Intact<br>
-        Filter #3: Macro/War Alignment<br>
-        Filter #4: Earnings Trajectory<br>
-        Filter #5: Position Size vs Conviction<br>
-        <br>
-        <span class="c-gold">→ WHERE to deploy capital</span>
-      </div>
-    </div>
-    <div class="arch-arrow">→</div>
-    <div class="arch-box">
-      <div id="arch-c-title" class="arch-title">DECISION</div>
-      <div id="arch-c-desc" class="arch-desc">
-        Both layers must align.<br><br>
-        Macro score says: <em>deploy 50%</em><br>
-        Stock score says: <em>AVAV = 8/10</em><br>
-        ↓<br>
-        <span class="c-gold">Buy AVAV with 50% of capital</span>
-      </div>
-    </div>
-  </div>
-
-  <div id="arch-note" class="note-box gold" style="margin-top: 16px;">
-    <strong>KEY INSIGHT:</strong> Analyst consensus is not a 31st indicator inside the composite score — that would double-count information already embedded in macro signals. Instead, it is <strong>Filter #1 in the per-stock scorecard</strong>, the first test every stock must pass before capital is deployed. The composite score tells you <em>when</em>. The scorecard tells you <em>where</em>.
-  </div>
 </section>
 
-<!-- ===== REGIME MATRIX ===== -->
-<section id="regime">
-  <div class="section-header">
-    <span id="s02-num" class="num">§02</span>
-    <h2 id="s02-title">REGIME MATRIX — VIX-BASED DEPLOYMENT PROTOCOL</h2>
-  </div>
-
-  <div class="regime-grid">
-    <div class="regime-card" style="border-color: var(--green);">
-      <div id="r1-range" class="vix-range c-green">VIX &lt; 15</div>
-      <div id="r1-name" class="regime-name c-green">CALM MARKET</div>
-      <div id="r1-action" class="action">Market complacent. Peaks likely near. Protect existing positions.</div>
-      <div id="r1-pct" class="deploy-pct c-red">0%</div>
-      <div id="r1-label" style="font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--text-dim); margin-top: 4px;">HOLD CASH</div>
-    </div>
-    <div class="regime-card" style="border-color: var(--blue);">
-      <div id="r2-range" class="vix-range c-blue">VIX 15–20</div>
-      <div id="r2-name" class="regime-name c-blue">NORMAL RANGE</div>
-      <div id="r2-action" class="action">Selective opportunities. Only highest-conviction stocks. Use limit orders.</div>
-      <div id="r2-pct" class="deploy-pct c-blue">25%</div>
-      <div id="r2-label" style="font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--text-dim); margin-top: 4px;">SELECTIVE</div>
-    </div>
-    <div class="regime-card active">
-      <div id="r3-range" class="vix-range c-warn">VIX 20–30</div>
-      <div id="r3-name" class="regime-name c-warn">FEAR ZONE ← NOW</div>
-      <div id="r3-action" class="action">Sweet spot for paradigm stocks. Market discounting, not breaking. Full positions.</div>
-      <div id="r3-pct" class="deploy-pct c-warn">50%</div>
-      <div id="r3-label" style="font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--text-dim); margin-top: 4px;">DEPLOY 50%</div>
-    </div>
-    <div class="regime-card" style="border-color: var(--red);">
-      <div id="r4-range" class="vix-range c-red">VIX &gt; 30</div>
-      <div id="r4-name" class="regime-name c-red">CRISIS ZONE</div>
-      <div id="r4-action" class="action">Maximum opportunity for 5-year investors. Deploy all reserves. Generational entries.</div>
-      <div id="r4-pct" class="deploy-pct c-red">100%</div>
-      <div id="r4-label" style="font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--text-dim); margin-top: 4px;">FULL DEPLOY</div>
-    </div>
-  </div>
-
-  <div id="regime-note" class="note-box warn" style="margin-top: 16px;">
-    <strong>CURRENT:</strong> VIX 29.48 — one tick below the Crisis threshold. Do not wait for VIX 30 to act. Limits are already set. The plan is armed.
-  </div>
-</section>
 
 <!-- ===== STOCK SCORECARD — NEW ===== -->
 <section id="scorecard">
@@ -1092,169 +1054,164 @@
       </thead>
       <tbody>
         <tr>
-          <td><span class="ticker-cell">PLTR</span></td>
-          <td><span class="c-green">Strong Buy +40%</span></td>
-          <td><span class="dot g"></span>AI × Military intact</td>
-          <td><span class="dot g"></span>War = direct revenue</td>
-          <td><span class="dot g"></span>Beats consistently</td>
-          <td><span class="dot g"></span>Core position</td>
+          <td><span class="ticker-cell">000660.KS</span></td>
+          <td><span class="c-green">$955000.0 (+1.8%)</span></td>
+          <td><span class="dot g"></span> Partnership with Applied Materials strengthen</td>
           <td><span class="score-badge high">10/10</span></td>
-          <td><span class="action-badge add">HOLD + ADD DIPS</span></td>
-          <td class="c-dim">Up 8.23% on war day. Add at €88 limit.</td>
+          <td><span class="action-badge sell">LEGEND — NEVER SELL</span></td>
+          <td class="c-dim">Positive news on AI memory deals boosts outlook.</td>
         </tr>
         <tr>
-          <td><span class="ticker-cell">KTOS</span></td>
-          <td><span class="c-green">Strong Buy +12%</span></td>
-          <td><span class="dot g"></span>Defense/drone intact</td>
-          <td><span class="dot g"></span>War = direct revenue</td>
-          <td><span class="dot g"></span>Beat last Q</td>
-          <td><span class="dot g"></span>7 shares, stop set</td>
-          <td><span class="score-badge high">9/10</span></td>
-          <td><span class="action-badge add">HOLD + ADD $80</span></td>
-          <td class="c-dim">Stop $75 protects. Add limit $80 Kiwoom.</td>
-        </tr>
-        <tr>
-          <td><span class="ticker-cell">UEC</span></td>
-          <td><span class="c-green">Buy +18% (Goldman)</span></td>
-          <td><span class="dot g"></span>Nuclear renaissance intact</td>
-          <td><span class="dot g"></span>Energy crisis = nuclear accelerated</td>
-          <td><span class="dot y"></span>Earnings Mar 10 ⏳</td>
-          <td><span class="dot g"></span>Held in both TR + Kiwoom</td>
-          <td><span class="score-badge high">9/10</span></td>
-          <td><span class="action-badge hold">HOLD — ADD AFTER MAR 10</span></td>
-          <td class="c-dim">Stop $11.50. Add €250 TR only if Mar 10 beats.</td>
-        </tr>
-        <tr>
-          <td><span class="ticker-cell">AVAV</span></td>
-          <td><span class="c-green">Strong Buy +54% (21 analysts)</span></td>
-          <td><span class="dot g"></span>Drone warfare = permanent</td>
-          <td><span class="dot g"></span>Switchblade deployed in live conflict</td>
-          <td><span class="dot g"></span>+185% rev expected Mar 10</td>
-          <td><span class="dot y"></span>Not yet owned</td>
-          <td><span class="score-badge high">8/10</span></td>
-          <td><span class="action-badge pending">BUY WED AFTER EARNINGS</span></td>
-          <td class="c-dim">Do NOT buy before Mar 10 earnings. Entry $205–240 post-reaction.</td>
-        </tr>
-        <tr>
-          <td><span class="ticker-cell">CRSP</span></td>
-          <td><span class="c-green">Strong Buy +140%</span></td>
-          <td><span class="dot g"></span>Gene editing platform intact</td>
-          <td><span class="dot g"></span>No war exposure at all</td>
-          <td><span class="dot g"></span>Earnings Mar 26 catalyst</td>
-          <td><span class="dot y"></span>Limit pending $44</td>
-          <td><span class="score-badge high">8/10</span></td>
-          <td><span class="action-badge pending">LIMIT $44 ACTIVE</span></td>
-          <td class="c-dim">Buy before Mar 26 earnings. €300 TR.</td>
-        </tr>
-        <tr>
-          <td><span class="ticker-cell">COHR</span></td>
-          <td><span class="c-green">Buy consensus</span></td>
-          <td><span class="dot g"></span>AI optical networking intact</td>
-          <td><span class="dot y"></span>War neutral</td>
-          <td><span class="dot g"></span>Beat last Q</td>
-          <td><span class="dot g"></span>Largest TR position</td>
-          <td><span class="score-badge high">7/10</span></td>
-          <td><span class="action-badge hold">HOLD</span></td>
-          <td class="c-dim">Core AI infrastructure play. No action needed.</td>
-        </tr>
-        <tr>
-          <td><span class="ticker-cell">IONQ</span></td>
-          <td><span class="c-warn">Buy (post legal clarity)</span></td>
-          <td><span class="dot g"></span>Quantum computing intact</td>
-          <td><span class="dot g"></span>War has zero impact on quantum</td>
-          <td><span class="dot g"></span>Legal overhang clearing</td>
-          <td><span class="dot y"></span>Limit $25 pending</td>
-          <td><span class="score-badge high">7/10</span></td>
-          <td><span class="action-badge pending">LIMIT $25 ACTIVE</span></td>
-          <td class="c-dim">Near stop = max asymmetry. $400 Kiwoom.</td>
-        </tr>
-        <tr>
-          <td><span class="ticker-cell">TMO</span></td>
-          <td><span class="c-green">Buy consensus</span></td>
-          <td><span class="dot g"></span>Life sciences thesis intact</td>
-          <td><span class="dot y"></span>War neutral</td>
-          <td><span class="dot g"></span>Steady beats</td>
-          <td><span class="dot y"></span>Small position only</td>
-          <td><span class="score-badge mid">6/10</span></td>
-          <td><span class="action-badge hold">HOLD</span></td>
-          <td class="c-dim">Held in both accounts. No urgency.</td>
-        </tr>
-        <tr>
-          <td><span class="ticker-cell">RKLB</span></td>
-          <td><span class="c-green">Buy consensus</span></td>
-          <td><span class="dot g"></span>Space infrastructure intact</td>
-          <td><span class="dot y"></span>War neutral</td>
-          <td><span class="dot g"></span>Revenue growing</td>
-          <td><span class="dot y"></span>Small position TR</td>
-          <td><span class="score-badge mid">6/10</span></td>
-          <td><span class="action-badge hold">HOLD</span></td>
-          <td class="c-dim">Target €220. Stop €115. No additions now.</td>
-        </tr>
-        <tr>
-          <td><span class="ticker-cell">NTLA</span></td>
-          <td><span class="c-green">Strong Buy +170%</span></td>
-          <td><span class="dot g"></span>Gene editing intact</td>
-          <td><span class="dot g"></span>No war exposure</td>
-          <td><span class="dot y"></span>Earlier stage — catalyst TBD</td>
-          <td><span class="dot y"></span>Limit $10 pending</td>
-          <td><span class="score-badge mid">6/10</span></td>
-          <td><span class="action-badge pending">LIMIT $10 ACTIVE</span></td>
-          <td class="c-dim">€200 TR. Fills with CRSP as bio pair.</td>
-        </tr>
-        <tr>
-          <td><span class="ticker-cell">FCX</span></td>
-          <td><span class="c-warn">Buy +12% only</span></td>
-          <td><span class="dot y"></span>Mine mudslide — production -28.5%</td>
-          <td><span class="dot r"></span>Recession fear hits copper hard</td>
-          <td><span class="dot y"></span>Apr 16 — too far</td>
-          <td><span class="dot y"></span>Held TR + Kiwoom</td>
-          <td><span class="score-badge low">4/10</span></td>
-          <td><span class="action-badge exit">SELL TR — KIWOOM STOP $54.50</span></td>
-          <td class="c-dim">TR €630 → sell today → redeploy AVAV Wed. Kiwoom: stop only.</td>
-        </tr>
-        <tr>
-          <td><span class="ticker-cell">GEVO</span></td>
-          <td><span class="c-warn">Hold — recovery stage</span></td>
-          <td><span class="dot y"></span>Recovering — new CEO, EBITDA positive</td>
-          <td><span class="dot y"></span>Neutral — no war impact</td>
-          <td><span class="dot y"></span>Earnings Mar 26 ⏳</td>
-          <td><span class="dot r"></span>-84% underwater</td>
-          <td><span class="score-badge low">4/10</span></td>
-          <td><span class="action-badge watch">HOLD TO MAR 26 ONLY</span></td>
-          <td class="c-dim">Above $2.50 after earnings → sell 50%. Below $1.80 → sell all.</td>
-        </tr>
-        <tr>
-          <td><span class="ticker-cell">HUYA</span></td>
-          <td><span class="c-red">Hold — no conviction</span></td>
-          <td><span class="dot r"></span>No thesis — China platform risk</td>
-          <td><span class="dot r"></span>China ADR risk in war environment</td>
-          <td><span class="dot y"></span>Earnings Mar 17 — exit trigger</td>
-          <td><span class="dot r"></span>-79% underwater</td>
-          <td><span class="score-badge low">2/10</span></td>
-          <td><span class="action-badge exit">EXIT MAR 17 — ALL SCENARIOS</span></td>
-          <td class="c-dim">All 3 scenarios on Mar 17 lead to full exit. No exceptions.</td>
-        </tr>
-        <tr>
-          <td><span class="ticker-cell">FSLR</span></td>
-          <td><span class="c-red">Hold — downgraded Jefferies</span></td>
-          <td><span class="dot r"></span>BROKEN — guidance -$1B vs consensus</td>
-          <td><span class="dot r"></span>Trade war = solar tariff risk</td>
-          <td><span class="dot r"></span>Missed Q4 badly</td>
-          <td><span class="dot y"></span>Tiny position €39</td>
-          <td><span class="score-badge low">1/10</span></td>
-          <td><span class="action-badge exit">EXIT — BROKEN THESIS</span></td>
-          <td class="c-dim">Not war noise. Fundamental breakdown. Cut and redeploy.</td>
+          <td><span class="ticker-cell">272210.KS</span></td>
+          <td><span class="c-red">$147700.0 (-5.4%)</span></td>
+          <td><span class="dot g"></span> Continued strength in defense and new propuls</td>
+          <td><span class="score-badge high">10/10</span></td>
+          <td><span class="action-badge sell">LEGEND — NEVER SELL</span></td>
+          <td class="c-dim">Positive developments in defense and propulsion systems.</td>
         </tr>
         <tr>
           <td><span class="ticker-cell">IAU</span></td>
-          <td><span class="c-green">Strong consensus — macro hedge</span></td>
-          <td><span class="dot g"></span>Gold in every crisis intact</td>
-          <td><span class="dot g"></span>War = direct gold bid</td>
-          <td><span class="dot g"></span>No earnings. Pure asset.</td>
-          <td><span class="dot g"></span>+124% legend position</td>
+          <td><span class="c-red">$97.48 (-0.4%)</span></td>
+          <td><span class="dot g"></span> Gold remains a safe haven amid geopolitical t</td>
           <td><span class="score-badge high">10/10</span></td>
-          <td><span class="action-badge add">HOLD FOREVER — NEVER SELL</span></td>
-          <td class="c-dim">Gold at $5,075+. War hedge working perfectly.</td>
+          <td><span class="action-badge pending"></span></td>
+          <td class="c-dim">Stable demand for gold as a safe haven asset.</td>
+        </tr>
+        <tr>
+          <td><span class="ticker-cell">UEC</span></td>
+          <td><span class="c-red">$14.04 (-3.0%)</span></td>
+          <td><span class="dot g"></span> Strong liquidity and strategic positioning in</td>
+          <td><span class="score-badge high">9/10</span></td>
+          <td><span class="action-badge add">HOLD — ADD AFTER EARNINGS</span></td>
+          <td class="c-dim">Positive earnings support stable outlook.</td>
+        </tr>
+        <tr>
+          <td><span class="ticker-cell">KTOS</span></td>
+          <td><span class="c-red">$88.79 (-0.2%)</span></td>
+          <td><span class="dot g"></span> Strong performance due to new defense contrac</td>
+          <td><span class="score-badge high">9/10</span></td>
+          <td><span class="action-badge add">HOLD + ADD $80</span></td>
+          <td class="c-dim">Continued strength in defense sector supports outlook.</td>
+        </tr>
+        <tr>
+          <td><span class="ticker-cell">COHR</span></td>
+          <td><span class="c-red">$250.88 (-3.7%)</span></td>
+          <td><span class="dot g"></span> NVIDIA supply deal supports long-term growth.</td>
+          <td><span class="score-badge high">8/10</span></td>
+          <td><span class="action-badge hold">HOLD</span></td>
+          <td class="c-dim">Positive news on supply deal offsets market volatility.</td>
+        </tr>
+        <tr>
+          <td><span class="ticker-cell">MC.PA</span></td>
+          <td><span class="c-red">$500.3 (-0.8%)</span></td>
+          <td><span class="dot g"></span> Stable outlook with focus on craftsmanship an</td>
+          <td><span class="score-badge high">8/10</span></td>
+          <td><span class="action-badge hold">HOLD (locked ~1yr promo)</span></td>
+          <td class="c-dim">No significant changes in company strategy.</td>
+        </tr>
+        <tr>
+          <td><span class="ticker-cell">URNM</span></td>
+          <td><span class="c-red">$67.35 (-1.9%)</span></td>
+          <td><span class="dot g"></span> Continued strength in uranium market.</td>
+          <td><span class="score-badge high">8/10</span></td>
+          <td><span class="action-badge add">HOLD — ADD IN 2 WEEKS</span></td>
+          <td class="c-dim">Stable outlook with strong uranium demand.</td>
+        </tr>
+        <tr>
+          <td><span class="ticker-cell">PLTR</span></td>
+          <td><span class="c-green">$151.78 (+0.4%)</span></td>
+          <td><span class="dot g"></span> Strong AI leadership amid geopolitical tensio</td>
+          <td><span class="score-badge mid">7/10</span></td>
+          <td><span class="action-badge add">HOLD + ADD DIPS</span></td>
+          <td class="c-dim">Continued demand for AI solutions in defense.</td>
+        </tr>
+        <tr>
+          <td><span class="ticker-cell">FCX</span></td>
+          <td><span class="c-red">$61.42 (-1.6%)</span></td>
+          <td><span class="dot g"></span> Upgrade due to improved copper outlook.</td>
+          <td><span class="score-badge mid">7/10</span></td>
+          <td><span class="action-badge sell">SELL TR — KIWOOM STOP $54.50</span></td>
+          <td class="c-dim">Positive copper outlook supports stable forecast.</td>
+        </tr>
+        <tr>
+          <td><span class="ticker-cell">IONQ</span></td>
+          <td><span class="c-red">$34.24 (-2.5%)</span></td>
+          <td><span class="dot g"></span> Positive long-term outlook with recent volati</td>
+          <td><span class="score-badge mid">7/10</span></td>
+          <td><span class="action-badge pending">LIMIT $25 ACTIVE</span></td>
+          <td class="c-dim">No significant news affecting short-term outlook.</td>
+        </tr>
+        <tr>
+          <td><span class="ticker-cell">RKLB</span></td>
+          <td><span class="c-green">$72.07 (+4.6%)</span></td>
+          <td><span class="dot g"></span> Positive developments in space infrastructure</td>
+          <td><span class="score-badge mid">6/10</span></td>
+          <td><span class="action-badge hold">HOLD</span></td>
+          <td class="c-dim">Stable outlook with new space-based initiatives.</td>
+        </tr>
+        <tr>
+          <td><span class="ticker-cell">TMO</span></td>
+          <td><span class="c-red">$495.38 (-0.9%)</span></td>
+          <td><span class="dot g"></span> New product launches support steady growth.</td>
+          <td><span class="score-badge mid">6/10</span></td>
+          <td><span class="action-badge hold">HOLD</span></td>
+          <td class="c-dim">No significant changes in company outlook.</td>
+        </tr>
+        <tr>
+          <td><span class="ticker-cell">GEVO</span></td>
+          <td><span class="c-red">$2.29 (-0.4%)</span></td>
+          <td><span class="dot g"></span> Positive earnings and cash flow turnaround.</td>
+          <td><span class="score-badge mid">6/10</span></td>
+          <td><span class="action-badge hold">HOLD TO MAR 26 ONLY</span></td>
+          <td class="c-dim">Earnings beat supports stable outlook.</td>
+        </tr>
+        <tr style="background:rgba(255,59,59,0.08);">
+          <td><span class="ticker-cell">AVAV</span></td>
+          <td><span class="c-red">$206.99 (-6.6%)</span></td>
+          <td><span class="dot r"></span> Earnings miss and weak outlook lead to downgr</td>
+          <td><span style="font-size:10px;color:var(--text-dim);">8→</span><span class="score-badge mid">6/10</span></td>
+          <td><span class="action-badge pending"></span></td>
+          <td class="c-dim">Negative earnings report impacts short-term outlook.</td>
+        </tr>
+        <tr>
+          <td><span class="ticker-cell">NTLA</span></td>
+          <td><span class="c-red">$13.0 (-3.5%)</span></td>
+          <td><span class="dot g"></span> Positive momentum but no major news to change</td>
+          <td><span class="score-badge mid">6/10</span></td>
+          <td><span class="action-badge pending"></span></td>
+          <td class="c-dim">Stable outlook with recent share price rebound.</td>
+        </tr>
+        <tr>
+          <td><span class="ticker-cell">CWEN</span></td>
+          <td><span class="c-green">$37.87 (+0.8%)</span></td>
+          <td><span class="dot g"></span> No significant changes in outlook despite mar</td>
+          <td><span class="score-badge mid">5/10</span></td>
+          <td><span class="action-badge hold">HOLD</span></td>
+          <td class="c-dim">Stable outlook with no major news impact.</td>
+        </tr>
+        <tr style="background:rgba(255,59,59,0.08);">
+          <td><span class="ticker-cell">CRSP</span></td>
+          <td><span class="c-red">$50.14 (-5.0%)</span></td>
+          <td><span class="dot r"></span> Dilutive $350M offering negatively impacts sh</td>
+          <td><span style="font-size:10px;color:var(--text-dim);">8→</span><span class="score-badge mid">5/10</span></td>
+          <td><span class="action-badge pending"></span></td>
+          <td class="c-dim">Dilution concerns lead to significant score downgrade.</td>
+        </tr>
+        <tr>
+          <td><span class="ticker-cell">FSLR</span></td>
+          <td><span class="c-green">$200.24 (+1.2%)</span></td>
+          <td><span class="dot g"></span> Continued concerns over backlog and tax credi</td>
+          <td><span class="score-badge low">2/10</span></td>
+          <td><span class="action-badge sell">EXIT — BROKEN THESIS</span></td>
+          <td class="c-dim">No change due to ongoing issues with backlog.</td>
+        </tr>
+        <tr>
+          <td><span class="ticker-cell">HUYA</span></td>
+          <td><span class="c-red">$3.31 (-4.1%)</span></td>
+          <td><span class="dot g"></span> No significant news to change broken thesis.</td>
+          <td><span class="score-badge low">2/10</span></td>
+          <td><span class="action-badge sell">EXIT MAR 17 — ALL SCENARIOS</span></td>
+          <td class="c-dim">Continued risks with no new developments.</td>
         </tr>
       </tbody>
     </table>
@@ -1289,6 +1246,7 @@
 </section>
 
 
+
 <!-- ===== PRICE MATRIX ===== -->
 <section id="matrix">
   <div class="section-header">
@@ -1300,9 +1258,9 @@
     <strong>HOW TO READ:</strong> All USD prices. EUR column auto-converts at live rate fetched on load.
     1M/6M = Minerva structured estimates · 12M = Analyst consensus median · 5Y = Paradigm-shift projection.
     <br><strong>⚠ Verify current price on your broker before any execution.</strong>
-    &nbsp;|&nbsp; Rate fetched: <span id="fx-rate-display" style="color:var(--gold);font-family:'Share Tech Mono',monospace;">loading...</span>
+    &nbsp;|&nbsp; Rate fetched: <span id="fx-rate-display" style="color:var(--gold);font-family:Share Tech Mono,monospace;">loading...</span>
     &nbsp;|&nbsp; <span id="fx-time-display" style="color:var(--text-dim);font-size:12px;">—</span>
-    &nbsp;|&nbsp; <button onclick="fetchFXRate()" style="background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:'Share Tech Mono',monospace;font-size:10px;padding:3px 10px;cursor:pointer;border-radius:2px;">↻ REFRESH RATE</button>
+    &nbsp;|&nbsp; <button onclick="fetchFXRate()" style="background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:Share Tech Mono,monospace;font-size:10px;padding:3px 10px;cursor:pointer;border-radius:2px;">↻ REFRESH RATE</button>
   </div>
 
   <!-- TABLE 1: PRICE PROJECTIONS -->
@@ -1358,36 +1316,33 @@
 // ─── PRICE MATRIX DATA ────────────────────────────────────────────────────────
 // buyTarget: null = already held, no pending order
 const MATRIX_DATA = [
-  { ticker:'PLTR',  name:'Palantir',             current:157,   buyUSD:102,   buyNote:'€88 add',      amount:'€200 TR',    m1:150,  m6:175,  m12:200,  y5:450,  conviction:'★★★★★ 10/10' },
-  { ticker:'COHR',  name:'Coherent Corp.',        current:88,    buyUSD:null,  buyNote:'Already held', amount:'—',          m1:85,   m6:105,  m12:110,  y5:280,  conviction:'★★★★☆ 7/10' },
-  { ticker:'UEC',   name:'Uranium Energy',        current:13.65, buyUSD:12.50, buyNote:'Add on beat',  amount:'€250 TR',    m1:13,   m6:16,   m12:18,   y5:55,   conviction:'★★★★☆ 9/10' },
-  { ticker:'KTOS',  name:'Kratos Defense',        current:88,    buyUSD:80,    buyNote:'Add limit',    amount:'$400 KW',    m1:90,   m6:105,  m12:115,  y5:260,  conviction:'★★★★☆ 9/10' },
-  { ticker:'AVAV',  name:'AeroVironment',         current:221,   buyUSD:218,   buyNote:'Post-earnings',amount:'€630 TR',    m1:245,  m6:290,  m12:355,  y5:700,  conviction:'★★★★★ 8/10' },
-  { ticker:'RKLB',  name:'Rocket Lab',            current:67,    buyUSD:null,  buyNote:'Already held', amount:'—',          m1:65,   m6:78,   m12:83,   y5:200,  conviction:'★★★☆☆ 6/10' },
-  { ticker:'IAU',   name:'iShares Gold ETF',      current:55,    buyUSD:null,  buyNote:'NEVER SELL',   amount:'—',          m1:57,   m6:62,   m12:65,   y5:90,   conviction:'★★★★★ 10/10' },
-  { ticker:'IONQ',  name:'IonQ Quantum',          current:36,    buyUSD:33,    buyNote:'Limit active', amount:'$400 KW',    m1:38,   m6:52,   m12:65,   y5:180,  conviction:'★★★★☆ 7/10' },
-  { ticker:'NTLA',  name:'Intellia Therapeutics', current:13.60, buyUSD:12.94, buyNote:'€11.20 limit', amount:'€300 TR',    m1:14,   m6:18,   m12:30,   y5:95,   conviction:'★★★★☆ 8/10' },
-  { ticker:'CRSP',  name:'CRISPR Therapeutics',   current:57.50, buyUSD:53.82, buyNote:'€46.60 limit', amount:'€200 TR',    m1:58,   m6:68,   m12:77,   y5:200,  conviction:'★★★☆☆ 6/10' },
+  { ticker:'COHR', name:'Coherent Corp.', current:250.88, buyUSD:null, buyNote:'HOLD', amount:'', m1:280.0, m6:315.0, m12:315.0, y5:425.0, conviction:'8/10' },
+  { ticker:'PLTR', name:'Palantir', current:151.78, buyUSD:null, buyNote:'HOLD + ADD DIPS', amount:'', m1:151.0, m6:171.0, m12:171.0, y5:241.0, conviction:'7/10' },
+  { ticker:'UEC', name:'Uranium Energy', current:14.04, buyUSD:null, buyNote:'HOLD — ADD AFTER EARNINGS', amount:'', m1:16.5, m6:20.5, m12:20.5, y5:30.5, conviction:'9/10' },
+  { ticker:'RKLB', name:'Rocket Lab', current:72.07, buyUSD:null, buyNote:'HOLD', amount:'', m1:73.5, m6:87.5, m12:87.5, y5:123.5, conviction:'6/10' },
+  { ticker:'FSLR', name:'First Solar', current:200.24, buyUSD:null, buyNote:'EXIT — BROKEN THESIS', amount:'', m1:210.0, m6:250.0, m12:250.0, y5:350.0, conviction:'2/10' },
+  { ticker:'CWEN', name:'Clearway Energy', current:37.87, buyUSD:null, buyNote:'HOLD', amount:'', m1:38.5, m6:44.5, m12:44.5, y5:58.5, conviction:'5/10' },
+  { ticker:'TMO', name:'Thermo Fisher', current:495.38, buyUSD:null, buyNote:'HOLD', amount:'', m1:521.0, m6:601.0, m12:601.0, y5:801.0, conviction:'6/10' },
+  { ticker:'MC.PA', name:'LVMH', current:500.3, buyUSD:null, buyNote:'HOLD (locked ~1yr promo)', amount:'', m1:522.0, m6:602.0, m12:602.0, y5:802.0, conviction:'8/10' },
+  { ticker:'FCX', name:'Freeport-McMoRan', current:61.42, buyUSD:null, buyNote:'SELL TR — KIWOOM STOP $54.50', amount:'', m1:70.5, m6:81.0, m12:81.0, y5:107.0, conviction:'7/10' },
+  { ticker:'URNM', name:'Sprott Uranium Miners', current:67.35, buyUSD:null, buyNote:'HOLD — ADD IN 2 WEEKS', amount:'', m1:72.5, m6:85.5, m12:85.5, y5:120.5, conviction:'8/10' },
+  { ticker:'000660.KS', name:'SK Hynix', current:955000.0, buyUSD:null, buyNote:'LEGEND — NEVER SELL', amount:'', m1:995000.0, m6:1120000.0, m12:1120000.0, y5:1520000.0, conviction:'10/10' },
+  { ticker:'272210.KS', name:'Hanwha Systems', current:147700.0, buyUSD:null, buyNote:'LEGEND — NEVER SELL', amount:'', m1:163500.0, m6:183500.0, m12:183500.0, y5:253500.0, conviction:'10/10' },
+  { ticker:'KTOS', name:'Kratos Defense', current:88.79, buyUSD:null, buyNote:'HOLD + ADD $80', amount:'', m1:89.5, m6:99.5, m12:99.5, y5:129.5, conviction:'9/10' },
+  { ticker:'IONQ', name:'IonQ Quantum', current:34.24, buyUSD:null, buyNote:'LIMIT $25 ACTIVE', amount:'', m1:37.0, m6:44.0, m12:44.0, y5:69.0, conviction:'7/10' },
+  { ticker:'HUYA', name:'HUYA', current:3.31, buyUSD:null, buyNote:'EXIT MAR 17 — ALL SCENARIOS', amount:'', m1:3.6, m6:4.0, m12:4.0, y5:6.0, conviction:'2/10' },
+  { ticker:'GEVO', name:'Gevo', current:2.29, buyUSD:null, buyNote:'HOLD TO MAR 26 ONLY', amount:'', m1:2.9, m6:3.5, m12:3.5, y5:5.8, conviction:'6/10' },
+  { ticker:'AVAV', name:'AeroVironment', current:206.99, buyUSD:205.0, buyNote:'$205-240 post-earnings', amount:'€630 TR', m1:185.0, m6:205.0, m12:205.0, y5:250.0, conviction:'6/10' },
+  { ticker:'CRSP', name:'CRISPR Therapeutics', current:50.14, buyUSD:44.0, buyNote:'$44 limit', amount:'€300 TR', m1:42.0, m6:50.0, m12:50.0, y5:70.0, conviction:'5/10' },
+  { ticker:'NTLA', name:'Intellia Therapeutics', current:13.0, buyUSD:10.0, buyNote:'$10 limit', amount:'€200 TR', m1:15.7, m6:21.5, m12:21.5, y5:36.5, conviction:'6/10' },
+  { ticker:'IAU', name:'iShares Gold ETF', current:97.48, buyUSD:null, buyNote:'Any dip', amount:'NEVER SELL', m1:101.5, m6:111.5, m12:111.5, y5:141.5, conviction:'10/10' }
 ];
 
-let FX_RATE = 1.155; // fallback — EUR/USD Mar 10 2026
+let FX_RATE = 1.1578; // fallback — EUR/USD Mar 10 2026
 
 async function fetchFXRate() {
-  document.getElementById('fx-rate-display').textContent = 'fetching...';
-  try {
-    const res = await fetch('https://corsproxy.io/?url=' + encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/EURUSD=X?interval=1d&range=1d'));
-    const data = await res.json();
-    const rate = data?.chart?.result?.[0]?.meta?.regularMarketPrice;
-    if (rate && rate > 1 && rate < 2) {
-      FX_RATE = rate;
-      document.getElementById('fx-rate-display').textContent = '1 EUR = $' + FX_RATE.toFixed(4) + ' USD';
-      document.getElementById('fx-time-display').textContent = 'Updated ' + new Date().toLocaleTimeString('de-DE');
-    } else throw new Error('bad rate');
-  } catch(e) {
-    // fallback to hardcoded — update manually if needed
-    document.getElementById('fx-rate-display').textContent = '1 EUR = $' + FX_RATE.toFixed(4) + ' (hardcoded Mar 10 2026)';
-    document.getElementById('fx-time-display').textContent = 'Live fetch failed — using session rate';
-  }
+  document.getElementById('fx-rate-display').textContent = '1 EUR = $' + FX_RATE.toFixed(4) + ' USD';
+  document.getElementById('fx-time-display').textContent = 'Injected by TITAN engine — 2026-03-11 20:52 CET';
   renderMatrixTables();
 }
 
@@ -1428,8 +1383,8 @@ function renderMatrixTables() {
 
     priceHTML += '<tr>' +
       '<td class="ticker-cell">' + d.ticker + '<br><span style="font-size:10px;color:var(--text-dim);font-family:inherit">' + d.name + '</span></td>' +
-      '<td class="c-gold" style="font-family:'Share Tech Mono',monospace">' + fmtUSD(d.current) + '</td>' +
-      '<td style="font-family:'Share Tech Mono',monospace;color:var(--blue)">' + curEUR + '</td>' +
+      '<td class="c-gold" style="font-family:Share Tech Mono,monospace">' + fmtUSD(d.current) + '</td>' +
+      '<td style="font-family:Share Tech Mono,monospace;color:var(--blue)">' + curEUR + '</td>' +
       '<td>' + buyUSDfmt + '</td>' +
       '<td style="color:var(--blue)">' + buyEUR + '</td>' +
       '<td style="font-size:12px;color:var(--text-dim)">' + d.amount + '</td>' +
@@ -1442,8 +1397,8 @@ function renderMatrixTables() {
     if (d.buyUSD) {
       upsideHTML += '<tr>' +
         '<td class="ticker-cell">' + d.ticker + '</td>' +
-        '<td class="c-gold" style="font-family:'Share Tech Mono',monospace">' + fmtUSD(d.buyUSD) + '</td>' +
-        '<td style="font-family:'Share Tech Mono',monospace;color:var(--blue)">' + buyEUR + '</td>' +
+        '<td class="c-gold" style="font-family:Share Tech Mono,monospace">' + fmtUSD(d.buyUSD) + '</td>' +
+        '<td style="font-family:Share Tech Mono,monospace;color:var(--blue)">' + buyEUR + '</td>' +
         '<td>' + upside(d.buyUSD, d.m1) + '</td>' +
         '<td>' + upside(d.buyUSD, d.m6) + '</td>' +
         '<td>' + upside(d.buyUSD, d.m12) + '</td>' +
@@ -1464,64 +1419,369 @@ window.addEventListener('DOMContentLoaded', function() {
 </script>
 
 
-<!-- ===== 3-LAYER SYSTEM ===== -->
-<section id="layers">
+<!-- ===== REGIME MATRIX ===== -->
+<section id="regime">
   <div class="section-header">
-    <span id="s04-num" class="num">§04</span>
-    <h2 id="s04-title">3-LAYER INVESTMENT SYSTEM</h2>
+    <span id="s02-num" class="num">§02</span>
+    <h2 id="s02-title">REGIME MATRIX — VIX-BASED DEPLOYMENT PROTOCOL</h2>
   </div>
 
-  <div class="layer-tabs">
-    <div id="tab-short" class="layer-tab active" onclick="showLayer('short')">⚡ SHORT TERM (1 WEEK–1 MONTH)</div>
-    <div id="tab-mid" class="layer-tab" onclick="showLayer('mid')">📈 MID TERM (1–6 MONTHS)</div>
-    <div id="tab-long" class="layer-tab" onclick="showLayer('long')">🏰 LONG TERM (5 YEARS)</div>
+  <div class="regime-grid">
+    <div class="regime-card" style="border-color: var(--green);">
+      <div id="r1-range" class="vix-range c-green">VIX &lt; 15</div>
+      <div id="r1-name" class="regime-name c-green">CALM MARKET</div>
+      <div id="r1-action" class="action">Market complacent. Peaks likely near. Protect existing positions.</div>
+      <div id="r1-pct" class="deploy-pct c-red">0%</div>
+      <div id="r1-label" style="font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--text-dim); margin-top: 4px;">HOLD CASH</div>
+    </div>
+    <div class="regime-card" style="border-color: var(--blue);">
+      <div id="r2-range" class="vix-range c-blue">VIX 15–20</div>
+      <div id="r2-name" class="regime-name c-blue">NORMAL RANGE</div>
+      <div id="r2-action" class="action">Selective opportunities. Only highest-conviction stocks. Use limit orders.</div>
+      <div id="r2-pct" class="deploy-pct c-blue">25%</div>
+      <div id="r2-label" style="font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--text-dim); margin-top: 4px;">SELECTIVE</div>
+    </div>
+    <div class="regime-card active">
+      <div id="r3-range" class="vix-range c-warn">VIX 20–30</div>
+      <div id="r3-name" class="regime-name c-warn">FEAR ZONE ← NOW</div>
+      <div id="r3-action" class="action">Sweet spot for paradigm stocks. Market discounting, not breaking. Full positions.</div>
+      <div id="r3-pct" class="deploy-pct c-warn">50%</div>
+      <div id="r3-label" style="font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--text-dim); margin-top: 4px;">DEPLOY 50%</div>
+    </div>
+    <div class="regime-card" style="border-color: var(--red);">
+      <div id="r4-range" class="vix-range c-red">VIX &gt; 30</div>
+      <div id="r4-name" class="regime-name c-red">CRISIS ZONE</div>
+      <div id="r4-action" class="action">Maximum opportunity for 5-year investors. Deploy all reserves. Generational entries.</div>
+      <div id="r4-pct" class="deploy-pct c-red">100%</div>
+      <div id="r4-label" style="font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--text-dim); margin-top: 4px;">FULL DEPLOY</div>
+    </div>
   </div>
 
-  <div id="layer-short" class="layer-content active">
-    <div id="short-note" class="note-box">Logic: Ride momentum already in motion. War environment = defense/gold spikes. Enter fast, exit with discipline. These are <strong>tactical entries with pre-set exits.</strong></div>
-    <br>
+  <div id="regime-note" class="note-box warn" style="margin-top: 16px;">
+    <strong>CURRENT:</strong> VIX 29.48 — one tick below the Crisis threshold. Do not wait for VIX 30 to act. Limits are already set. The plan is armed.
+  </div>
+</section>
+
+<!-- ===== GLOBAL ISSUES (LIVE) ===== -->
+<section id="global-issues">
+  <div class="section-header">
+    <span class="num">LIVE</span>
+    <h2>GLOBAL ISSUES — TOP 5 MARKET-MOVING FACTORS TODAY</h2>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:24px;">
+    <div style="background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--warn);padding:10px 14px;border-radius:3px;font-size:13px;color:var(--text);line-height:1.6;word-break:keep-all;">US-Iran tensions impacting defense stocks</div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--warn);padding:10px 14px;border-radius:3px;font-size:13px;color:var(--text);line-height:1.6;word-break:keep-all;">AI memory chip partnerships boosting semiconductor sector</div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--warn);padding:10px 14px;border-radius:3px;font-size:13px;color:var(--text);line-height:1.6;word-break:keep-all;">AeroVironment cuts outlook, shares plunge</div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--warn);padding:10px 14px;border-radius:3px;font-size:13px;color:var(--text);line-height:1.6;word-break:keep-all;">CRISPR Therapeutics announces $350M dilutive offering</div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--warn);padding:10px 14px;border-radius:3px;font-size:13px;color:var(--text);line-height:1.6;word-break:keep-all;">Oil prices surge due to geopolitical tensions</div>
+  </div>
+</section>
+
+
+<!-- ===== 30-INDEX FORECAST MATRIX (LIVE) ===== -->
+<section id="forecast-matrix">
+  <div class="section-header">
+    <span class="num">LIVE</span>
+    <h2>30-INDEX FORECAST MATRIX — GPT-4o ESTIMATES</h2>
+  </div>
+
+  <div class="note-box gold" style="margin-bottom:18px;">
+    <strong>HOW TO READ:</strong> Current = live price. Est = GPT-4o forward estimates reflecting TODAY'S NEWS.
+    Yday = yesterday's estimate. Delta = change in estimate.
+    <span style="color:var(--green);">Green</span> = improved. <span style="color:var(--red);">Red</span> = worsened.
+    <br><strong>Last updated:</strong> <span style="color:var(--gold);font-family:'Share Tech Mono',monospace;">2026-03-11 20:52 CET</span>
+  </div>
+
+  <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:1px;margin-bottom:12px;">MACRO INDICATORS</div>
+  <div style="overflow-x:auto;margin-bottom:28px;">
     <table>
-      <thead id="short-thead"><tr><th>#</th><th>TICKER</th><th>NAME</th><th>WHY NOW</th><th>ENTRY ZONE</th><th>TARGET</th><th>STOP</th><th>TIMEFRAME</th></tr></thead>
+      <thead>
+        <tr>
+          <th>INDEX</th><th>CURRENT</th>
+          <th>1W EST</th><th>1M EST</th><th>1Y EST</th><th>5Y EST</th>
+          <th>YDAY 1W</th><th>YDAY 1M</th><th>YDAY 1Y</th><th>YDAY 5Y</th>
+          <th>DELTA</th><th>WHY CHANGED</th>
+        </tr>
+      </thead>
       <tbody>
-        <tr><td>1</td><td class="ticker-cell">AVAV</td><td>AeroVironment</td><td>Switchblade deployed in live conflict. DoD backlog expanding. 185% rev expected.</td><td class="c-gold">$205–240 post-earnings</td><td class="c-green">$355 median target</td><td class="c-red">$185</td><td>2–4 weeks</td></tr>
-        <tr><td>2</td><td class="ticker-cell">PLTR</td><td>Palantir</td><td>Maven Smart System with NATO. Every escalation = direct revenue. Already up 8%.</td><td class="c-gold">€88 limit</td><td class="c-green">€120</td><td class="c-red">€70</td><td>3–4 weeks</td></tr>
-        <tr><td>3</td><td class="ticker-cell">KTOS</td><td>Kratos</td><td>Defense drones in active war. $1.5T DoD budget discussions. Stop safely at $75.</td><td class="c-gold">$80 limit (add)</td><td class="c-green">$99</td><td class="c-red">$75</td><td>2–4 weeks</td></tr>
-        <tr><td>4</td><td class="ticker-cell">IAU</td><td>Gold ETF</td><td>War + dollar weakness + Fed hold = gold bid. Already +124%. Never sell.</td><td class="c-gold">Any dip</td><td class="c-green">+10%</td><td class="c-red">–5%</td><td>Permanent</td></tr>
+        <tr>
+          <td class="ticker-cell">BTC</td>
+          <td><span class="c-green">70,673</span></td>
+          <td>71,000</td><td>74,000</td>
+          <td class="c-green">92,000</td><td class="c-gold">153,000</td>
+          <td class="c-dim">71,000</td><td class="c-dim">74,000</td>
+          <td class="c-dim">92,000</td><td class="c-dim">153,000</td>
+          <td><span class="c-dim">—</span></td>
+          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">No significant news affecting Bitcoin today.</td>
+        </tr>
+        <tr>
+          <td class="ticker-cell">Copper</td>
+          <td><span class="c-green">5.92</span></td>
+          <td>6.50</td><td>6.70</td>
+          <td class="c-green">7.50</td><td class="c-gold">9.60</td>
+          <td class="c-dim">6.50</td><td class="c-dim">6.70</td>
+          <td class="c-dim">7.50</td><td class="c-dim">9.60</td>
+          <td><span class="c-dim">—</span></td>
+          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">Copper outlook stable with minor upgrades in FCX.</td>
+        </tr>
+        <tr>
+          <td class="ticker-cell">Gold</td>
+          <td><span class="c-red">5,186</span></td>
+          <td>5,320</td><td>5,480</td>
+          <td class="c-green">6,080</td><td class="c-gold">7,580</td>
+          <td class="c-dim">5,320</td><td class="c-dim">5,480</td>
+          <td class="c-dim">6,080</td><td class="c-dim">7,580</td>
+          <td><span class="c-dim">—</span></td>
+          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">Gold prices slightly down due to falling demand despite geopolitical tensions.</td>
+        </tr>
+        <tr>
+          <td class="ticker-cell">Oil</td>
+          <td><span class="c-green">87.67</span></td>
+          <td>88.50</td><td>90.00</td>
+          <td class="c-green">95.00</td><td class="c-gold">110.00</td>
+          <td class="c-dim">88.50</td><td class="c-dim">90.00</td>
+          <td class="c-dim">95.00</td><td class="c-dim">110.00</td>
+          <td><span class="c-green">+11.1%</span></td>
+          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">Oil prices surged due to US-Iran tensions.</td>
+        </tr>
+
       </tbody>
     </table>
-    <div id="short-rule-note" class="note-box warn" style="margin-top: 12px;"><strong>SHORT TERM RULES:</strong> Max €300–400 per trade · Set limit sell at target BEFORE entry · Stop hit = exit same day no negotiation · Do not hold through earnings unless thesis clear</div>
   </div>
 
-  <div id="layer-mid" class="layer-content">
-    <div id="mid-note" class="note-box">Logic: Paradigm shift stocks currently beaten down but thesis intact. <strong>Buy fear, sell recovery.</strong></div>
-    <br>
+  <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:1px;margin-bottom:12px;">PORTFOLIO &amp; WATCHLIST — WITH LIVE SCORE REVISION</div>
+  <div style="overflow-x:auto;">
     <table>
-      <thead id="mid-thead"><tr><th>#</th><th>TICKER</th><th>NAME</th><th>WHY</th><th>ENTRY</th><th>TARGET</th><th>STOP</th><th>TIMELINE</th></tr></thead>
+      <thead>
+        <tr>
+          <th>STOCK</th><th>SCORE</th><th>CURRENT</th>
+          <th>1W EST</th><th>1M EST</th><th>1Y EST</th><th>5Y EST</th>
+          <th>YDAY 1W</th><th>YDAY 1M</th><th>YDAY 1Y</th><th>YDAY 5Y</th>
+          <th>DELTA</th><th>WHY CHANGED</th>
+        </tr>
+      </thead>
       <tbody>
-        <tr><td>1</td><td class="ticker-cell">CRSP</td><td>CRISPR Therapeutics</td><td>Phase 3 data 2026. No war exposure. Down on market fear not company failure. Best bio asymmetry.</td><td class="c-gold">$44 limit ✅ set</td><td class="c-green">$106 (+140%)</td><td class="c-red">$38</td><td>3–5 months</td></tr>
-        <tr><td>2</td><td class="ticker-cell">NTLA</td><td>Intellia Therapeutics</td><td>Same gene editing wave as CRSP. Cheaper entry, earlier stage = more upside potential.</td><td class="c-gold">$10 limit ✅ set</td><td class="c-green">$27 (+170%)</td><td class="c-red">$9</td><td>3–5 months</td></tr>
-        <tr><td>3</td><td class="ticker-cell">IONQ</td><td>IonQ Quantum</td><td>Quantum computing inflection 2026–2027. Legal overhang clearing. Already hold 11 shares.</td><td class="c-gold">$25 limit ✅ set</td><td class="c-green">$72</td><td class="c-red">$25</td><td>4–6 months</td></tr>
-        <tr><td>4</td><td class="ticker-cell">UEC</td><td>Uranium Energy</td><td>War = energy security narrative accelerating. Nuclear renaissance. Critical minerals list.</td><td class="c-gold">Add €250 after Mar 10</td><td class="c-green">+40–50%</td><td class="c-red">$11.50</td><td>2–4 months</td></tr>
-        <tr><td>5</td><td class="ticker-cell">RKLB</td><td>Rocket Lab</td><td>Space infrastructure. Every satellite launch = revenue. Dipped on market fear only.</td><td class="c-gold">€141 current</td><td class="c-green">€220</td><td class="c-red">€115</td><td>3–6 months</td></tr>
-      </tbody>
-    </table>
-  </div>
+        <tr>
+          <td class="ticker-cell">000660.KS</td>
+          <td><span class="score-badge high" style="font-size:12px;">10/10</span></td>
+          <td><span class="c-green">$955,000</span></td>
+          <td>$965,000</td><td>$995,000</td>
+          <td class="c-green">$1,120,000</td><td class="c-gold">$1,520,000</td>
+          <td class="c-dim">$965,000</td><td class="c-dim">$995,000</td>
+          <td class="c-dim">$1,120,000</td><td class="c-dim">$1,520,000</td>
+          <td><span class="c-green">+0.5%</span></td>
+          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">Positive news on AI memory deals boosts outlook.</td>
+        </tr>
+        <tr>
+          <td class="ticker-cell">272210.KS</td>
+          <td><span class="score-badge high" style="font-size:12px;">10/10</span></td>
+          <td><span class="c-red">$147,700</span></td>
+          <td>$158,500</td><td>$163,500</td>
+          <td class="c-green">$183,500</td><td class="c-gold">$253,500</td>
+          <td class="c-dim">$158,500</td><td class="c-dim">$163,500</td>
+          <td class="c-dim">$183,500</td><td class="c-dim">$253,500</td>
+          <td><span class="c-green">+0.6%</span></td>
+          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">Positive developments in defense and propulsion systems.</td>
+        </tr>
+        <tr style="background:rgba(255,59,59,0.06);">
+          <td class="ticker-cell">AVAV</td>
+          <td><span style="font-size:10px;color:var(--text-dim);">8→</span><span class="score-badge mid" style="font-size:12px;">▼6/10</span></td>
+          <td><span class="c-red">$207</span></td>
+          <td>$180</td><td>$185</td>
+          <td class="c-green">$205</td><td class="c-gold">$250</td>
+          <td class="c-dim">$180</td><td class="c-dim">$185</td>
+          <td class="c-dim">$205</td><td class="c-dim">$250</td>
+          <td><span class="c-red">-5.1%</span></td>
+          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">Negative earnings report impacts short-term outlook.</td>
+        </tr>
+        <tr>
+          <td class="ticker-cell">COHR</td>
+          <td><span class="score-badge high" style="font-size:12px;">8/10</span></td>
+          <td><span class="c-red">$251</span></td>
+          <td>$275</td><td>$280</td>
+          <td class="c-green">$315</td><td class="c-gold">$425</td>
+          <td class="c-dim">$275</td><td class="c-dim">$280</td>
+          <td class="c-dim">$315</td><td class="c-dim">$425</td>
+          <td><span class="c-dim">—</span></td>
+          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">Positive news on supply deal offsets market volatility.</td>
+        </tr>
+        <tr style="background:rgba(255,59,59,0.06);">
+          <td class="ticker-cell">CRSP</td>
+          <td><span style="font-size:10px;color:var(--text-dim);">8→</span><span class="score-badge mid" style="font-size:12px;">▼5/10</span></td>
+          <td><span class="c-red">$50.14</span></td>
+          <td>$40.00</td><td>$42.00</td>
+          <td class="c-green">$50.00</td><td class="c-gold">$70.00</td>
+          <td class="c-dim">$40.00</td><td class="c-dim">$42.00</td>
+          <td class="c-dim">$50.00</td><td class="c-dim">$70.00</td>
+          <td><span class="c-red">-16.0%</span></td>
+          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">Dilution concerns lead to significant score downgrade.</td>
+        </tr>
+        <tr>
+          <td class="ticker-cell">CWEN</td>
+          <td><span class="score-badge mid" style="font-size:12px;">5/10</span></td>
+          <td><span class="c-green">$37.87</span></td>
+          <td>$37.50</td><td>$38.50</td>
+          <td class="c-green">$44.50</td><td class="c-gold">$58.50</td>
+          <td class="c-dim">$37.50</td><td class="c-dim">$38.50</td>
+          <td class="c-dim">$44.50</td><td class="c-dim">$58.50</td>
+          <td><span class="c-dim">—</span></td>
+          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">Stable outlook with no major news impact.</td>
+        </tr>
+        <tr>
+          <td class="ticker-cell">FCX</td>
+          <td><span class="score-badge mid" style="font-size:12px;">7/10</span></td>
+          <td><span class="c-red">$61.42</span></td>
+          <td>$68.50</td><td>$70.50</td>
+          <td class="c-green">$81.00</td><td class="c-gold">$107</td>
+          <td class="c-dim">$68.50</td><td class="c-dim">$70.50</td>
+          <td class="c-dim">$81.00</td><td class="c-dim">$107</td>
+          <td><span class="c-green">+0.7%</span></td>
+          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">Positive copper outlook supports stable forecast.</td>
+        </tr>
+        <tr>
+          <td class="ticker-cell">FSLR</td>
+          <td><span class="score-badge low" style="font-size:12px;">2/10</span></td>
+          <td><span class="c-green">$200</span></td>
+          <td>$200</td><td>$210</td>
+          <td class="c-green">$250</td><td class="c-gold">$350</td>
+          <td class="c-dim">$200</td><td class="c-dim">$210</td>
+          <td class="c-dim">$250</td><td class="c-dim">$350</td>
+          <td><span class="c-dim">—</span></td>
+          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">No change due to ongoing issues with backlog.</td>
+        </tr>
+        <tr>
+          <td class="ticker-cell">GEVO</td>
+          <td><span class="score-badge mid" style="font-size:12px;">6/10</span></td>
+          <td><span class="c-red">$2.29</span></td>
+          <td>$2.70</td><td>$2.90</td>
+          <td class="c-green">$3.50</td><td class="c-gold">$5.80</td>
+          <td class="c-dim">$2.70</td><td class="c-dim">$2.90</td>
+          <td class="c-dim">$3.50</td><td class="c-dim">$5.80</td>
+          <td><span class="c-dim">—</span></td>
+          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">Earnings beat supports stable outlook.</td>
+        </tr>
+        <tr>
+          <td class="ticker-cell">HUYA</td>
+          <td><span class="score-badge low" style="font-size:12px;">2/10</span></td>
+          <td><span class="c-red">$3.31</span></td>
+          <td>$3.50</td><td>$3.60</td>
+          <td class="c-green">$4.00</td><td class="c-gold">$6.00</td>
+          <td class="c-dim">$3.50</td><td class="c-dim">$3.60</td>
+          <td class="c-dim">$4.00</td><td class="c-dim">$6.00</td>
+          <td><span class="c-dim">—</span></td>
+          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">Continued risks with no new developments.</td>
+        </tr>
+        <tr>
+          <td class="ticker-cell">IAU</td>
+          <td><span class="score-badge high" style="font-size:12px;">10/10</span></td>
+          <td><span class="c-red">$97.48</span></td>
+          <td>$99.50</td><td>$102</td>
+          <td class="c-green">$112</td><td class="c-gold">$142</td>
+          <td class="c-dim">$99.50</td><td class="c-dim">$102</td>
+          <td class="c-dim">$112</td><td class="c-dim">$142</td>
+          <td><span class="c-dim">—</span></td>
+          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">Stable demand for gold as a safe haven asset.</td>
+        </tr>
+        <tr>
+          <td class="ticker-cell">IONQ</td>
+          <td><span class="score-badge mid" style="font-size:12px;">7/10</span></td>
+          <td><span class="c-red">$34.24</span></td>
+          <td>$35.00</td><td>$37.00</td>
+          <td class="c-green">$44.00</td><td class="c-gold">$69.00</td>
+          <td class="c-dim">$35.00</td><td class="c-dim">$37.00</td>
+          <td class="c-dim">$44.00</td><td class="c-dim">$69.00</td>
+          <td><span class="c-dim">—</span></td>
+          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">No significant news affecting short-term outlook.</td>
+        </tr>
+        <tr>
+          <td class="ticker-cell">KTOS</td>
+          <td><span class="score-badge high" style="font-size:12px;">9/10</span></td>
+          <td><span class="c-red">$88.79</span></td>
+          <td>$87.50</td><td>$89.50</td>
+          <td class="c-green">$99.50</td><td class="c-gold">$130</td>
+          <td class="c-dim">$87.50</td><td class="c-dim">$89.50</td>
+          <td class="c-dim">$99.50</td><td class="c-dim">$130</td>
+          <td><span class="c-dim">—</span></td>
+          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">Continued strength in defense sector supports outlook.</td>
+        </tr>
+        <tr>
+          <td class="ticker-cell">MC.PA</td>
+          <td><span class="score-badge high" style="font-size:12px;">8/10</span></td>
+          <td><span class="c-red">$500</span></td>
+          <td>$512</td><td>$522</td>
+          <td class="c-green">$602</td><td class="c-gold">$802</td>
+          <td class="c-dim">$512</td><td class="c-dim">$522</td>
+          <td class="c-dim">$602</td><td class="c-dim">$802</td>
+          <td><span class="c-dim">—</span></td>
+          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">No significant changes in company strategy.</td>
+        </tr>
+        <tr>
+          <td class="ticker-cell">NTLA</td>
+          <td><span class="score-badge mid" style="font-size:12px;">6/10</span></td>
+          <td><span class="c-red">$13.00</span></td>
+          <td>$14.70</td><td>$15.70</td>
+          <td class="c-green">$21.50</td><td class="c-gold">$36.50</td>
+          <td class="c-dim">$14.70</td><td class="c-dim">$15.70</td>
+          <td class="c-dim">$21.50</td><td class="c-dim">$36.50</td>
+          <td><span class="c-dim">—</span></td>
+          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">Stable outlook with recent share price rebound.</td>
+        </tr>
+        <tr>
+          <td class="ticker-cell">PLTR</td>
+          <td><span class="score-badge mid" style="font-size:12px;">7/10</span></td>
+          <td><span class="c-green">$152</span></td>
+          <td>$144</td><td>$151</td>
+          <td class="c-green">$171</td><td class="c-gold">$241</td>
+          <td class="c-dim">$144</td><td class="c-dim">$151</td>
+          <td class="c-dim">$171</td><td class="c-dim">$241</td>
+          <td><span class="c-dim">—</span></td>
+          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">Continued demand for AI solutions in defense.</td>
+        </tr>
+        <tr>
+          <td class="ticker-cell">RKLB</td>
+          <td><span class="score-badge mid" style="font-size:12px;">6/10</span></td>
+          <td><span class="c-green">$72.07</span></td>
+          <td>$70.50</td><td>$73.50</td>
+          <td class="c-green">$87.50</td><td class="c-gold">$124</td>
+          <td class="c-dim">$70.50</td><td class="c-dim">$73.50</td>
+          <td class="c-dim">$87.50</td><td class="c-dim">$124</td>
+          <td><span class="c-dim">—</span></td>
+          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">Stable outlook with new space-based initiatives.</td>
+        </tr>
+        <tr>
+          <td class="ticker-cell">TMO</td>
+          <td><span class="score-badge mid" style="font-size:12px;">6/10</span></td>
+          <td><span class="c-red">$495</span></td>
+          <td>$506</td><td>$521</td>
+          <td class="c-green">$601</td><td class="c-gold">$801</td>
+          <td class="c-dim">$506</td><td class="c-dim">$521</td>
+          <td class="c-dim">$601</td><td class="c-dim">$801</td>
+          <td><span class="c-dim">—</span></td>
+          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">No significant changes in company outlook.</td>
+        </tr>
+        <tr>
+          <td class="ticker-cell">UEC</td>
+          <td><span class="score-badge high" style="font-size:12px;">9/10</span></td>
+          <td><span class="c-red">$14.04</span></td>
+          <td>$15.50</td><td>$16.50</td>
+          <td class="c-green">$20.50</td><td class="c-gold">$30.50</td>
+          <td class="c-dim">$15.50</td><td class="c-dim">$16.50</td>
+          <td class="c-dim">$20.50</td><td class="c-dim">$30.50</td>
+          <td><span class="c-dim">—</span></td>
+          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">Positive earnings support stable outlook.</td>
+        </tr>
+        <tr>
+          <td class="ticker-cell">URNM</td>
+          <td><span class="score-badge high" style="font-size:12px;">8/10</span></td>
+          <td><span class="c-red">$67.35</span></td>
+          <td>$70.50</td><td>$72.50</td>
+          <td class="c-green">$85.50</td><td class="c-gold">$120</td>
+          <td class="c-dim">$70.50</td><td class="c-dim">$72.50</td>
+          <td class="c-dim">$85.50</td><td class="c-dim">$120</td>
+          <td><span class="c-dim">—</span></td>
+          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">Stable outlook with strong uranium demand.</td>
+        </tr>
 
-  <div id="layer-long" class="layer-content">
-    <div id="long-note" class="note-box">Logic: Own the paradigm shifts of the 2020s. <strong>These are the compounders.</strong> Add on every major dip. Never panic sell. 5-year target: €25,000 → €80,000–120,000.</div>
-    <br>
-    <table>
-      <thead id="long-thead"><tr><th>TICKER</th><th>SECTOR</th><th>5-YEAR THESIS</th><th>CURRENT POSITION</th></tr></thead>
-      <tbody>
-        <tr><td class="ticker-cell">PLTR</td><td>Intelligence</td><td>AI becomes the operating system of every government and military on earth</td><td class="c-green">✅ Hold, add on dips</td></tr>
-        <tr><td class="ticker-cell">COHR</td><td>Intelligence</td><td>Optical networking is the spine of AI infrastructure. Every data center needs it.</td><td class="c-green">✅ Hold, core position</td></tr>
-        <tr><td class="ticker-cell">KTOS</td><td>Space / Robotics</td><td>Autonomous drone warfare + hypersonics = 20-year spend cycle</td><td class="c-green">✅ Hold + add $80</td></tr>
-        <tr><td class="ticker-cell">CRSP</td><td>Bio-Engineering</td><td>First gene editing cures approved. CRSP owns the platform IP.</td><td class="c-gold">⏳ Limit $44 pending</td></tr>
-        <tr><td class="ticker-cell">UEC + URNM</td><td>Energy</td><td>Nuclear renaissance. Every AI data center needs baseload power. Uranium is the fuel.</td><td class="c-green">✅ Hold + add post Mar 10</td></tr>
-        <tr><td class="ticker-cell">AVAV</td><td>Robotics / Defense</td><td>Drone warfare is permanent. Contracts, backlog, moat. War accelerates adoption.</td><td class="c-gold">⏳ Buy Wednesday post-earnings</td></tr>
-        <tr><td class="ticker-cell">IAU</td><td>Macro Hedge</td><td>Gold in every war, every recession, every crisis. Permanent 5–10% portfolio weight.</td><td class="c-green">✅ NEVER SELL. +124%.</td></tr>
-        <tr><td class="ticker-cell">SK HYNIX</td><td>Korea — Intelligence</td><td>HBM memory is the hardware of AI. Irreplaceable position in AI supply chain.</td><td class="c-green">✅ LEGEND. +657%. Untouched.</td></tr>
-        <tr><td class="ticker-cell">HANWHA</td><td>Korea — Defense</td><td>Korean defense exports surging globally. Artillery, missiles, systems.</td><td class="c-green">✅ LEGEND. +820%. Untouched.</td></tr>
       </tbody>
     </table>
   </div>
@@ -1718,6 +1978,119 @@ window.addEventListener('DOMContentLoaded', function() {
   </div>
 </section>
 
+<!-- ===== 3-LAYER SYSTEM ===== -->
+<section id="layers">
+  <div class="section-header">
+    <span id="s04-num" class="num">§04</span>
+    <h2 id="s04-title">3-LAYER INVESTMENT SYSTEM</h2>
+  </div>
+
+  <div class="layer-tabs">
+    <div id="tab-short" class="layer-tab active" onclick="showLayer('short')">⚡ SHORT TERM (1 WEEK–1 MONTH)</div>
+    <div id="tab-mid" class="layer-tab" onclick="showLayer('mid')">📈 MID TERM (1–6 MONTHS)</div>
+    <div id="tab-long" class="layer-tab" onclick="showLayer('long')">🏰 LONG TERM (5 YEARS)</div>
+  </div>
+
+  <div id="layer-short" class="layer-content active">
+    <div id="short-note" class="note-box">Logic: Ride momentum already in motion. War environment = defense/gold spikes. Enter fast, exit with discipline. These are <strong>tactical entries with pre-set exits.</strong></div>
+    <br>
+    <table>
+      <thead id="short-thead"><tr><th>#</th><th>TICKER</th><th>NAME</th><th>WHY NOW</th><th>ENTRY ZONE</th><th>TARGET</th><th>STOP</th><th>TIMEFRAME</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td class="ticker-cell">AVAV</td><td>AeroVironment</td><td>Switchblade deployed in live conflict. DoD backlog expanding. 185% rev expected.</td><td class="c-gold">$205–240 post-earnings</td><td class="c-green">$355 median target</td><td class="c-red">$185</td><td>2–4 weeks</td></tr>
+        <tr><td>2</td><td class="ticker-cell">PLTR</td><td>Palantir</td><td>Maven Smart System with NATO. Every escalation = direct revenue. Already up 8%.</td><td class="c-gold">€88 limit</td><td class="c-green">€120</td><td class="c-red">€70</td><td>3–4 weeks</td></tr>
+        <tr><td>3</td><td class="ticker-cell">KTOS</td><td>Kratos</td><td>Defense drones in active war. $1.5T DoD budget discussions. Stop safely at $75.</td><td class="c-gold">$80 limit (add)</td><td class="c-green">$99</td><td class="c-red">$75</td><td>2–4 weeks</td></tr>
+        <tr><td>4</td><td class="ticker-cell">IAU</td><td>Gold ETF</td><td>War + dollar weakness + Fed hold = gold bid. Already +124%. Never sell.</td><td class="c-gold">Any dip</td><td class="c-green">+10%</td><td class="c-red">–5%</td><td>Permanent</td></tr>
+      </tbody>
+    </table>
+    <div id="short-rule-note" class="note-box warn" style="margin-top: 12px;"><strong>SHORT TERM RULES:</strong> Max €300–400 per trade · Set limit sell at target BEFORE entry · Stop hit = exit same day no negotiation · Do not hold through earnings unless thesis clear</div>
+  </div>
+
+  <div id="layer-mid" class="layer-content">
+    <div id="mid-note" class="note-box">Logic: Paradigm shift stocks currently beaten down but thesis intact. <strong>Buy fear, sell recovery.</strong></div>
+    <br>
+    <table>
+      <thead id="mid-thead"><tr><th>#</th><th>TICKER</th><th>NAME</th><th>WHY</th><th>ENTRY</th><th>TARGET</th><th>STOP</th><th>TIMELINE</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td class="ticker-cell">CRSP</td><td>CRISPR Therapeutics</td><td>Phase 3 data 2026. No war exposure. Down on market fear not company failure. Best bio asymmetry.</td><td class="c-gold">$44 limit ✅ set</td><td class="c-green">$106 (+140%)</td><td class="c-red">$38</td><td>3–5 months</td></tr>
+        <tr><td>2</td><td class="ticker-cell">NTLA</td><td>Intellia Therapeutics</td><td>Same gene editing wave as CRSP. Cheaper entry, earlier stage = more upside potential.</td><td class="c-gold">$10 limit ✅ set</td><td class="c-green">$27 (+170%)</td><td class="c-red">$9</td><td>3–5 months</td></tr>
+        <tr><td>3</td><td class="ticker-cell">IONQ</td><td>IonQ Quantum</td><td>Quantum computing inflection 2026–2027. Legal overhang clearing. Already hold 11 shares.</td><td class="c-gold">$25 limit ✅ set</td><td class="c-green">$72</td><td class="c-red">$25</td><td>4–6 months</td></tr>
+        <tr><td>4</td><td class="ticker-cell">UEC</td><td>Uranium Energy</td><td>War = energy security narrative accelerating. Nuclear renaissance. Critical minerals list.</td><td class="c-gold">Add €250 after Mar 10</td><td class="c-green">+40–50%</td><td class="c-red">$11.50</td><td>2–4 months</td></tr>
+        <tr><td>5</td><td class="ticker-cell">RKLB</td><td>Rocket Lab</td><td>Space infrastructure. Every satellite launch = revenue. Dipped on market fear only.</td><td class="c-gold">€141 current</td><td class="c-green">€220</td><td class="c-red">€115</td><td>3–6 months</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="layer-long" class="layer-content">
+    <div id="long-note" class="note-box">Logic: Own the paradigm shifts of the 2020s. <strong>These are the compounders.</strong> Add on every major dip. Never panic sell. 5-year target: €25,000 → €80,000–120,000.</div>
+    <br>
+    <table>
+      <thead id="long-thead"><tr><th>TICKER</th><th>SECTOR</th><th>5-YEAR THESIS</th><th>CURRENT POSITION</th></tr></thead>
+      <tbody>
+        <tr><td class="ticker-cell">PLTR</td><td>Intelligence</td><td>AI becomes the operating system of every government and military on earth</td><td class="c-green">✅ Hold, add on dips</td></tr>
+        <tr><td class="ticker-cell">COHR</td><td>Intelligence</td><td>Optical networking is the spine of AI infrastructure. Every data center needs it.</td><td class="c-green">✅ Hold, core position</td></tr>
+        <tr><td class="ticker-cell">KTOS</td><td>Space / Robotics</td><td>Autonomous drone warfare + hypersonics = 20-year spend cycle</td><td class="c-green">✅ Hold + add $80</td></tr>
+        <tr><td class="ticker-cell">CRSP</td><td>Bio-Engineering</td><td>First gene editing cures approved. CRSP owns the platform IP.</td><td class="c-gold">⏳ Limit $44 pending</td></tr>
+        <tr><td class="ticker-cell">UEC + URNM</td><td>Energy</td><td>Nuclear renaissance. Every AI data center needs baseload power. Uranium is the fuel.</td><td class="c-green">✅ Hold + add post Mar 10</td></tr>
+        <tr><td class="ticker-cell">AVAV</td><td>Robotics / Defense</td><td>Drone warfare is permanent. Contracts, backlog, moat. War accelerates adoption.</td><td class="c-gold">⏳ Buy Wednesday post-earnings</td></tr>
+        <tr><td class="ticker-cell">IAU</td><td>Macro Hedge</td><td>Gold in every war, every recession, every crisis. Permanent 5–10% portfolio weight.</td><td class="c-green">✅ NEVER SELL. +124%.</td></tr>
+        <tr><td class="ticker-cell">SK HYNIX</td><td>Korea — Intelligence</td><td>HBM memory is the hardware of AI. Irreplaceable position in AI supply chain.</td><td class="c-green">✅ LEGEND. +657%. Untouched.</td></tr>
+        <tr><td class="ticker-cell">HANWHA</td><td>Korea — Defense</td><td>Korean defense exports surging globally. Artillery, missiles, systems.</td><td class="c-green">✅ LEGEND. +820%. Untouched.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== SYSTEM ARCHITECTURE ===== -->
+<section id="architecture">
+  <div class="section-header">
+    <span id="s01-num" class="num">§01</span>
+    <h2 id="s01-title">SYSTEM ARCHITECTURE — TWO LAYERS, ONE DECISION</h2>
+  </div>
+
+  <div class="arch-diagram">
+    <div class="arch-box">
+      <div id="arch-a-title" class="arch-title">LAYER A — MACRO ENGINE</div>
+      <div id="arch-a-desc" class="arch-desc">
+        Composite Score 0–100<br>
+        Built from VIX + 30 macro signals<br>
+        <br>
+        <span class="c-gold">→ WHEN to deploy capital</span><br>
+        Controls deployment %, regime, timing
+      </div>
+    </div>
+    <div class="arch-arrow">×</div>
+    <div class="arch-box" style="border-color: var(--gold);">
+      <div id="arch-b-title" class="arch-title" style="color: var(--green);">LAYER B — STOCK SCORECARD</div>
+      <div id="arch-b-desc" class="arch-desc">
+        Per-stock 5-filter score 0–10<br>
+        <span class="c-gold">Filter #1: Analyst Consensus</span> ← <span style="color: var(--green);">NEW</span><br>
+        Filter #2: Thesis Intact<br>
+        Filter #3: Macro/War Alignment<br>
+        Filter #4: Earnings Trajectory<br>
+        Filter #5: Position Size vs Conviction<br>
+        <br>
+        <span class="c-gold">→ WHERE to deploy capital</span>
+      </div>
+    </div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-box">
+      <div id="arch-c-title" class="arch-title">DECISION</div>
+      <div id="arch-c-desc" class="arch-desc">
+        Both layers must align.<br><br>
+        Macro score says: <em>deploy 50%</em><br>
+        Stock score says: <em>AVAV = 8/10</em><br>
+        ↓<br>
+        <span class="c-gold">Buy AVAV with 50% of capital</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="arch-note" class="note-box gold" style="margin-top: 16px;">
+    <strong>KEY INSIGHT:</strong> Analyst consensus is not a 31st indicator inside the composite score — that would double-count information already embedded in macro signals. Instead, it is <strong>Filter #1 in the per-stock scorecard</strong>, the first test every stock must pass before capital is deployed. The composite score tells you <em>when</em>. The scorecard tells you <em>where</em>.
+  </div>
+</section>
+
 <!-- ===== MINERVA PROTOCOL ===== -->
 <section id="protocol">
   <div class="section-header">
@@ -1757,12 +2130,153 @@ window.addEventListener('DOMContentLoaded', function() {
   </div>
 </section>
 
+<!-- ===== TUITION LOG ===== -->
+<section id="tuition" style="margin-top: 48px;">
+  <div class="section-header">
+    <span class="num">§08</span>
+    <h2>📖 TUITION LOG — LESSONS PAID IN REAL CAPITAL</h2>
+  </div>
+
+  <div class="note-box gold" style="margin-bottom: 24px;">
+    Every entry here cost real money. That makes it real wisdom. These are not rules from a book — they are scars from the market. Read before every deployment.
+  </div>
+
+  <!-- LESSON 01 -->
+  <div style="background: var(--bg2); border: 1px solid var(--border); border-left: 4px solid var(--warn); border-radius: 4px; padding: 20px; margin-bottom: 16px;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+      <div>
+        <span style="font-family: 'Orbitron', monospace; font-size: 11px; color: var(--warn); letter-spacing: 1px;">LESSON #01</span>
+        <div style="font-family: 'Orbitron', monospace; font-size: 15px; color: var(--gold); margin-top: 4px;">THE €1 GAP TRAP</div>
+      </div>
+      <div style="text-align: right;">
+        <div style="font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim);">DATE: 11 MAR 2026</div>
+        <div style="font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim);">STOCK: CRSP &nbsp;|&nbsp; COST: MISSED ENTRY</div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+      <div>
+        <div style="font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--red); letter-spacing: 1px; margin-bottom: 6px;">WHAT HAPPENED</div>
+        <div style="font-size: 13px; color: var(--text); line-height: 1.7;">
+          CRSP was bleeding -8% and trading at €46 — right at the target zone of €46.60. 
+          Instead of buying, Titan hesitated and lowered the limit to €45.50 seeking an extra €1 of discount. 
+          The stock bounced on a green day. Entry missed.
+        </div>
+      </div>
+      <div>
+        <div style="font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--green); letter-spacing: 1px; margin-bottom: 6px;">THE REAL COST</div>
+        <div style="font-size: 13px; color: var(--text); line-height: 1.7;">
+          CRSP 5Y target: <span style="color: var(--gold);">$200</span>. 
+          Entry at €46 vs €45.50 = €0.50 difference per share. 
+          On a 5-year journey to $200, that €0.50 is <span style="color: var(--red);">completely irrelevant.</span> 
+          The obsession with the perfect entry cost the entire position.
+        </div>
+      </div>
+    </div>
+
+    <div style="background: var(--bg3); border: 1px solid rgba(201,168,76,0.2); border-radius: 3px; padding: 14px;">
+      <div style="font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--gold); letter-spacing: 1px; margin-bottom: 8px;">⚔️ THE RULE FORGED FROM THIS LESSON</div>
+      <div style="font-size: 14px; color: var(--green); font-weight: 600; line-height: 1.7;">
+        When a stock with conviction score 7+ enters your target zone — BUY. Do not negotiate with yourself over €1. 
+        On a 5-year horizon, position sizing matters 100x more than entry precision. 
+        Fear of the falling knife is just fear wearing a logical costume.
+      </div>
+    </div>
+
+    <div style="margin-top: 14px; display: flex; gap: 24px; flex-wrap: wrap;">
+      <div>
+        <div style="font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--text-dim); margin-bottom: 3px;">CONVICTION SCORE</div>
+        <span class="score-badge high">6/10</span>
+      </div>
+      <div>
+        <div style="font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--text-dim); margin-bottom: 3px;">MISTAKE TYPE</div>
+        <span style="font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--warn);">FEAR-BASED HESITATION</span>
+      </div>
+      <div>
+        <div style="font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--text-dim); margin-bottom: 3px;">TUITION PAID</div>
+        <span style="font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--red);">MISSED POSITION</span>
+      </div>
+      <div>
+        <div style="font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--text-dim); margin-bottom: 3px;">MINERVA VERDICT</div>
+        <span style="font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--green);">GRADUATED ✓</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LESSON 02 — GEVO -->
+  <div style="background: var(--bg2); border: 1px solid var(--border); border-left: 4px solid var(--red); border-radius: 4px; padding: 20px; margin-bottom: 16px;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+      <div>
+        <span style="font-family: 'Orbitron', monospace; font-size: 11px; color: var(--red); letter-spacing: 1px;">LESSON #02</span>
+        <div style="font-family: 'Orbitron', monospace; font-size: 15px; color: var(--gold); margin-top: 4px;">THE HOPE-HOLD TRAP</div>
+      </div>
+      <div style="text-align: right;">
+        <div style="font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim);">DATE: MAR 2026</div>
+        <div style="font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim);">STOCK: GEVO &nbsp;|&nbsp; COST: -83% UNREALIZED</div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+      <div>
+        <div style="font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--red); letter-spacing: 1px; margin-bottom: 6px;">WHAT HAPPENED</div>
+        <div style="font-size: 13px; color: var(--text); line-height: 1.7;">
+          Bought GEVO at $13 avg. Stock collapsed to ~$2.20 (-83%). 
+          Instead of exiting, considered averaging down at $2.15 with $200 to "recover." 
+          The spike on Mar 10 — a perfect exit gift — was not taken.
+        </div>
+      </div>
+      <div>
+        <div style="font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--green); letter-spacing: 1px; margin-bottom: 6px;">THE REAL COST</div>
+        <div style="font-size: 13px; color: var(--text); line-height: 1.7;">
+          Adding $200 at $2.20 moves average from $13.00 to $12.70 — <span style="color: var(--red);">negligible.</span> 
+          GEVO needs to 6x just to break even. That $200 deployed into IONQ at $33 could reach $65 in 12 months. 
+          Dead capital has an invisible cost.
+        </div>
+      </div>
+    </div>
+
+    <div style="background: var(--bg3); border: 1px solid rgba(201,168,76,0.2); border-radius: 3px; padding: 14px;">
+      <div style="font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--gold); letter-spacing: 1px; margin-bottom: 8px;">⚔️ THE RULE FORGED FROM THIS LESSON</div>
+      <div style="font-size: 14px; color: var(--green); font-weight: 600; line-height: 1.7;">
+        A spike in a broken thesis is an EXIT GIFT — not a recovery signal. 
+        The loss is already real whether you sell or hold. The only question is: what does this capital do NEXT? 
+        Score 4/10 positions do not deserve averaging down. Ever. Sell and redeploy into conviction.
+      </div>
+    </div>
+
+    <div style="margin-top: 14px; display: flex; gap: 24px; flex-wrap: wrap;">
+      <div>
+        <div style="font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--text-dim); margin-bottom: 3px;">CONVICTION SCORE</div>
+        <span class="score-badge low">4/10</span>
+      </div>
+      <div>
+        <div style="font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--text-dim); margin-bottom: 3px;">MISTAKE TYPE</div>
+        <span style="font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--red);">HOPE DISGUISED AS STRATEGY</span>
+      </div>
+      <div>
+        <div style="font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--text-dim); margin-bottom: 3px;">TUITION PAID</div>
+        <span style="font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--red);">-83% UNREALIZED</span>
+      </div>
+      <div>
+        <div style="font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--text-dim); margin-bottom: 3px;">MINERVA VERDICT</div>
+        <span style="font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--warn);">LESSON IN PROGRESS ⚠️</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="note-box" style="border-left-color: var(--gold); margin-top: 8px;">
+    <strong>TITAN'S OWN WORDS — 11 MAR 2026:</strong> <em>"It's a shame. I had the chance to buy the bleeding ones yesterday. I should have been more aggressive to overcome fear of dropping price — because in 5 years, anyhow our portfolio shows huge upside. I shouldn't have been obsessed with a few EUR gap."</em>
+    <br><br>This is the Titan who is becoming greater every day. The awareness IS the edge.
+  </div>
+
+</section>
+
 </div><!-- /container -->
 
 <footer>
   <div id="foot-left" class="left">
-    TITAN INVESTMENT SYSTEM · v4.0 · 09 MAR 2026 &nbsp;|&nbsp; 
-    STOCK SCORECARD ADDED — ANALYST CONSENSUS AS FILTER #1 &nbsp;|&nbsp;
+    OLYMPUS · TITAN INVESTMENT SYSTEM · v4.2 · 11 MAR 2026 &nbsp;|&nbsp;
+    TUITION LOG ADDED — LESSONS FORGED IN REAL CAPITAL &nbsp;|&nbsp;
     MACRO ENGINE × STOCK SCORECARD = DECISION
   </div>
   <div id="foot-right" class="right">MINERVA · 90% MENTOR · 10% BATTLE-BROTHER 👑</div>
@@ -1784,9 +2298,9 @@ window.addEventListener('DOMContentLoaded', function() {
     en: {
       // Header
       sysTitle: 'TITAN INVESTMENT SYSTEM',
-      sysSubtitle: 'MINERVA PROTOCOL &nbsp;·&nbsp; v4.0 &nbsp;·&nbsp; LAST UPDATED: 09 MAR 2026',
+      sysSubtitle: 'MINERVA PROTOCOL &nbsp;·&nbsp; v4.0 &nbsp;·&nbsp; LIVE UPDATE: 2026-03-11 20:52 CET',
       lblVix: 'VIX', lblComposite: 'COMPOSITE', lblRegime: 'REGIME', lblEnv: 'ENVIRONMENT',
-      envVal: 'US-IRAN WAR D8', regimeVal: 'WATCH',
+      envVal: 'US-IRAN DAY 10 + FED WEEK', regimeVal: 'WATCH',
       langBtn: '🌐 &nbsp;한국어',
 
       // Nav
