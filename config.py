@@ -138,6 +138,30 @@ PORTFOLIO = {
             "score": 10, "action": "LEGEND — NEVER SELL",
             "thesis": "Korean defense exports surging globally. +820%",
         },
+        {
+            "ticker": "042660.KS", "name": "한화오션", "category": "Defense/Shipbuilding",
+            "buy_price_krw": None, "shares": None,
+            "score": 8, "action": "WATCH",
+            "thesis": "Korean shipbuilding renaissance — defense + LNG vessels",
+        },
+        {
+            "ticker": "009540.KS", "name": "HD한국조선해양", "category": "Shipbuilding",
+            "buy_price_krw": None, "shares": None,
+            "score": 8, "action": "WATCH",
+            "thesis": "World's largest shipbuilder — LNG + naval orders surging",
+        },
+        {
+            "ticker": "329180.KS", "name": "HD현대중공업", "category": "Shipbuilding",
+            "buy_price_krw": None, "shares": None,
+            "score": 7, "action": "WATCH",
+            "thesis": "Heavy industry + shipbuilding — Korea defense supply chain",
+        },
+        {
+            "ticker": "207940.KS", "name": "삼성바이오로직스", "category": "Bio-Engineering",
+            "buy_price_krw": None, "shares": None,
+            "score": 8, "action": "WATCH",
+            "thesis": "Global CDMO leader — biologic drug manufacturing growth",
+        },
     ],
     "Kiwoom_US": [
         {

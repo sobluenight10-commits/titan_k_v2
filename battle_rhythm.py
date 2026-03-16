@@ -150,15 +150,25 @@ def _berlin_now():
 
 
 def _build_header(title: str, ctx: Dict) -> str:
-    """Build standard briefing header with Berlin time."""
+    """Build standard briefing header — GOD'S MISSION first, always."""
     regime_emoji = {"CALM": "🟢", "NORMAL": "🔵", "FEAR": "🟡", "CRISIS": "🔴"}.get(ctx["regime"], "⚪")
     now = _berlin_now()
-    return (
+    mission = (
+        f"⚔️ <b>GOD'S MISSION</b>\n"
+        f"🎯 ₩170,000,000,000 (~€115M) by 2036\n"
+        f"📈 ~47% CAGR · Beat Buffett every year\n"
+        f"💰 €25,000 + €1,500/month deployed\n"
+        f"🏝 Destination: Thailand Islands\n"
+        f"🔱 Belief: <b>INVINCIBLE</b>\n"
+        f"{'━' * 28}\n\n"
+    )
+    header = (
         f"🔱 <b>{title}</b>\n"
         f"📅 {now.strftime('%Y-%m-%d %H:%M')} Berlin\n"
         f"{regime_emoji} {ctx['regime']} · VIX {ctx['vix']} · Deploy {ctx['deploy_pct']}%\n"
         f"{'━' * 28}\n\n"
     )
+    return mission + header
 
 
 def _build_footer() -> str:
@@ -221,7 +231,14 @@ def generate_kr_close() -> str:
     ctx = _fetch_live_context()
 
     # Korean tickers specifically
-    kr_tickers = ["000660.KS", "272210.KS"]
+    kr_tickers = [
+        "000660.KS",  # SK Hynix
+        "272210.KS",  # Hanwha Systems
+        "042660.KS",  # 한화오션
+        "009540.KS",  # HD한국조선해양
+        "329180.KS",  # HD현대중공업
+        "207940.KS",  # 삼성바이오로직스
+    ]
     kr_lines = []
     for t in kr_tickers:
         p = ctx["prices"].get(t, {})
@@ -241,7 +258,12 @@ Structure:
 • [2-3 bullets: KOSPI direction, key Korean market themes]
 
 💼 KR PORTFOLIO
-• [SK Hynix and Hanwha status — price, change, any news]
+• SK Hynix (000660.KS) — price, change, HBM/AI news
+• Hanwha Systems (272210.KS) — price, change, defense news
+• 한화오션 (042660.KS) — price, change, shipbuilding news
+• HD한국조선해양 (009540.KS) — price, change
+• HD현대중공업 (329180.KS) — price, change
+• 삼성바이오로직스 (207940.KS) — price, change, bio news
 
 🇺🇸 US PREVIEW
 • [how Korean close signals for US open in 3 hours]
