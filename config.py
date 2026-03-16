@@ -19,6 +19,7 @@ TIMEZONE = "Europe/Berlin"
 # ── DAILY BATTLE RHYTHM (all times Berlin) ────────────────────────────────────
 # Each entry: (time, briefing_id, description)
 DAILY_SCHEDULE = [
+    ("06:45", "olympus",      "🏛 Olympus Dashboard Update + 30-Index Forecast"),
     ("07:00", "blog",         "📰 Blog Summary"),
     ("08:30", "morning_macro","🌅 Late Night Global Issues → Portfolio Insights → Today's Plan"),
     ("12:30", "kr_close",     "🇰🇷 Korean Market Close Summary → Portfolio Impact"),

@@ -156,14 +156,39 @@ def run_olympus_update() -> dict:
 
 FORECAST_SYSTEM = """You are the Olympus Intelligence Engine — the brain of the TITAN Investment System.
 You have access to LIVE market data AND today's breaking news for every stock.
-Your job:
+
+You operate as the TITAN ARCHITECT: an elite AI investment strategist that filters every
+stock through the 10 Global Titan Criteria before issuing any BUY, HOLD, or score above 7.
+
+══ THE 10 GLOBAL TITAN CRITERIA ══
+
+1. QUANTITATIVE GATE (Mandatory — calculate or flag UNKNOWN if data missing)
+   a) Graham Number = sqrt(22.5 x EPS x BVPS). Flag if current price > Graham Number.
+   b) Magic Formula: ROIC > 25% AND Earnings Yield (EBIT/EV) is attractive vs peers.
+   c) Lynch Filter: PEG Ratio < 1.0 AND Inventory Growth < Sales Growth.
+   d) Buffett Shield: Debt-to-Equity < 0.5.
+
+2. PORTFOLIO ARCHITECTURE (Ray Dalio Logic)
+   Classify asset as SPEAR (High Growth/Alpha) or SHIELD (Value/Defensive).
+   Note diversification impact on existing portfolio.
+
+3. BOGLE COST GUARD
+   For any ETF/Fund: flag if Expense Ratio > 0.15%.
+
+4. SCORING RULES (non-negotiable)
+   - NEVER guess a Graham Number. Missing EPS or BVPS = state "UNKNOWN — awaiting filing."
+   - Always state the data source assumption (e.g. "Based on Q3 2025 10-Q").
+   - Score 8+ REQUIRES passing at least 3 of 4 quantitative gates.
+   - Score 10 REQUIRES all 4 gates passed AND clear paradigm-shift thesis intact.
+   - Broken thesis = score 1-3 regardless of quant metrics.
+
+Your broader job:
 1. Detect critical events (dilution, broken thesis, earnings surprise, war escalation, etc.)
-2. Revise stock scores based on new information
+2. Revise stock scores based on news AND quantitative gate results
 3. Produce precise forward price estimates
 4. Flag alerts that demand immediate attention
 
-You must be BRUTALLY HONEST. If news is catastrophic (dilution, fraud, guidance cut), slash the score.
-If a stock crashed 12% on real bad news, do NOT keep the old rosy forecast.
+BRUTALLY HONEST. If news is catastrophic, slash the score. No cheerleading.
 ALWAYS respond with valid JSON only. No markdown fences."""
 
 FORECAST_USER = """You are updating the OLYMPUS dashboard. Today is {today}.
@@ -185,14 +210,20 @@ FORECAST_USER = """You are updating the OLYMPUS dashboard. Today is {today}.
 ══ INSTRUCTIONS ══
 1. Read ALL the news carefully. Detect any material event: dilution, offering, guidance cut,
    earnings miss/beat, analyst upgrade/downgrade, war escalation, regulatory action, etc.
-2. For EACH stock: produce new_score (1-10) based on ALL information including today's news.
-   If a stock had score 8 but just announced $350M dilutive offering, new_score should be 4-5.
-   old_score is provided — you MUST explain any change.
-3. For EACH stock and indicator: produce 1w, 1m, 1y, 5y forward estimates.
-   These MUST reflect today's news. A stock that just dropped 12% on dilution
-   should NOT have the same 1w estimate as yesterday.
-4. Generate ALERTS for any score change >= 2 points or any critical event.
-5. Determine the current global environment description (e.g. "US-IRAN DAY 10 + FED WEEK")
+2. For EACH stock: run the TITAN ARCHITECT quantitative gate:
+   a) Graham Number = sqrt(22.5 x EPS x BVPS). Use latest 10-Q/10-K. State assumption.
+      If data unavailable, write "UNKNOWN — awaiting filing" — never guess.
+   b) Magic Formula: ROIC > 25%? Earnings Yield (EBIT/EV) attractive? Yes/No/UNKNOWN.
+   c) Lynch Filter: PEG < 1.0? Inventory Growth < Sales Growth? Yes/No/UNKNOWN.
+   d) Buffett Shield: Debt-to-Equity < 0.5? Yes/No/UNKNOWN.
+   e) Classify as SPEAR or SHIELD.
+   f) For ETFs only: Expense Ratio > 0.15%? Flag if yes.
+3. Produce new_score (1-10) based on ALL information: news + quant gates.
+   Score 8+ requires 3+ gates passed. Score 10 requires all 4 gates + intact thesis.
+   Broken thesis = 1-3 regardless of metrics.
+4. For EACH stock and indicator: produce 1w, 1m, 1y, 5y forward estimates.
+5. Generate ALERTS for score change >= 2 points or any critical event.
+6. Determine the current global environment description.
 
 Return ONLY this JSON:
 {{
@@ -222,12 +253,23 @@ Return ONLY this JSON:
     "TICKER": {{
       "old_score": number,
       "new_score": number,
-      "score_reason": "Why score changed or stayed same — reference specific news",
+      "score_reason": "Why score changed or stayed same — reference specific news and gate results",
       "est_1w": number,
       "est_1m": number,
       "est_1y": number,
       "est_5y": number,
-      "why_changed": "1 sentence referencing today's news if applicable"
+      "why_changed": "1 sentence referencing today's news if applicable",
+      "architect": {{
+        "graham_number": "e.g. $42.10 (Based on Q3 2025 10-Q: EPS $1.87, BVPS $8.92) — BELOW current price" or "UNKNOWN — awaiting filing",
+        "magic_formula": "ROIC: 31% (PASS) / Earnings Yield: 4.2% (PASS)" or "UNKNOWN",
+        "lynch_filter": "PEG: 0.82 (PASS) / Inventory vs Sales: N/A for software" or "FAIL: PEG 2.1",
+        "buffett_shield": "D/E: 0.32 (PASS)" or "FAIL: D/E 1.8",
+        "gates_passed": 3,
+        "classification": "SPEAR",
+        "etf_expense_ratio": null,
+        "verdict": "PASS — 3/4 gates met. High-conviction SPEAR with intact paradigm thesis.",
+        "data_assumption": "Based on most recent 10-Q (Q3 2025, filed Nov 2025)"
+      }}
     }}
   }}
 }}"""
@@ -735,7 +777,7 @@ def _build_forecast_html(data: dict) -> str:
     </table>
   </div>
 
-  <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:1px;margin-bottom:12px;">PORTFOLIO &amp; WATCHLIST — WITH LIVE SCORE REVISION</div>
+  <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:1px;margin-bottom:12px;">PORTFOLIO &amp; WATCHLIST — WITH LIVE SCORE REVISION + TITAN ARCHITECT GATE</div>
   <div style="overflow-x:auto;">
     <table>
       <thead>
@@ -743,7 +785,7 @@ def _build_forecast_html(data: dict) -> str:
           <th>STOCK</th><th>SCORE</th><th>CURRENT</th>
           <th>1W EST</th><th>1M EST</th><th>1Y EST</th><th>5Y EST</th>
           <th>YDAY 1W</th><th>YDAY 1M</th><th>YDAY 1Y</th><th>YDAY 5Y</th>
-          <th>DELTA</th><th>WHY CHANGED</th>
+          <th>DELTA</th><th>ARCHITECT GATE</th><th>WHY CHANGED</th>
         </tr>
       </thead>
       <tbody>
@@ -847,7 +889,8 @@ def _build_stock_rows(forecasts: dict, snapshot: dict, deltas: dict, yesterday: 
           <td class="c-dim">{_fmt(y1w, True)}</td><td class="c-dim">{_fmt(y1m, True)}</td>
           <td class="c-dim">{_fmt(y1y, True)}</td><td class="c-dim">{_fmt(y5y, True)}</td>
           <td><span class="{delta_color}">{delta_display}</span></td>
-          <td style="font-size:11px;max-width:220px;color:var(--text-dim);">{why}</td>
+          <td style="font-size:10px;max-width:200px;color:var(--text-dim);line-height:1.5;">{_fmt_architect(est.get('architect'))}</td>
+          <td style="font-size:11px;max-width:180px;color:var(--text-dim);">{why}</td>
         </tr>
 """
     return rows
@@ -864,6 +907,60 @@ def _fmt(val, is_stock: bool) -> str:
             return f"{v:,.2f}" if abs(v) < 1000 else f"{v:,.0f}"
     except (ValueError, TypeError):
         return str(val)
+
+
+def _fmt_architect(arch: dict | None) -> str:
+    """Render the TITAN ARCHITECT gate as a compact HTML cell."""
+    if not arch:
+        return '<span style="color:var(--text-dim)">—</span>'
+
+    gates_passed = arch.get("gates_passed", 0)
+    verdict = arch.get("verdict", "")
+    classification = arch.get("classification", "")
+    graham = arch.get("graham_number", "UNKNOWN")
+    magic = arch.get("magic_formula", "UNKNOWN")
+    lynch = arch.get("lynch_filter", "UNKNOWN")
+    buffett = arch.get("buffett_shield", "UNKNOWN")
+    assumption = arch.get("data_assumption", "")
+    etf_er = arch.get("etf_expense_ratio")
+
+    # Gate pass color
+    if gates_passed >= 4:
+        gate_color = "var(--green)"
+        gate_label = f"✅ {gates_passed}/4 GATES"
+    elif gates_passed >= 3:
+        gate_color = "var(--gold)"
+        gate_label = f"🟡 {gates_passed}/4 GATES"
+    elif gates_passed >= 2:
+        gate_color = "var(--warn)"
+        gate_label = f"⚠️ {gates_passed}/4 GATES"
+    else:
+        gate_color = "var(--red)"
+        gate_label = f"❌ {gates_passed}/4 GATES"
+
+    cls_badge = (
+        '<span style="color:var(--red);font-weight:bold;">⚔ SPEAR</span>'
+        if classification == "SPEAR"
+        else '<span style="color:var(--blue, #4fc3f7);font-weight:bold;">🛡 SHIELD</span>'
+        if classification == "SHIELD"
+        else ""
+    )
+
+    etf_line = ""
+    if etf_er is not None:
+        er_color = "var(--red)" if float(etf_er) > 0.15 else "var(--green)"
+        etf_line = f'<div>ER: <span style="color:{er_color};">{etf_er}%</span></div>'
+
+    return (
+        f'<div style="font-weight:bold;color:{gate_color};margin-bottom:3px;">{gate_label}</div>'
+        f'<div style="margin-bottom:2px;">{cls_badge}</div>'
+        f'<div style="color:var(--text-dim);margin-bottom:2px;">Graham: {graham[:40]}</div>'
+        f'<div style="color:var(--text-dim);margin-bottom:2px;">Magic: {magic[:35]}</div>'
+        f'<div style="color:var(--text-dim);margin-bottom:2px;">Lynch: {lynch[:35]}</div>'
+        f'<div style="color:var(--text-dim);margin-bottom:2px;">Buffett: {buffett[:30]}</div>'
+        f'{etf_line}'
+        f'<div style="color:var(--text-dim);font-style:italic;font-size:9px;">{assumption[:50]}</div>'
+    )
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -937,6 +1034,17 @@ def _inject_live_scorecard(html: str, data: dict) -> str:
         thesis_dot = '<span class="dot g"></span>' if not alert else '<span class="dot r"></span>'
         reason_text = score_reason or why or pos.get("thesis", "")
 
+        # Compact architect summary for scorecard
+        arch = sf.get("architect", {})
+        if arch:
+            gates = arch.get("gates_passed", 0)
+            gate_icon = "✅" if gates >= 4 else "🟡" if gates >= 3 else "⚠️" if gates >= 2 else "❌"
+            cls = arch.get("classification", "")
+            cls_tag = f" ⚔SPEAR" if cls == "SPEAR" else f" 🛡SHIELD" if cls == "SHIELD" else ""
+            arch_summary = f"{gate_icon}{gates}/4{cls_tag}"
+        else:
+            arch_summary = "—"
+
         action_cls = "add" if "ADD" in action.upper() or "BUY" in action.upper() else "hold" if "HOLD" in action.upper() else "sell" if "EXIT" in action.upper() or "SELL" in action.upper() else "pending"
 
         rows += f"""        <tr{row_bg}>
@@ -945,6 +1053,7 @@ def _inject_live_scorecard(html: str, data: dict) -> str:
           <td>{thesis_dot} {reason_text[:45]}</td>
           <td>{badge}</td>
           <td><span class="action-badge {action_cls}">{action[:30]}</span></td>
+          <td style="font-size:11px;color:var(--text-dim);">{arch_summary}</td>
           <td class="c-dim">{why[:60]}</td>
         </tr>
 """
@@ -956,6 +1065,7 @@ def _inject_live_scorecard(html: str, data: dict) -> str:
           <th>THESIS / NEWS</th>
           <th>SCORE</th>
           <th>ACTION</th>
+          <th>ARCHITECT</th>
           <th>WHY CHANGED</th>
         </tr>
       </thead>"""
@@ -1143,6 +1253,31 @@ def get_olympus_telegram_summary(data: dict) -> str:
         for diff, ticker, old, new, reason in score_changes:
             arrow = "▲" if diff > 0 else "▼"
             body += f"  {arrow} <b>{ticker}</b>: {old}→{new}/10 — {reason[:80]}\n"
+        body += "\n"
+
+    # TITAN ARCHITECT gate verdicts
+    architect_lines = []
+    for ticker, est in stocks.items():
+        arch = est.get("architect")
+        if not arch:
+            continue
+        gates = arch.get("gates_passed", 0)
+        verdict = arch.get("verdict", "")
+        cls = arch.get("classification", "")
+        gate_icon = "✅" if gates >= 4 else "🟡" if gates >= 3 else "⚠️" if gates >= 2 else "❌"
+        cls_icon = "⚔" if cls == "SPEAR" else "🛡" if cls == "SHIELD" else ""
+        graham_short = arch.get("graham_number", "UNKNOWN")
+        # Keep it short for Telegram
+        if len(graham_short) > 45:
+            graham_short = graham_short[:45] + "…"
+        architect_lines.append(
+            f"  {gate_icon} <b>{ticker}</b> {cls_icon} {gates}/4 gates | {graham_short}"
+        )
+
+    if architect_lines:
+        body += "<b>🏛 TITAN ARCHITECT GATE</b>\n"
+        for line in architect_lines:
+            body += line + "\n"
         body += "\n"
 
     # Key forecast changes

@@ -31,6 +31,10 @@ _price_cache: Dict = {}
 _cache_time: float = 0
 CACHE_TTL = 60  # seconds
 
+# ── Conversation Memory (per-session, keyed by chat_id) ───────────────────────
+_conversation_history: Dict[str, list] = {}
+HISTORY_MAX_TURNS = 20  # keep last 20 user+assistant pairs = 40 messages
+
 
 def _get_cached_prices() -> Dict:
     """Return cached prices or fetch fresh if stale."""
@@ -71,15 +75,29 @@ def _footer() -> str:
 # ══════════════════════════════════════════════════════════════════════════════
 
 async def cmd_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = str(update.effective_chat.id)
+    configured_id = str(TELEGRAM_CHAT_ID).strip()
+    if configured_id and chat_id != configured_id:
+        await update.message.reply_text(
+            f"⚠️ <b>This chat is not configured for briefings.</b>\n\n"
+            f"Your chat ID: <code>{chat_id}</code>\n"
+            f"Add to .env on your server (Android/laptop):\n"
+            f"<code>TELEGRAM_CHAT_ID={chat_id}</code>\n\n"
+            f"Then restart the bot. Briefings and alarms go only to the configured chat.",
+            parse_mode=ParseMode.HTML,
+        )
+        return
     await update.message.reply_text(
         "🔱 <b>titan_K — Minerva Online</b>\n\n"
         "<b>Commands:</b>\n"
         "• /macro — Macro briefing now\n"
         "• /blog — Blog analysis now\n"
+        "• /olympus — Olympus dashboard update + Telegram\n"
         "• /price PLTR UEC — Live prices\n"
         "• /score — Portfolio scorecard\n"
         "• /regime — VIX regime\n"
-        "• /news — Scan all sources\n\n"
+        "• /news — Scan all sources\n"
+        "• /reset — Clear conversation memory\n\n"
         "<b>Or just type:</b>\n"
         "\"CRISPR status\" · \"should I buy UEC?\" · \"oil today?\"\n"
         + _footer(),
@@ -103,6 +121,29 @@ async def cmd_macro(update: Update, context: ContextTypes.DEFAULT_TYPE):
 def _sync_macro() -> str:
     from battle_rhythm import generate_briefing
     return generate_briefing("morning_macro")
+
+
+async def cmd_olympus(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("🏛 Running Olympus update... ~60s")
+    try:
+        loop = asyncio.get_event_loop()
+        result = await asyncio.wait_for(
+            loop.run_in_executor(None, _sync_olympus),
+            timeout=120,
+        )
+        if result:
+            from telegram_bot import send_telegram
+            send_telegram(result)
+    except asyncio.TimeoutError:
+        await update.message.reply_text("⚠️ Olympus timed out (120s). Try again later.")
+    except Exception as e:
+        await update.message.reply_text(f"⚠️ {str(e)[:200]}")
+
+
+def _sync_olympus() -> str:
+    from olympus_engine import run_olympus_update, get_olympus_telegram_summary
+    result = run_olympus_update()
+    return get_olympus_telegram_summary(result)
 
 
 async def cmd_blog(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -351,9 +392,23 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     system = (
         f"You are Minerva — Titan's AI advisor. LIVE data below.\n"
         f"RULES: Bullet points. Max 15 words per bullet. No disclaimers. Direct.\n"
+        f"You have full conversation memory — reference prior context naturally.\n"
         f"VIX: {vix}\n\nPORTFOLIO:\n" + "\n".join(port_lines) +
         "\n\nWATCHLIST:\n" + "\n".join(watch_lines)
     )
+
+    # ── Conversation Memory ────────────────────────────────────────────────────
+    chat_id = str(update.effective_chat.id)
+    if chat_id not in _conversation_history:
+        _conversation_history[chat_id] = []
+
+    history = _conversation_history[chat_id]
+    history.append({"role": "user", "content": user_msg})
+
+    # Trim to max turns (keep last N pairs)
+    if len(history) > HISTORY_MAX_TURNS * 2:
+        history = history[-(HISTORY_MAX_TURNS * 2):]
+        _conversation_history[chat_id] = history
 
     try:
         from openai import OpenAI
@@ -362,16 +417,32 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             model="gpt-4o",
             messages=[
                 {"role": "system", "content": system},
-                {"role": "user", "content": user_msg},
+                *history,
             ],
             temperature=0.4,
-            max_tokens=400,
+            max_tokens=800,
         )
-        reply = resp.choices[0].message.content + _footer()
+        reply_text = resp.choices[0].message.content
+        # Store assistant reply in history
+        history.append({"role": "assistant", "content": reply_text})
+        _conversation_history[chat_id] = history
+
+        reply = reply_text + _footer()
         await update.message.reply_text(reply, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
     except Exception as e:
         logger.error(f"GPT error: {e}")
         await update.message.reply_text(f"⚠️ {str(e)[:200]}")
+
+
+async def cmd_reset(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Clear conversation history for this chat."""
+    chat_id = str(update.effective_chat.id)
+    _conversation_history.pop(chat_id, None)
+    await update.message.reply_text(
+        "🔱 Conversation memory cleared. Fresh context." + _footer(),
+        parse_mode=ParseMode.HTML,
+        disable_web_page_preview=True,
+    )
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -393,7 +464,21 @@ def _get_score(ticker: str) -> int:
 # BOT RUNNER
 # ══════════════════════════════════════════════════════════════════════════════
 
+async def _error_handler(update: object, context: ContextTypes.DEFAULT_TYPE):
+    """Global error handler — logs + tries to notify user."""
+    logger.error(f"Bot error: {context.error}", exc_info=context.error)
+    if update and hasattr(update, "effective_chat") and update.effective_chat:
+        try:
+            await context.bot.send_message(
+                chat_id=update.effective_chat.id,
+                text=f"⚠️ Error: {str(context.error)[:200]}\nPlease retry.",
+            )
+        except Exception:
+            pass
+
+
 def start_interactive_bot():
+    import time as _time
     logger.info("Starting interactive bot...")
     app = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
 
@@ -401,11 +486,24 @@ def start_interactive_bot():
     app.add_handler(CommandHandler("help", cmd_start))
     app.add_handler(CommandHandler("macro", cmd_macro))
     app.add_handler(CommandHandler("blog", cmd_blog))
+    app.add_handler(CommandHandler("olympus", cmd_olympus))
     app.add_handler(CommandHandler("price", cmd_price))
     app.add_handler(CommandHandler("score", cmd_score))
     app.add_handler(CommandHandler("regime", cmd_regime))
     app.add_handler(CommandHandler("news", cmd_news))
+    app.add_handler(CommandHandler("reset", cmd_reset))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+    app.add_error_handler(_error_handler)
 
-    logger.info("🔱 Bot listening.")
-    app.run_polling(allowed_updates=Update.ALL_TYPES)
+    for attempt in range(1, 6):
+        try:
+            logger.info(f"Bot polling attempt {attempt}/5...")
+            app.run_polling(allowed_updates=Update.ALL_TYPES)
+            break
+        except Exception as e:
+            logger.warning(f"Bot start failed (attempt {attempt}): {e}")
+            if attempt < 5:
+                _time.sleep(5 * attempt)
+            else:
+                logger.error("Bot failed after 5 attempts. Running scheduler only.")
+                raise

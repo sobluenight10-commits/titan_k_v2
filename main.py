@@ -118,6 +118,8 @@ def run_briefing(briefing_id: str, description: str = ""):
 
     if briefing_id == "blog":
         _run_blog()
+    elif briefing_id == "olympus":
+        _run_olympus()
     else:
         _run_battle_rhythm(briefing_id)
 
@@ -151,6 +153,23 @@ def _run_blog():
         try:
             from telegram_bot import send_telegram
             send_telegram(f"🔱 ⚠️ Blog error: {str(e)[:200]}")
+        except:
+            pass
+
+
+def _run_olympus():
+    try:
+        from olympus_engine import run_olympus_update, get_olympus_telegram_summary
+        from telegram_bot import send_telegram
+        result = run_olympus_update()
+        msg = get_olympus_telegram_summary(result)
+        send_telegram(msg)
+        logger.info("Olympus update sent")
+    except Exception as e:
+        logger.error(f"Olympus failed: {e}", exc_info=True)
+        try:
+            from telegram_bot import send_telegram
+            send_telegram(f"🏛 Olympus error: {str(e)[:200]}")
         except:
             pass
 
@@ -202,6 +221,10 @@ def start_scheduler():
     for t, _, desc in DAILY_SCHEDULE:
         logger.info(f"  ⏰ {t} {desc}")
     logger.info("=" * 50)
+
+    from blog_monitor import start_blog_monitor
+    start_blog_monitor()
+
     while True:
         schedule.run_pending()
         time.sleep(10)
@@ -221,12 +244,26 @@ def start_full_system():
         logger.info(f"     {t} {desc}")
     logger.info("=" * 50)
 
+    # Notify Telegram that Minerva is online (so user knows alarms will work)
+    try:
+        from telegram_bot import send_telegram
+        send_telegram(
+            "🔱 <b>Minerva ONLINE</b>\n"
+            "Send /start for commands. Olympus 06:45, Blog 07:00 Berlin. New blog → alert every 15 min."
+        )
+    except Exception as e:
+        logger.warning(f"Startup Telegram ping failed: {e}")
+
     def scheduler_loop():
         while True:
             schedule.run_pending()
             time.sleep(10)
 
     threading.Thread(target=scheduler_loop, daemon=True).start()
+
+    from blog_monitor import start_blog_monitor
+    start_blog_monitor()
+
     from interactive_bot import start_interactive_bot
     start_interactive_bot()
 
@@ -271,6 +308,7 @@ def main():
     parser.add_argument("--listen", action="store_true")
     parser.add_argument("--schedule", action="store_true")
     parser.add_argument("--ping", action="store_true")
+    parser.add_argument("--olympus", action="store_true")
     args = parser.parse_args()
 
     validate_config()
@@ -278,6 +316,8 @@ def main():
     if args.ping:
         from telegram_bot import send_test_ping
         send_test_ping()
+    elif args.olympus:
+        run_briefing("olympus", "Manual")
     elif args.test:
         run_briefing("morning_macro", "Test")
     elif args.blog:

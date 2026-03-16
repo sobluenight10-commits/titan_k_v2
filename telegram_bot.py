@@ -196,6 +196,13 @@ def send_macro_briefing(briefing: dict):
     send_telegram(header + body + footer)
 
 
+def send_olympus_briefing(data: dict):
+    """Format and send the Olympus forecast update."""
+    from olympus_engine import get_olympus_telegram_summary
+    msg = get_olympus_telegram_summary(data)
+    send_telegram(msg)
+
+
 def send_test_ping():
     """Send a test message to verify bot connection."""
     send_telegram(

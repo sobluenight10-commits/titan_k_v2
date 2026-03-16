@@ -44,14 +44,23 @@ python main.py --macro
 ### 4. Cursor Agent Automation (New!)
 Use `.cursor/automation.json` to set up scheduled runs via Cursor's agent feature.
 
-### 5. Android Termux 24/7 Server
-```bash
-# In Termux:
-cd ~/titan_k_v2
-nohup python main.py &
+### 5. Android 24/7 (Olympus server — required for alarms)
+**If you get no Telegram messages:** the process must run 24/7 (laptop off = no alerts). Use an Android phone with Termux.
 
-# Or use termux-job-scheduler for reliability
+```bash
+# On Android (Termux): same .env (TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID)
+python run_android.py
 ```
+See **[ANDROID.md](ANDROID.md)** for full setup. `/start` not replying? Bot wasn’t running or `TELEGRAM_CHAT_ID` is wrong — send `/start` and the bot will tell you your chat ID if the chat isn’t configured.
+
+### 6. Olympus dashboard shows old data
+Dashboard is `data/OLYMPUS_LIVE.html`, updated at 06:45 Berlin or manually:
+
+```bash
+python refresh_olympus.py        # Refresh HTML
+python refresh_olympus.py --send  # Refresh + send summary to Telegram
+```
+Or double‑click **Refresh Olympus.bat** (Windows).
 
 ## Architecture
 ```
