@@ -118,7 +118,7 @@ def run_briefing(briefing_id: str, description: str = ""):
 
     if briefing_id == "blog":
         _run_blog()
-    elif briefing_id == "olympus":
+    elif briefing_id in ("olympus", "olympus_weekly"):
         _run_olympus()
     else:
         _run_battle_rhythm(briefing_id)
@@ -197,13 +197,26 @@ def _run_battle_rhythm(briefing_id: str):
 
 def _setup_schedule():
     """Register briefings using schedule library with Berlin timezone."""
-    from config import DAILY_SCHEDULE
+    from config import DAILY_SCHEDULE, WEEKLY_SCHEDULE
     schedule.clear()
+
+    # Weekday briefings (weekday check enforced in generate_briefing)
     for sched_time, briefing_id, description in DAILY_SCHEDULE:
         schedule.every().day.at(sched_time, "Europe/Berlin").do(
             run_briefing, briefing_id, description
         )
-    logger.info(f"Registered {len(DAILY_SCHEDULE)} briefings (Berlin time)")
+
+    # Saturday Olympus
+    for sched_time, briefing_id, description in WEEKLY_SCHEDULE:
+        schedule.every().saturday.at(sched_time, "Europe/Berlin").do(
+            run_briefing, briefing_id, description
+        )
+
+    # Layer 3 — 30-min news pulse during US session
+    from battle_rhythm import run_news_pulse
+    schedule.every(30).minutes.do(run_news_pulse)
+
+    logger.info(f"Registered {len(DAILY_SCHEDULE)} daily + {len(WEEKLY_SCHEDULE)} weekly briefings + 30min news pulse (Berlin time)")
 
 
 def _berlin_now():
