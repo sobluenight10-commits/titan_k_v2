@@ -17,18 +17,12 @@ TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")
 TIMEZONE = "Europe/Berlin"
 
 # ── DAILY BATTLE RHYTHM (all times Berlin) ────────────────────────────────────
-# Each entry: (time, briefing_id, description)
+# Each entry: (time, briefing_id, description)DAILY_SCHEDULE = [    ("07:00", "master_daily", "📰 Master Daily Brief → Blog + Macro + Scores + TITAN Orders"),
 DAILY_SCHEDULE = [
-    ("06:45", "olympus",      "🏛 Olympus Dashboard Update + 30-Index Forecast"),
-    ("07:00", "blog",         "📰 Blog Summary"),
-    ("08:30", "morning_macro","🌅 Late Night Global Issues → Portfolio Insights → Today's Plan"),
-    ("12:30", "kr_close",     "🇰🇷 Korean Market Close Summary → Portfolio Impact"),
-    ("15:00", "us_premarket", "🇺🇸 Final Check Before US Open → Preparation"),
-    ("15:40", "us_open_40",   "⚡ 40min After US Open → Status + Actions"),
-    ("17:30", "us_midday_1",  "📊 US Mid-Session Check #1"),
-    ("19:30", "us_midday_2",  "📊 US Mid-Session Check #2"),
-    ("22:00", "us_late",      "📊 US Late Session Check"),
-    ("23:00", "us_close",     "🏁 US Market Close → Summary + Review"),
+    ("07:00", "master_daily", "📰 Master Daily Brief → Blog + Macro + Scores + TITAN Orders"),
+    ("15:00", "us_premarket", "🇺🇸 US Pre-Market → Futures + Orders Check"),
+    ("18:00", "us_midday",    "⚡ Open Summary + Mid-Session → Institutional Flows"),
+    ("23:00", "us_close",     "🏁 US Market Close → Daily Review + Tomorrow Prep"),
 ]
 
 # ── Data Storage ──────────────────────────────────────────────────────────────
@@ -38,7 +32,7 @@ DATA_FILE = os.path.join("data", "titan_k_data.json")
 # GitHub Pages URL for TITAN_SYSTEM_v4.html (update after deploying to GitHub Pages)
 TITAN_SYSTEM_URL = os.getenv(
     "TITAN_SYSTEM_URL",
-    "https://sobluenight10-commits.github.io/titan_k_v2/TITAN_SYSTEM_v4.html"
+    "https://sobluenight10-commits.github.io/gods_plan/TITAN_SYSTEM_v5.html"
 )
 
 # ── Blog Source ───────────────────────────────────────────────────────────────
@@ -73,7 +67,7 @@ PORTFOLIO = {
         {
             "ticker": "UEC", "name": "Uranium Energy", "category": "Energy",
             "buy_price_eur": None, "shares": None,
-            "score": 9, "action": "HOLD — ADD AFTER EARNINGS",
+            "score": 9, "action": "HOLD — ADD ON DIPS",
             "thesis": "Nuclear renaissance — energy security narrative",
             "stop_usd": 11.50, "target_usd": 18,
         },
@@ -112,7 +106,7 @@ PORTFOLIO = {
         {
             "ticker": "FCX", "name": "Freeport-McMoRan", "category": "Energy",
             "buy_price_eur": None, "shares": None,
-            "score": 4, "action": "SELL TR — KIWOOM STOP $54.50",
+            "score": 4, "action": "HOLDING — STOP $54.50 ACTIVE",
             "thesis": "Mine mudslide -28.5% production, recession fear hits copper",
             "stop_usd": 54.50,
         },
@@ -188,13 +182,13 @@ PORTFOLIO = {
         {
             "ticker": "HUYA", "name": "HUYA", "category": "China/Platform",
             "buy_price_usd": None, "shares": None,
-            "score": 2, "action": "EXIT MAR 17 — ALL SCENARIOS",
+            "score": 2, "action": "EXIT NOW — OVERDUE",
             "thesis": "BROKEN — no thesis, China ADR risk, -79% underwater",
         },
         {
             "ticker": "GEVO", "name": "Gevo", "category": "Energy",
             "buy_price_usd": None, "shares": None,
-            "score": 4, "action": "HOLD TO MAR 26 ONLY",
+            "score": 4, "action": "HOLD TO MAR 26 ONLY — EXIT DATE APPROACHING",
             "thesis": "Recovering — new CEO, EBITDA positive. -84% underwater.",
         },
     ],
@@ -204,7 +198,7 @@ PORTFOLIO = {
 WATCHLIST = [
     {"ticker": "AVAV", "name": "AeroVironment", "category": "Robotics/Defense",
      "score": 8, "entry": "$205-240 post-earnings", "target_usd": 355,
-     "amount": "€630 TR", "timing": "WED MAR 11 after Mar 10 earnings"},
+     "amount": "€630 TR", "timing": "BOUGHT — monitoring"},
     {"ticker": "CRSP", "name": "CRISPR Therapeutics", "category": "Bio-Engineering",
      "score": 8, "entry": "$44 limit", "target_usd": 106,
      "amount": "€300 TR", "timing": "Before Mar 26 earnings"},
@@ -303,13 +297,14 @@ FUTURE_STATE_CATEGORIES = [
 ]
 
 # ── Earnings Calendar (upcoming) ──────────────────────────────────────────────
+from datetime import date as _date
 EARNINGS_CALENDAR = [
-    {"ticker": "UEC",  "date": "2026-03-10", "timing": "BMO", "importance": "CRITICAL"},
-    {"ticker": "AVAV", "date": "2026-03-10", "timing": "AMC", "importance": "CRITICAL"},
-    {"ticker": "HUYA", "date": "2026-03-17", "timing": "BMO", "importance": "EXIT TRIGGER"},
-    {"ticker": "CRSP", "date": "2026-03-26", "timing": "TBD", "importance": "CATALYST"},
-    {"ticker": "GEVO", "date": "2026-03-26", "timing": "TBD", "importance": "EXIT TRIGGER"},
-    {"ticker": "FCX",  "date": "2026-04-16", "timing": "TBD", "importance": "LOW"},
+    e for e in [
+        {"ticker": "CRSP", "date": "2026-03-26", "timing": "TBD", "importance": "CATALYST"},
+        {"ticker": "GEVO", "date": "2026-03-26", "timing": "TBD", "importance": "EXIT TRIGGER"},
+        {"ticker": "FCX",  "date": "2026-04-16", "timing": "TBD", "importance": "LOW"},
+    ]
+    if e["date"] >= str(_date.today())
 ]
 
 # ── Macro Events Calendar ─────────────────────────────────────────────────────
@@ -317,3 +312,11 @@ MACRO_CALENDAR = [
     {"event": "CPI Print", "date": "2026-03-11", "rule": "No new orders. Let limits work."},
     {"event": "PPI / PCE / GDP", "date": "2026-03-12", "rule": "Same. No reactions."},
 ]
+
+# Weekly Olympus — every Saturday 07:00
+WEEKLY_SCHEDULE = [
+    ("07:00", "olympus_weekly", "🏛 Olympus Weekly Dashboard → Full Table + Bubble Chart"),
+]
+
+# TITAN bot config
+TITAN_BOT_TOKEN = ""  # loaded from .env

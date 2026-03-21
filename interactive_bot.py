@@ -414,7 +414,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         from openai import OpenAI
         client = OpenAI(api_key=OPENAI_API_KEY)
         resp = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": system},
                 *history,

@@ -145,7 +145,7 @@ NO paragraphs. NO long sentences. This is read on a phone at 7am."""
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-mini",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.35,
             max_tokens=350,
@@ -216,7 +216,7 @@ NO paragraphs. NO long explanations."""
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-mini",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.3,
             max_tokens=500,

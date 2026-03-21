@@ -191,7 +191,7 @@ Plain text only, no markdown."""
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-mini",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.4,
             max_tokens=300,
@@ -231,7 +231,7 @@ Write a compact impact assessment. Focus on positions that need attention TODAY.
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-mini",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.3,
             max_tokens=400,

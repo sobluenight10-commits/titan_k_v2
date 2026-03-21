@@ -341,7 +341,7 @@ def _generate_forecasts(snapshot: Dict, stock_prices: Dict, news: Dict, yesterda
 
     try:
         resp = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": FORECAST_SYSTEM},
                 {"role": "user", "content": prompt},

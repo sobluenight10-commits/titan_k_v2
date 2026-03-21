@@ -92,7 +92,7 @@ def analyze_post(post: Dict) -> Dict:
     
     try:
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": prompt},
@@ -178,7 +178,7 @@ def generate_blog_summary(analyses: list) -> str:
     
     try:
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": "You are Minerva. Write a concise executive summary for Titan's morning briefing. Be direct, actionable, no fluff. Use plain text, no markdown."},
                 {"role": "user", "content": f"Summarize today's blog analysis for the Telegram briefing:\n\n{json.dumps(summary_data, indent=2)}"},
