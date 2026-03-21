@@ -1,7 +1,7 @@
 """
-🔱 titan_K v2 — Master Configuration
-All portfolio positions, watchlist, indicator weights, and system constants.
-Updated from TITAN_SYSTEM_v4.html (09 Mar 2026).
+🔱 OLYMPUS — gods_plan Master Configuration
+Civilization-Shift Investment System
+Updated: 2026-03-21 — Full v5 rewrite
 """
 import os
 from dotenv import load_dotenv
@@ -9,276 +9,519 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # ── API Keys ──────────────────────────────────────────────────────────────────
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
-TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN") or os.getenv("TELEGRAM_TOKEN", "")
-TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")
+OPENAI_API_KEY      = os.getenv("OPENAI_API_KEY", "")
+TELEGRAM_BOT_TOKEN  = os.getenv("TELEGRAM_BOT_TOKEN") or os.getenv("TELEGRAM_TOKEN", "")
+TELEGRAM_CHAT_ID    = os.getenv("TELEGRAM_CHAT_ID", "")
+GITHUB_TOKEN        = os.getenv("GITHUB_TOKEN", "")  # for auto-push dashboard
+
+# ── GitHub Pages Config ───────────────────────────────────────────────────────
+GITHUB_REPO         = "sobluenight10-commits/gods_plan"
+GITHUB_BRANCH       = "master"
+DASHBOARD_FILE      = "TITAN_SYSTEM_v5.html"
+TITAN_SYSTEM_URL    = os.getenv(
+    "TITAN_SYSTEM_URL",
+    "https://sobluenight10-commits.github.io/gods_plan/TITAN_SYSTEM_v5.html"
+)
 
 # ── Timing ────────────────────────────────────────────────────────────────────
 TIMEZONE = "Europe/Berlin"
 
-# ── DAILY BATTLE RHYTHM (all times Berlin) ────────────────────────────────────
-# Each entry: (time, briefing_id, description)DAILY_SCHEDULE = [    ("07:00", "master_daily", "📰 Master Daily Brief → Blog + Macro + Scores + TITAN Orders"),
+# ── DAILY BATTLE RHYTHM ───────────────────────────────────────────────────────
+# Revised schedule — cost-optimized, 3 briefings/day on weekdays
 DAILY_SCHEDULE = [
-    ("07:00", "master_daily", "📰 Master Daily Brief → Blog + Macro + Scores + TITAN Orders"),
-    ("15:00", "us_premarket", "🇺🇸 US Pre-Market → Futures + Orders Check"),
-    ("18:00", "us_midday",    "⚡ Open Summary + Mid-Session → Institutional Flows"),
-    ("23:00", "us_close",     "🏁 US Market Close → Daily Review + Tomorrow Prep"),
+    ("07:00", "master_daily",  "🌅 Morning Brief → Blog + Macro + Scores + Orders"),
+    ("15:30", "us_open",       "🇺🇸 US Open → Futures + Key Levels + Alerts"),
+    ("22:30", "us_close",      "🏁 US Close → Daily Review + Tomorrow Prep"),
+]
+
+# ── WEEKLY OLYMPUS ────────────────────────────────────────────────────────────
+WEEKLY_SCHEDULE = [
+    ("08:00", "olympus_weekly", "🏛 Olympus Weekly → Full Matrix + Dashboard Push"),
 ]
 
 # ── Data Storage ──────────────────────────────────────────────────────────────
 DATA_FILE = os.path.join("data", "titan_k_data.json")
 
-# ── TITAN System Reference ────────────────────────────────────────────────────
-# GitHub Pages URL for TITAN_SYSTEM_v4.html (update after deploying to GitHub Pages)
-TITAN_SYSTEM_URL = os.getenv(
-    "TITAN_SYSTEM_URL",
-    "https://sobluenight10-commits.github.io/gods_plan/TITAN_SYSTEM_v5.html"
-)
-
 # ── Blog Source ───────────────────────────────────────────────────────────────
-NAVER_BLOG_ID = "ranto28"
+NAVER_BLOG_ID  = "ranto28"
 NAVER_BLOG_URL = f"https://blog.naver.com/{NAVER_BLOG_ID}"
-NAVER_RSS_URL = f"https://rss.blog.naver.com/{NAVER_BLOG_ID}.xml"
+NAVER_RSS_URL  = f"https://rss.blog.naver.com/{NAVER_BLOG_ID}.xml"
 
-# ── Exchange Rate Reference ───────────────────────────────────────────────────
-DEFAULT_EUR_USD = 1.155  # fallback if live fetch fails
+# ── Exchange Rate ─────────────────────────────────────────────────────────────
+DEFAULT_EUR_USD = 1.09   # fallback if live fetch fails
+DEFAULT_USD_KRW = 1350   # fallback for Korean stocks
+
+# ── Models ────────────────────────────────────────────────────────────────────
+FAST_MODEL  = "gpt-4o-mini"   # all daily briefings
+DEEP_MODEL  = "gpt-4o-mini"   # weekly olympus (kept mini for cost)
+
+# ── Cost Guard ────────────────────────────────────────────────────────────────
+DAILY_COST_LIMIT_USD  = 0.20
+MONTHLY_COST_LIMIT_USD = 3.00
+
 
 # ══════════════════════════════════════════════════════════════════════════════
-# PORTFOLIO — YOUR EXACT POSITIONS (from TITAN_SYSTEM_v4)
+# CIVILIZATION-SHIFT STOCK UNIVERSE — v5
 # ══════════════════════════════════════════════════════════════════════════════
 
-PORTFOLIO = {
-    # ── Trade Republic (EUR) ──────────────────────────────────────────────
-    "TR": [
-        {
-            "ticker": "COHR", "name": "Coherent Corp.", "category": "Intelligence",
-            "buy_price_eur": None, "shares": None,  # largest TR position
-            "score": 7, "action": "HOLD",
-            "thesis": "AI optical networking — spine of AI infrastructure",
-            "stop_usd": None, "target_usd": 110,
-        },
-        {
-            "ticker": "PLTR", "name": "Palantir", "category": "Intelligence",
-            "buy_price_eur": None, "shares": None,
-            "score": 10, "action": "HOLD + ADD DIPS",
-            "thesis": "AI × Military — Maven Smart System with NATO",
-            "stop_usd": None, "target_usd": 200, "limit_eur": 88,
-        },
-        {
-            "ticker": "UEC", "name": "Uranium Energy", "category": "Energy",
-            "buy_price_eur": None, "shares": None,
-            "score": 9, "action": "HOLD — ADD ON DIPS",
-            "thesis": "Nuclear renaissance — energy security narrative",
-            "stop_usd": 11.50, "target_usd": 18,
-        },
-        {
-            "ticker": "RKLB", "name": "Rocket Lab", "category": "Space",
-            "buy_price_eur": None, "shares": None,
-            "score": 6, "action": "HOLD",
-            "thesis": "Space infrastructure — every satellite launch = revenue",
-            "stop_eur": 115, "target_eur": 220,
-        },
-        {
-            "ticker": "FSLR", "name": "First Solar", "category": "Energy",
-            "buy_price_eur": None, "shares": None,
-            "score": 1, "action": "EXIT — BROKEN THESIS",
-            "thesis": "BROKEN — guidance -$1B vs consensus, Jefferies downgrade",
-            "stop_usd": None, "target_usd": None,
-        },
-        {
-            "ticker": "CWEN", "name": "Clearway Energy", "category": "Energy",
-            "buy_price_eur": None, "shares": None,
-            "score": None, "action": "HOLD",
-            "thesis": "Clean energy yield play",
-        },
-        {
-            "ticker": "TMO", "name": "Thermo Fisher", "category": "Bio-Engineering",
-            "buy_price_eur": None, "shares": None,
-            "score": 6, "action": "HOLD",
-            "thesis": "Life sciences infrastructure — steady compounder",
-        },
-        {
-            "ticker": "MC.PA", "name": "LVMH", "category": "Luxury",
-            "buy_price_eur": None, "shares": None,
-            "score": None, "action": "HOLD (locked ~1yr promo)",
-            "thesis": "Promotional gift — locked position",
-        },
-        {
-            "ticker": "FCX", "name": "Freeport-McMoRan", "category": "Energy",
-            "buy_price_eur": None, "shares": None,
-            "score": 4, "action": "HOLDING — STOP $54.50 ACTIVE",
-            "thesis": "Mine mudslide -28.5% production, recession fear hits copper",
-            "stop_usd": 54.50,
-        },
-        {
-            "ticker": "URNM", "name": "Sprott Uranium Miners", "category": "Energy",
-            "buy_price_eur": None, "shares": None,
-            "score": None, "action": "HOLD — ADD IN 2 WEEKS",
-            "thesis": "Uranium ETF — nuclear renaissance basket",
-        },
-    ],
+# Status values: "portfolio", "watchlist", "ipo_watch", "radar", "locked", "exit"
+# Broker values: "TR", "Kiwoom_KR", "Kiwoom_US", "watchlist"
 
-    # ── Kiwoom (KRW / USD) ────────────────────────────────────────────────
-    "Kiwoom_KR": [
-        {
-            "ticker": "000660.KS", "name": "SK Hynix", "category": "Intelligence",
-            "buy_price_krw": 130500, "shares": 6,
-            "score": 10, "action": "LEGEND — NEVER SELL",
-            "thesis": "HBM memory = hardware of AI. Irreplaceable. +657%",
-        },
-        {
-            "ticker": "272210.KS", "name": "Hanwha Systems", "category": "Defense",
-            "buy_price_krw": 16418, "shares": 128,
-            "score": 10, "action": "LEGEND — NEVER SELL",
-            "thesis": "Korean defense exports surging globally. +820%",
-        },
-        {
-            "ticker": "042660.KS", "name": "한화오션", "category": "Defense/Shipbuilding",
-            "buy_price_krw": None, "shares": None,
-            "score": 8, "action": "WATCH",
-            "thesis": "Korean shipbuilding renaissance — defense + LNG vessels",
-        },
-        {
-            "ticker": "009540.KS", "name": "HD한국조선해양", "category": "Shipbuilding",
-            "buy_price_krw": None, "shares": None,
-            "score": 8, "action": "WATCH",
-            "thesis": "World's largest shipbuilder — LNG + naval orders surging",
-        },
-        {
-            "ticker": "329180.KS", "name": "HD현대중공업", "category": "Shipbuilding",
-            "buy_price_krw": None, "shares": None,
-            "score": 7, "action": "WATCH",
-            "thesis": "Heavy industry + shipbuilding — Korea defense supply chain",
-        },
-        {
-            "ticker": "207940.KS", "name": "삼성바이오로직스", "category": "Bio-Engineering",
-            "buy_price_krw": None, "shares": None,
-            "score": 8, "action": "WATCH",
-            "thesis": "Global CDMO leader — biologic drug manufacturing growth",
-        },
-    ],
-    "Kiwoom_US": [
-        {
-            "ticker": "KTOS", "name": "Kratos Defense", "category": "Robotics/Defense",
-            "buy_price_usd": None, "shares": 7,
-            "score": 9, "action": "HOLD + ADD $80",
-            "thesis": "Defense drones in active war — $1.5T DoD budget",
-            "stop_usd": 75, "target_usd": 115, "limit_usd": 80,
-        },
-        {
-            "ticker": "IONQ", "name": "IonQ Quantum", "category": "Intelligence",
-            "buy_price_usd": None, "shares": 11,
-            "score": 7, "action": "LIMIT $25 ACTIVE",
-            "thesis": "Quantum computing inflection 2026-2027",
-            "stop_usd": 25, "target_usd": 65, "limit_usd": 25,
-        },
-        {
-            "ticker": "FCX", "name": "Freeport-McMoRan (KW)", "category": "Energy",
-            "buy_price_usd": None, "shares": 3,
-            "score": 4, "action": "STOP $54.50",
-            "thesis": "Mine mudslide — stop protects until Apr 16",
-            "stop_usd": 54.50,
-        },
-        {
-            "ticker": "HUYA", "name": "HUYA", "category": "China/Platform",
-            "buy_price_usd": None, "shares": None,
-            "score": 2, "action": "EXIT NOW — OVERDUE",
-            "thesis": "BROKEN — no thesis, China ADR risk, -79% underwater",
-        },
-        {
-            "ticker": "GEVO", "name": "Gevo", "category": "Energy",
-            "buy_price_usd": None, "shares": None,
-            "score": 4, "action": "HOLD TO MAR 26 ONLY — EXIT DATE APPROACHING",
-            "thesis": "Recovering — new CEO, EBITDA positive. -84% underwater.",
-        },
-    ],
-}
+STOCKS = [
 
-# ── WATCHLIST (pending buy orders / candidates) ───────────────────────────────
-WATCHLIST = [
-    {"ticker": "AVAV", "name": "AeroVironment", "category": "Robotics/Defense",
-     "score": 8, "entry": "$205-240 post-earnings", "target_usd": 355,
-     "amount": "€630 TR", "timing": "BOUGHT — monitoring"},
-    {"ticker": "CRSP", "name": "CRISPR Therapeutics", "category": "Bio-Engineering",
-     "score": 8, "entry": "$44 limit", "target_usd": 106,
-     "amount": "€300 TR", "timing": "Before Mar 26 earnings"},
-    {"ticker": "NTLA", "name": "Intellia Therapeutics", "category": "Bio-Engineering",
-     "score": 6, "entry": "$10 limit", "target_usd": 27,
-     "amount": "€200 TR", "timing": "SET TODAY"},
-    {"ticker": "IAU", "name": "iShares Gold ETF", "category": "Macro Hedge",
-     "score": 10, "entry": "Any dip", "target_usd": None,
-     "amount": "NEVER SELL", "timing": "HOLD FOREVER"},
+    # ── 1. INTELLIGENCE ── AGI · Quantum · Neural Interfaces · Advanced Memory
+    {
+        "ticker": "000660.KS", "name": "SK Hynix",
+        "category": "INTELLIGENCE", "status": "portfolio", "broker": "Kiwoom_KR",
+        "score": 10, "signal": "LEGEND", "action": "NEVER SELL",
+        "thesis": "World #1 HBM3E. Every AI chip stack runs on SK Hynix memory. Backbone of AGI civilization.",
+        "buy_price": 130500, "currency": "KRW",
+        "stop": None, "target_1y": 1120000, "target_5y": 1520000,
+        "forecast": {"1w": 965000, "1m": 995000, "6m": 1050000, "1y": 1120000, "5y": 1520000},
+    },
+    {
+        "ticker": "PLTR", "name": "Palantir Technologies",
+        "category": "INTELLIGENCE", "status": "portfolio", "broker": "TR",
+        "score": 7, "signal": "HOLD", "action": "Hold + add dips",
+        "thesis": "Maven Smart System = NATO war AI. Every escalation = direct revenue.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": 171, "target_5y": 241,
+        "forecast": {"1w": 144, "1m": 151, "6m": 160, "1y": 171, "5y": 241},
+    },
+    {
+        "ticker": "IONQ", "name": "IonQ Quantum",
+        "category": "INTELLIGENCE", "status": "portfolio", "broker": "Kiwoom_US",
+        "score": 7, "signal": "HOLD", "action": "Limit $25 active (Kiwoom $400)",
+        "thesis": "Quantum computing inflection 2026-2027. Near stop = max asymmetry.",
+        "buy_price": None, "currency": "USD",
+        "stop": 25, "target_1y": 44, "target_5y": 69,
+        "forecast": {"1w": 35, "1m": 37, "6m": 40, "1y": 44, "5y": 69},
+    },
+    {
+        "ticker": "NVDA", "name": "Nvidia Corporation",
+        "category": "INTELLIGENCE", "status": "watchlist", "broker": "watchlist",
+        "score": 10, "signal": "BUY", "action": "Enter on next correction. Must own.",
+        "thesis": "GPU = printing press of AGI era. Single most Future-Fit stock on earth.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": 175, "target_5y": 400,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": 175, "5y": 400},
+    },
+    {
+        "ticker": "SMCI", "name": "Super Micro Computer",
+        "category": "INTELLIGENCE", "status": "watchlist", "broker": "watchlist",
+        "score": 6, "signal": "WATCH", "action": "Wait for accounting clarity before entry.",
+        "thesis": "AI rack assembler. Irreplaceable in build-out phase. Volatile.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": None, "target_5y": None,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": None, "5y": None},
+    },
+    {
+        "ticker": "MSFT", "name": "Microsoft / OpenAI proxy",
+        "category": "INTELLIGENCE", "status": "watchlist", "broker": "watchlist",
+        "score": 8, "signal": "WATCH", "action": "Best public proxy for OpenAI. Watch for entry.",
+        "thesis": "Copilot in every enterprise. AGI commercialization engine.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": 550, "target_5y": 900,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": 550, "5y": 900},
+    },
+
+    # ── 2. ENERGY ── Uranium · Fusion · Solid-State Batteries · Nuclear Renaissance
+    {
+        "ticker": "UEC", "name": "Uranium Energy Corp",
+        "category": "ENERGY", "status": "portfolio", "broker": "TR",
+        "score": 9, "signal": "HOLD", "action": "Add after earnings. Stop $11.50.",
+        "thesis": "In-situ recovery = lowest cost uranium miner. Nuclear renaissance locked in.",
+        "buy_price": None, "currency": "USD",
+        "stop": 11.50, "target_1y": 20.50, "target_5y": 30.50,
+        "forecast": {"1w": 15.50, "1m": 16.50, "6m": 18, "1y": 20.50, "5y": 30.50},
+    },
+    {
+        "ticker": "URNM", "name": "Sprott Uranium Miners ETF",
+        "category": "ENERGY", "status": "portfolio", "broker": "TR",
+        "score": 8, "signal": "HOLD", "action": "Add in 2 weeks.",
+        "thesis": "Uranium ETF basket. Nuclear renaissance is structural, not cyclical.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": 85.50, "target_5y": 121,
+        "forecast": {"1w": 70.50, "1m": 72.50, "6m": 79, "1y": 85.50, "5y": 121},
+    },
+    {
+        "ticker": "CWEN", "name": "Clearway Energy",
+        "category": "ENERGY", "status": "portfolio", "broker": "TR",
+        "score": 5, "signal": "HOLD", "action": "No additions. Watch IRA policy risk.",
+        "thesis": "Clean energy yield play. Stable but not high conviction.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": 44.50, "target_5y": 58.50,
+        "forecast": {"1w": 37.50, "1m": 38.50, "6m": 42, "1y": 44.50, "5y": 58.50},
+    },
+    {
+        "ticker": "CCJ", "name": "Cameco Corporation",
+        "category": "ENERGY", "status": "watchlist", "broker": "watchlist",
+        "score": 9, "signal": "BUY", "action": "Set limit on pullback. Saudi Aramco of uranium.",
+        "thesis": "Largest Western uranium producer. Nuclear renaissance = CCJ is unavoidable.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": 65, "target_5y": 110,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": 65, "5y": 110},
+    },
+    {
+        "ticker": "OKLO", "name": "Oklo Inc",
+        "category": "ENERGY", "status": "watchlist", "broker": "watchlist",
+        "score": 8, "signal": "BUY", "action": "Micro-nuclear for AI data centers. Sam Altman backed.",
+        "thesis": "AI power crisis = Oklo's market. NRC license decision 2026.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": None, "target_5y": None,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": None, "5y": None},
+    },
+    {
+        "ticker": "QS", "name": "QuantumScape",
+        "category": "ENERGY", "status": "watchlist", "broker": "watchlist",
+        "score": 6, "signal": "WATCH", "action": "Binary outcome. Small position only if entering.",
+        "thesis": "Solid-state battery. VW + Gates backed. If it works → ends fossil fuel dominance.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": None, "target_5y": None,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": None, "5y": None},
+    },
+
+    # ── 3. SPACE / LOGISTICS ── Orbital · Satellite · Lunar Economy · Urban Air
+    {
+        "ticker": "RKLB", "name": "Rocket Lab USA",
+        "category": "SPACE", "status": "portfolio", "broker": "TR",
+        "score": 6, "signal": "HOLD", "action": "Hold. Neutron rocket = next inflection.",
+        "thesis": "Only vertically integrated small-launch company actually launching.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": 87.50, "target_5y": 124,
+        "forecast": {"1w": 70.50, "1m": 73.50, "6m": 80, "1y": 87.50, "5y": 124},
+    },
+    {
+        "ticker": "ASTS", "name": "AST SpaceMobile",
+        "category": "SPACE", "status": "watchlist", "broker": "watchlist",
+        "score": 8, "signal": "BUY", "action": "Buy on consolidation. Extreme asymmetry.",
+        "thesis": "Direct-to-phone satellite. AT&T + Verizon contracted. 3B unconnected humans.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": None, "target_5y": None,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": None, "5y": None},
+    },
+    {
+        "ticker": "LUNR", "name": "Intuitive Machines",
+        "category": "SPACE", "status": "watchlist", "broker": "watchlist",
+        "score": 7, "signal": "WATCH", "action": "Watch IM-3 mission. Moon economy = signed contracts.",
+        "thesis": "NASA's only contracted lunar delivery partner. IM-1 landed Feb 2024.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": None, "target_5y": None,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": None, "5y": None},
+    },
+    {
+        "ticker": "xAI", "name": "xAI Corp — Grok / Colossus",
+        "category": "SPACE", "status": "ipo_watch", "broker": "watchlist",
+        "score": 9, "signal": "IPO READY", "action": "Buy IPO day. S-1 expected H1 2026.",
+        "thesis": "Colossus = world's largest AI cluster (100K H100s). Grok + SpaceX + Tesla pipelines.",
+        "buy_price": None, "currency": "USD",
+        "ipo_expected": "H2 2026", "valuation": "50B+",
+        "stop": None, "target_1y": None, "target_5y": None,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": None, "5y": None},
+    },
+    {
+        "ticker": "ACHR", "name": "Archer Aviation",
+        "category": "SPACE", "status": "watchlist", "broker": "watchlist",
+        "score": 6, "signal": "WATCH", "action": "Small position only. FAA certification = inflection.",
+        "thesis": "Urban air mobility. United Airlines invested. Abu Dhabi contracted.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": None, "target_5y": None,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": None, "5y": None},
+    },
+
+    # ── 4. BIO-ENGINEERING ── CRISPR · Base Editing · Longevity · AI Drug Discovery
+    {
+        "ticker": "CRSP", "name": "CRISPR Therapeutics",
+        "category": "BIO", "status": "portfolio", "broker": "TR",
+        "score": 5, "signal": "CAUTION", "action": "Wait below $40. Mar 26 catalyst.",
+        "thesis": "Gene editing platform. $350M dilution overhang — wait for stabilization.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": 50, "target_5y": 70,
+        "forecast": {"1w": 40, "1m": 42, "6m": 46, "1y": 50, "5y": 70},
+        "catalyst": "Earnings Mar 26",
+    },
+    {
+        "ticker": "NTLA", "name": "Intellia Therapeutics",
+        "category": "BIO", "status": "portfolio", "broker": "TR",
+        "score": 6, "signal": "HOLD", "action": "Limit $10 active (TR €200).",
+        "thesis": "In-vivo gene editing. Pairs with CRSP for full gene editing basket.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": 21.50, "target_5y": 36.50,
+        "forecast": {"1w": 14.70, "1m": 15.70, "6m": 18, "1y": 21.50, "5y": 36.50},
+    },
+    {
+        "ticker": "BEAM", "name": "Beam Therapeutics",
+        "category": "BIO", "status": "watchlist", "broker": "watchlist",
+        "score": 8, "signal": "BUY", "action": "Set limit on weakness. David Liu founded.",
+        "thesis": "Base editing = next-gen CRISPR. Strictly more precise. Phase 1/2 data 2026.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": None, "target_5y": None,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": None, "5y": None},
+    },
+    {
+        "ticker": "RXRX", "name": "Recursion Pharma",
+        "category": "BIO", "status": "watchlist", "broker": "watchlist",
+        "score": 7, "signal": "WATCH", "action": "NVIDIA partnership. Watch pipeline readout.",
+        "thesis": "AI drug discovery. Compresses 10yr development to 18 months.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": None, "target_5y": None,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": None, "5y": None},
+    },
+    {
+        "ticker": "EDIT", "name": "Editas Medicine",
+        "category": "BIO", "status": "watchlist", "broker": "watchlist",
+        "score": 5, "signal": "WATCH", "action": "Third gene editing platform. Completes trio.",
+        "thesis": "CRSP + NTLA + EDIT = full gene editing basket. Diversifies platform risk.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": None, "target_5y": None,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": None, "5y": None},
+    },
+
+    # ── 5. ROBOTICS ── Humanoids · Autonomous Manufacturing · Defense Drones
+    {
+        "ticker": "272210.KS", "name": "Hanwha Systems",
+        "category": "ROBOTICS", "status": "portfolio", "broker": "Kiwoom_KR",
+        "score": 10, "signal": "LEGEND", "action": "NEVER SELL",
+        "thesis": "Korea's premier autonomous weapons + propulsion. War is permanent demand. +820%.",
+        "buy_price": 16418, "currency": "KRW",
+        "stop": None, "target_1y": 183500, "target_5y": 253500,
+        "forecast": {"1w": 158500, "1m": 163500, "6m": 175000, "1y": 183500, "5y": 253500},
+    },
+    {
+        "ticker": "KTOS", "name": "Kratos Defense",
+        "category": "ROBOTICS", "status": "portfolio", "broker": "Kiwoom_US",
+        "score": 9, "signal": "HOLD", "action": "Add at $80 (Kiwoom $400). Stop $75.",
+        "thesis": "Defense drones deployed in live conflict = real revenue. $1.5T DoD budget.",
+        "buy_price": None, "currency": "USD",
+        "stop": 75, "target_1y": 99.50, "target_5y": 130,
+        "forecast": {"1w": 87.50, "1m": 89.50, "6m": 94, "1y": 99.50, "5y": 130},
+    },
+    {
+        "ticker": "AVAV", "name": "AeroVironment",
+        "category": "ROBOTICS", "status": "portfolio", "broker": "Kiwoom_US",
+        "score": 6, "signal": "HOLD", "action": "Do not add. Reassess Q4 earnings.",
+        "thesis": "Switchblade still deployed in conflict. Score 8→6 after earnings miss.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": 205, "target_5y": 250,
+        "forecast": {"1w": 180, "1m": 185, "6m": 195, "1y": 205, "5y": 250},
+    },
+    {
+        "ticker": "TSLA", "name": "Tesla — Optimus thesis",
+        "category": "ROBOTICS", "status": "watchlist", "broker": "watchlist",
+        "score": 8, "signal": "WATCH", "action": "NOT the car thesis. Watch for dip entry.",
+        "thesis": "Optimus humanoid = most underdiscussed asset. Labor company, not car company.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": None, "target_5y": None,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": None, "5y": None},
+    },
+    {
+        "ticker": "ESLT", "name": "Elbit Systems",
+        "category": "ROBOTICS", "status": "watchlist", "broker": "watchlist",
+        "score": 8, "signal": "BUY", "action": "Set limit. Battle-proven autonomous defense.",
+        "thesis": "Israeli autonomous defense. Western hemisphere Hanwha. IDF contract cycle.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": None, "target_5y": None,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": None, "5y": None},
+    },
+    {
+        "ticker": "FigureAI", "name": "Figure AI Inc",
+        "category": "ROBOTICS", "status": "ipo_watch", "broker": "watchlist",
+        "score": 9, "signal": "IPO WATCH", "action": "BMW factory deployment live. Watch IPO filing.",
+        "thesis": "Most advanced humanoid in production. OpenAI partnership. $40B private valuation.",
+        "buy_price": None, "currency": "USD",
+        "ipo_expected": "2026/2027",
+        "stop": None, "target_1y": None, "target_5y": None,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": None, "5y": None},
+    },
+
+    # ── 6. INFRASTRUCTURE ── Photonics · Power · Semiconductor Equipment · Water
+    {
+        "ticker": "COHR", "name": "Coherent Corp",
+        "category": "INFRASTRUCTURE", "status": "portfolio", "broker": "TR",
+        "score": 8, "signal": "HOLD", "action": "Hold. NVIDIA supply deal locked.",
+        "thesis": "800G transceivers = photonics backbone of all AI data center networks.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": 315, "target_5y": 425,
+        "forecast": {"1w": 275, "1m": 280, "6m": 298, "1y": 315, "5y": 425},
+    },
+    {
+        "ticker": "FCX", "name": "Freeport-McMoRan",
+        "category": "INFRASTRUCTURE", "status": "portfolio", "broker": "Kiwoom_US",
+        "score": 7, "signal": "REDUCE", "action": "Kiwoom stop $54.50. TR already sold.",
+        "thesis": "Copper = AI wiring metal. Long term intact, tactical reduce now.",
+        "buy_price": None, "currency": "USD",
+        "stop": 54.50, "target_1y": 81, "target_5y": 107,
+        "forecast": {"1w": 68.50, "1m": 70.50, "6m": 75, "1y": 81, "5y": 107},
+    },
+    {
+        "ticker": "TMO", "name": "Thermo Fisher Scientific",
+        "category": "INFRASTRUCTURE", "status": "portfolio", "broker": "TR",
+        "score": 6, "signal": "HOLD", "action": "Hold. Biotech infrastructure enabler.",
+        "thesis": "Life science instruments. Every gene editing lab needs TMO equipment.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": 601, "target_5y": 801,
+        "forecast": {"1w": 506, "1m": 521, "6m": 560, "1y": 601, "5y": 801},
+    },
+    {
+        "ticker": "VRT", "name": "Vertiv Holdings",
+        "category": "INFRASTRUCTURE", "status": "watchlist", "broker": "watchlist",
+        "score": 9, "signal": "BUY", "action": "Add immediately. This is overdue.",
+        "thesis": "Every AI data center needs power + cooling. Vertiv supplies both. +20% revenue YoY.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": None, "target_5y": None,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": None, "5y": None},
+    },
+    {
+        "ticker": "AMAT", "name": "Applied Materials",
+        "category": "INFRASTRUCTURE", "status": "watchlist", "broker": "watchlist",
+        "score": 8, "signal": "BUY", "action": "Cannot build chips without AMAT machines.",
+        "thesis": "Semiconductor manufacturing equipment. SK Hynix partner. Unavoidable.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": None, "target_5y": None,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": None, "5y": None},
+    },
+    {
+        "ticker": "AWK", "name": "American Water Works",
+        "category": "INFRASTRUCTURE", "status": "watchlist", "broker": "watchlist",
+        "score": 7, "signal": "WATCH", "action": "Water = scarcest resource of 2030s.",
+        "thesis": "Monopoly utility. Pricing power. Infrastructure no civilization can replace.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": None, "target_5y": None,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": None, "5y": None},
+    },
+
+    # ── GLOBAL ISSUE RADAR ── Rotating · Current: Food Security / War Fertilizer
+    {
+        "ticker": "NTR", "name": "Nutrien Ltd",
+        "category": "RADAR", "status": "radar", "broker": "watchlist",
+        "score": 8, "signal": "BUY", "action": "Priceless entry window. Food = national security.",
+        "thesis": "World's largest potash producer. War disrupted 40% global supply.",
+        "radar_theme": "Food Security / War Fertilizer Premium",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": None, "target_5y": None,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": None, "5y": None},
+    },
+    {
+        "ticker": "MOS", "name": "Mosaic Company",
+        "category": "RADAR", "status": "radar", "broker": "watchlist",
+        "score": 7, "signal": "WATCH", "action": "Higher volatility = higher upside vs NTR.",
+        "thesis": "Second largest fertilizer producer. Same thesis as NTR.",
+        "radar_theme": "Food Security / War Fertilizer Premium",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": None, "target_5y": None,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": None, "5y": None},
+    },
+    {
+        "ticker": "DE", "name": "John Deere",
+        "category": "RADAR", "status": "radar", "broker": "watchlist",
+        "score": 7, "signal": "WATCH", "action": "Precision autonomous agriculture.",
+        "thesis": "Food scarcity demands yield maximization. Bridges ROBOTICS + RADAR.",
+        "radar_theme": "Food Security / War Fertilizer Premium",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": None, "target_5y": None,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": None, "5y": None},
+    },
+
+    # ── LOCKED ── TR promotional gift
+    {
+        "ticker": "MC.PA", "name": "LVMH",
+        "category": "LOCKED", "status": "locked", "broker": "TR",
+        "score": 8, "signal": "LOCKED", "action": "Cannot sell. Track only.",
+        "thesis": "TR gift. Locked ~1 year from first transaction. Generational brand basket.",
+        "buy_price": None, "currency": "EUR",
+        "stop": None, "target_1y": 602, "target_5y": 802,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": 602, "5y": 802},
+    },
+
+    # ── EXIT QUEUE ── Legacy positions not aligned with civilization thesis
+    {
+        "ticker": "HUYA", "name": "HUYA Inc",
+        "category": "EXIT", "status": "exit", "broker": "Kiwoom_US",
+        "score": 2, "signal": "EXIT NOW", "action": "All scenarios → sell. No exceptions.",
+        "thesis": "BROKEN. China ADR risk. No thesis. -79% underwater.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": None, "target_5y": None,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": None, "5y": None},
+        "exit_deadline": "2026-03-17",
+    },
+    {
+        "ticker": "GEVO", "name": "Gevo Inc",
+        "category": "EXIT", "status": "exit", "broker": "Kiwoom_US",
+        "score": 2, "signal": "EXIT MAR 26", "action": "Hold ONLY until Mar 26. Then exit all scenarios.",
+        "thesis": "BROKEN. -83% underwater. Dead capital. Redeploy into conviction.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": None, "target_5y": None,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": None, "5y": None},
+        "exit_deadline": "2026-03-26",
+    },
+    {
+        "ticker": "IAU", "name": "iShares Gold ETF",
+        "category": "EXIT", "status": "exit", "broker": "TR",
+        "score": 3, "signal": "EXIT SOON", "action": "Exit on next strength. Redeploy into conviction.",
+        "thesis": "Gold is a relic hedge. Not a civilization-shift asset.",
+        "buy_price": None, "currency": "USD",
+        "stop": None, "target_1y": None, "target_5y": None,
+        "forecast": {"1w": None, "1m": None, "6m": None, "1y": None, "5y": None},
+    },
 ]
 
-# ── ALL TICKERS (for market data fetch) ───────────────────────────────────────
+
+# ══════════════════════════════════════════════════════════════════════════════
+# HELPER FUNCTIONS
+# ══════════════════════════════════════════════════════════════════════════════
+
+def get_portfolio_tickers():
+    """Return tickers of live portfolio positions only."""
+    return [s["ticker"] for s in STOCKS if s["status"] == "portfolio"]
+
 def get_all_tickers():
-    """Return unique set of all tickers across portfolio + watchlist."""
-    tickers = set()
-    for broker_positions in PORTFOLIO.values():
-        for pos in broker_positions:
-            tickers.add(pos["ticker"])
-    for w in WATCHLIST:
-        tickers.add(w["ticker"])
-    return sorted(tickers)
+    """Return all tickers except IPO-watch and private companies."""
+    skip = {"xAI", "FigureAI"}
+    return [s["ticker"] for s in STOCKS if s["ticker"] not in skip]
+
+def get_tradeable_tickers():
+    """Return tickers that have live market prices."""
+    skip = {"xAI", "FigureAI"}
+    return [s["ticker"] for s in STOCKS
+            if s["status"] in ("portfolio", "watchlist", "radar", "locked", "exit")
+            and s["ticker"] not in skip]
+
+def get_stocks_by_category(category: str):
+    return [s for s in STOCKS if s["category"] == category]
+
+def get_stock(ticker: str):
+    for s in STOCKS:
+        if s["ticker"] == ticker:
+            return s
+    return None
+
+def get_exit_queue():
+    return [s for s in STOCKS if s["status"] == "exit"]
+
+def get_buy_signals():
+    return [s for s in STOCKS if s["signal"] in ("BUY", "LEGEND")]
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# 30-INDICATOR COMPOSITE WEIGHTS (Macro Engine — Layer A)
+# MACRO ENGINE WEIGHTS
 # ══════════════════════════════════════════════════════════════════════════════
 
 WEIGHTS = {
-    # ── Fear & Volatility (25%) ───────────────────────────────────────────
-    "VIX":           0.08,
-    "VVIX":          0.03,
-    "SKEW":          0.03,
-    "Put/Call":      0.04,
-    "VIX_Term":      0.04,
-    "MOVE":          0.03,
-
-    # ── Rates & Liquidity (20%) ───────────────────────────────────────────
-    "US10Y":         0.05,
-    "US2Y":          0.03,
-    "Yield_Curve":   0.04,
-    "DXY":           0.04,
-    "Fed_Funds":     0.04,
-
-    # ── Equity Internals (20%) ────────────────────────────────────────────
-    "SPX":           0.04,
-    "NDX":           0.03,
-    "SOX":           0.05,
-    "RSP_SPY":       0.03,
-    "Adv_Dec":       0.03,
-    "52W_HL":        0.02,
-
-    # ── Commodities & Macro (15%) ─────────────────────────────────────────
-    "Gold":          0.04,
-    "Oil":           0.03,
-    "Copper":        0.03,
-    "Uranium":       0.03,
-    "Nat_Gas":       0.02,
-
-    # ── Credit & Risk (10%) ───────────────────────────────────────────────
-    "HYG_Spread":    0.03,
-    "IG_Spread":     0.02,
-    "TED_Spread":    0.02,
-    "LIBOR_OIS":     0.03,
-
-    # ── Geopolitical & Sentiment (10%) ────────────────────────────────────
-    "AAII_Bull":     0.02,
-    "CNN_FG":        0.03,
-    "Geopolitical":  0.03,
-    "BTC":           0.02,
+    "VIX": 0.08, "VVIX": 0.03, "SKEW": 0.03, "Put/Call": 0.04, "VIX_Term": 0.04, "MOVE": 0.03,
+    "US10Y": 0.05, "US2Y": 0.03, "Yield_Curve": 0.04, "DXY": 0.04, "Fed_Funds": 0.04,
+    "SPX": 0.04, "NDX": 0.03, "SOX": 0.05, "RSP_SPY": 0.03, "Adv_Dec": 0.03, "52W_HL": 0.02,
+    "Gold": 0.04, "Oil": 0.03, "Copper": 0.03, "Uranium": 0.03, "Nat_Gas": 0.02,
+    "HYG_Spread": 0.03, "IG_Spread": 0.02, "TED_Spread": 0.02, "LIBOR_OIS": 0.03,
+    "AAII_Bull": 0.02, "CNN_FG": 0.03, "Geopolitical": 0.03, "BTC": 0.02,
 }
 
-# ── VIX Regime Thresholds ─────────────────────────────────────────────────────
 VIX_REGIMES = {
-    "CALM":    {"range": (0, 15),    "deploy_pct": 0,   "label": "HOLD CASH"},
-    "NORMAL":  {"range": (15, 20),   "deploy_pct": 25,  "label": "SELECTIVE"},
-    "FEAR":    {"range": (20, 30),   "deploy_pct": 50,  "label": "DEPLOY 50%"},
-    "CRISIS":  {"range": (30, 100),  "deploy_pct": 100, "label": "FULL DEPLOY"},
+    "CALM":   {"range": (0, 15),   "deploy_pct": 0,   "label": "HOLD CASH"},
+    "NORMAL": {"range": (15, 20),  "deploy_pct": 25,  "label": "SELECTIVE"},
+    "FEAR":   {"range": (20, 30),  "deploy_pct": 50,  "label": "DEPLOY 50%"},
+    "CRISIS": {"range": (30, 100), "deploy_pct": 100, "label": "FULL DEPLOY"},
 }
 
-# ── Stock Scorecard Filters ───────────────────────────────────────────────────
 SCORECARD_FILTERS = [
     "F1: Analyst Consensus",
     "F2: Thesis Intact",
@@ -287,36 +530,15 @@ SCORECARD_FILTERS = [
     "F5: Position Size vs Conviction",
 ]
 
-# ── Future-State Matrix Categories ────────────────────────────────────────────
-FUTURE_STATE_CATEGORIES = [
-    "Intelligence",      # AI, data, quantum
-    "Energy",            # Nuclear, uranium, clean energy
-    "Space",             # Launch, satellites, defense
-    "Bio-Engineering",   # Gene editing, life sciences
-    "Robotics",          # Drones, autonomous systems
-]
-
-# ── Earnings Calendar (upcoming) ──────────────────────────────────────────────
+# ── Earnings Calendar ─────────────────────────────────────────────────────────
 from datetime import date as _date
 EARNINGS_CALENDAR = [
     e for e in [
-        {"ticker": "CRSP", "date": "2026-03-26", "timing": "TBD", "importance": "CATALYST"},
-        {"ticker": "GEVO", "date": "2026-03-26", "timing": "TBD", "importance": "EXIT TRIGGER"},
-        {"ticker": "FCX",  "date": "2026-04-16", "timing": "TBD", "importance": "LOW"},
+        {"ticker": "CRSP", "date": "2026-03-26", "importance": "CATALYST — gene editing"},
+        {"ticker": "GEVO", "date": "2026-03-26", "importance": "EXIT TRIGGER"},
+        {"ticker": "FCX",  "date": "2026-04-16", "importance": "REVIEW"},
     ]
     if e["date"] >= str(_date.today())
 ]
 
-# ── Macro Events Calendar ─────────────────────────────────────────────────────
-MACRO_CALENDAR = [
-    {"event": "CPI Print", "date": "2026-03-11", "rule": "No new orders. Let limits work."},
-    {"event": "PPI / PCE / GDP", "date": "2026-03-12", "rule": "Same. No reactions."},
-]
-
-# Weekly Olympus — every Saturday 07:00
-WEEKLY_SCHEDULE = [
-    ("07:00", "olympus_weekly", "🏛 Olympus Weekly Dashboard → Full Table + Bubble Chart"),
-]
-
-# TITAN bot config
 TITAN_BOT_TOKEN = ""  # loaded from .env
