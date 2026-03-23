@@ -14,24 +14,43 @@
   --watch:#3a3a3a;--watch-bg:#f0f0f0;--ipo:#5a2d82;--ipo-bg:#f5eeff;
   --radar:#7a3500;--radar-bg:#fff4ea;--locked:#4a4a6a;--locked-bg:#f0f0f8;
   --exit:#999;--exit-bg:#f5f5f5;
+  --spear:#8b1a00;--spear-bg:#fff0ea;
+  --shield:#1a3a6b;--shield-bg:#eaf0ff;
   --c1:#1e3a6e;--c2:#1e5c2a;--c3:#4a1a7a;--c4:#1a4f4f;--c5:#6b2d14;--c6:#1e3050;--c-radar:#7a3500;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{font-family:'DM Mono',monospace;background:var(--paper);color:var(--ink);font-size:12px;line-height:1.5;}
 
-.masthead{border-bottom:2.5px solid var(--ink);padding:24px 40px 18px;display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:16px;}
-.sys-name{font-family:'Playfair Display',serif;font-size:42px;letter-spacing:-1px;line-height:1;}
-.sys-sub{font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink4);margin-top:5px;font-weight:300;}
+/* ── NUDGE BANNER ── */
+.nudge-banner {
+  background: var(--ink);
+  color: white;
+  padding: 10px 40px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+}
+.nudge-icon { font-size: 16px; flex-shrink: 0; }
+.nudge-text { flex: 1; line-height: 1.4; }
+.nudge-text strong { font-family: 'Syne', sans-serif; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; }
+.nudge-date { font-size: 9px; color: rgba(255,255,255,0.5); white-space: nowrap; }
+
+/* ── MASTHEAD ── */
+.masthead{border-bottom:2.5px solid var(--ink);padding:22px 40px 16px;display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:16px;}
+.sys-name{font-family:'Playfair Display',serif;font-size:40px;letter-spacing:-1px;line-height:1;}
+.sys-sub{font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink4);margin-top:4px;font-weight:300;}
 .regime-block{text-align:center;}
 .regime-pill{display:inline-block;padding:5px 14px;border:1.5px solid var(--ink);font-family:'Syne',sans-serif;font-weight:700;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;background:#fff8e8;}
-.vix-num{font-family:'Playfair Display',serif;font-size:34px;font-style:italic;margin-top:3px;line-height:1;}
+.vix-num{font-family:'Playfair Display',serif;font-size:32px;font-style:italic;margin-top:3px;line-height:1;}
 .vix-label{font-size:9px;letter-spacing:0.18em;color:var(--ink4);text-transform:uppercase;}
 .masthead-right{text-align:right;}
 .meta-line{font-size:10px;color:var(--ink4);margin-bottom:2px;}
-.meta-warn{color:#c44;font-size:10px;}
 
-.dp-bar{background:var(--paper2);border-bottom:1px solid var(--rule);padding:12px 40px;display:flex;align-items:center;gap:32px;flex-wrap:wrap;}
+/* ── DRY POWDER ── */
+.dp-bar{background:var(--paper2);border-bottom:1px solid var(--rule);padding:10px 40px;display:flex;align-items:center;gap:32px;flex-wrap:wrap;}
 .dp-label{font-family:'Syne',sans-serif;font-weight:700;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink3);white-space:nowrap;}
 .dp-broker{display:flex;align-items:center;gap:8px;}
 .dp-broker-name{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;min-width:110px;color:var(--ink2);}
@@ -42,10 +61,74 @@ body{font-family:'DM Mono',monospace;background:var(--paper);color:var(--ink);fo
 .dp-total{margin-left:auto;font-size:11px;color:var(--ink3);}
 .dp-total strong{font-family:'Playfair Display',serif;font-size:18px;color:var(--ink);}
 
+/* ── 3-CARD MISSION BOARD ── */
+.mission-board {
+  padding: 20px 40px;
+  border-bottom: 2px solid var(--ink);
+  background: var(--paper);
+}
+.mission-header {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink4);
+  margin-bottom: 14px;
+}
+.mission-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.mission-card {
+  border: 1.5px solid var(--rule);
+  padding: 16px;
+  position: relative;
+  transition: transform 0.15s;
+}
+.mission-card:hover { transform: translateY(-2px); }
+.mission-card.strike { border-color: var(--buy); background: var(--buy-bg); }
+.mission-card.wait   { border-color: #c8a000; background: #fdf8e0; }
+.mission-card.flush  { border-color: var(--sell); background: var(--sell-bg); }
+
+.mc-status {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.mc-status.strike { color: var(--buy); }
+.mc-status.wait   { color: #a07000; }
+.mc-status.flush  { color: var(--sell); }
+
+.mc-icon { font-size: 20px; margin-bottom: 6px; display: block; }
+.mc-asset { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; margin-bottom: 3px; }
+.mc-sub { font-size: 10px; color: var(--ink3); margin-bottom: 10px; line-height: 1.4; }
+.mc-directive { font-size: 11px; color: var(--ink2); line-height: 1.5; font-weight: 400; margin-bottom: 10px; }
+.mc-trigger {
+  font-size: 10px;
+  padding: 4px 10px;
+  border: 1px solid currentColor;
+  display: inline-block;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.mc-trigger.strike { color: var(--buy); }
+.mc-trigger.wait   { color: #a07000; }
+.mc-trigger.flush  { color: var(--sell); }
+
+/* ── ALERTS ── */
 .alert-bar{background:#fffbf0;border-bottom:1px solid #e8d090;padding:8px 40px;display:flex;gap:16px;align-items:center;overflow-x:auto;white-space:nowrap;}
 .alert-lbl{font-family:'Syne',sans-serif;font-weight:700;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:#c06000;flex-shrink:0;}
 .alert-chip{font-size:10px;color:var(--ink2);padding:2px 9px;background:white;border:1px solid #e8d090;flex-shrink:0;}
 
+/* ── NAV ── */
 .nav{border-bottom:1px solid var(--rule);padding:0 40px;display:flex;gap:0;}
 .tab{padding:10px 18px;font-family:'Syne',sans-serif;font-weight:600;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;color:var(--ink4);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.12s;white-space:nowrap;}
 .tab:hover{color:var(--ink);}
@@ -54,14 +137,38 @@ body{font-family:'DM Mono',monospace;background:var(--paper);color:var(--ink);fo
 .panel{display:none;}
 .panel.active{display:block;}
 
-/* TABLE */
+/* ── SPEAR / SHIELD BADGE ── */
+.spear-badge {
+  display: inline-block;
+  padding: 1px 6px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  background: var(--spear-bg);
+  color: var(--spear);
+  border: 1px solid #e8a080;
+}
+.shield-badge {
+  display: inline-block;
+  padding: 1px 6px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  background: var(--shield-bg);
+  color: var(--shield);
+  border: 1px solid #a0c0e8;
+}
+
+/* ── TABLE ── */
 .tbl-scroll{overflow-x:auto;}
 table.master{width:100%;border-collapse:collapse;}
-table.master thead th{padding:7px 10px;font-family:'Syne',sans-serif;font-weight:600;font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink4);text-align:left;border-bottom:1px solid var(--rule);background:var(--paper);white-space:nowrap;position:sticky;top:0;z-index:9;}
+table.master thead th{padding:7px 8px;font-family:'Syne',sans-serif;font-weight:600;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink4);text-align:left;border-bottom:1px solid var(--rule);background:var(--paper);white-space:nowrap;position:sticky;top:0;z-index:9;}
 table.master thead th.r{text-align:right;}
 table.master tbody tr{border-bottom:1px solid var(--paper3);transition:background 0.1s;}
 table.master tbody tr:hover{background:var(--paper2);}
-table.master td{padding:9px 10px;vertical-align:middle;white-space:nowrap;}
+table.master td{padding:8px 8px;vertical-align:middle;white-space:nowrap;}
 table.master td.r{text-align:right;font-variant-numeric:tabular-nums;}
 
 .cat-band{padding:7px 40px;display:flex;align-items:center;gap:10px;background:var(--paper2);border-bottom:1px solid var(--rule);border-top:1px solid var(--rule);}
@@ -70,7 +177,7 @@ table.master td.r{text-align:right;font-variant-numeric:tabular-nums;}
 .cdesc{font-size:9px;color:var(--ink4);font-weight:300;}
 
 .tsym{font-family:'Syne',sans-serif;font-weight:700;font-size:12px;}
-.tname{font-size:9px;color:var(--ink4);font-weight:300;max-width:130px;overflow:hidden;text-overflow:ellipsis;}
+.tname{font-size:9px;color:var(--ink4);font-weight:300;max-width:120px;overflow:hidden;text-overflow:ellipsis;}
 
 .badge{display:inline-block;padding:2px 6px;font-family:'Syne',sans-serif;font-weight:700;font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;border-radius:1px;}
 .b-port{background:var(--ink);color:#fff;}
@@ -82,25 +189,24 @@ table.master td.r{text-align:right;font-variant-numeric:tabular-nums;}
 
 /* GOD SCORE */
 .god-score{display:flex;align-items:center;gap:5px;justify-content:flex-end;}
-.god-bar{width:40px;height:3px;background:var(--paper3);position:relative;}
-.god-fill{height:100%;transition:width 0.3s;}
-.god-num{font-family:'Playfair Display',serif;font-size:15px;min-width:24px;text-align:right;font-weight:700;}
-.god-label{font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink4);}
+.god-bar{width:36px;height:3px;background:var(--paper3);}
+.god-fill{height:100%;}
+.god-num{font-family:'Playfair Display',serif;font-size:14px;min-width:22px;text-align:right;font-weight:700;}
 
-/* RANK */
-.rank-cell{font-family:'Playfair Display',serif;font-style:italic;font-size:14px;text-align:center;color:var(--ink4);}
-.rank-1{color:#b8860b;font-weight:700;}
-.rank-2{color:#808080;font-weight:700;}
-.rank-3{color:#cd7f32;font-weight:700;}
+/* GAP TO TARGET */
+.gap-cell{text-align:right;}
+.gap-up{color:var(--buy);font-family:'Playfair Display',serif;font-size:13px;font-style:italic;}
+.gap-dn{color:var(--sell);font-family:'Playfair Display',serif;font-size:13px;font-style:italic;}
+.gap-label{font-size:8px;color:var(--ink4);display:block;margin-top:1px;}
 
-.pnow{font-family:'Playfair Display',serif;font-size:14px;}
+.pnow{font-family:'Playfair Display',serif;font-size:13px;}
 .fest{font-size:11px;}
 .pup{color:var(--buy);}
 .pdn{color:var(--sell);}
 .pfl{color:var(--ink4);}
 .pct{font-size:9px;display:block;margin-top:1px;}
 
-.sig{display:inline-block;padding:2px 8px;font-family:'Syne',sans-serif;font-weight:700;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;}
+.sig{display:inline-block;padding:2px 7px;font-family:'Syne',sans-serif;font-weight:700;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;}
 .s-buy{background:var(--buy-bg);color:var(--buy);}
 .s-hold{background:var(--hold-bg);color:var(--hold);}
 .s-sell{background:var(--sell-bg);color:var(--sell);}
@@ -109,12 +215,13 @@ table.master td.r{text-align:right;font-variant-numeric:tabular-nums;}
 .s-exit{background:var(--sell-bg);color:#c00;font-style:italic;}
 .s-locked{background:var(--locked-bg);color:var(--locked);}
 .s-ipo{background:var(--ipo-bg);color:var(--ipo);}
+.s-strike{background:#e8f5e0;color:#1a6b00;font-weight:900;}
+.s-flush{background:#fde8e8;color:#8b0000;font-weight:900;}
 
-.act{font-size:10px;color:var(--ink2);max-width:170px;white-space:normal;line-height:1.4;}
-.cat-ev{font-size:9px;color:var(--ink3);white-space:normal;max-width:120px;line-height:1.4;}
+.act{font-size:10px;color:var(--ink2);max-width:160px;white-space:normal;line-height:1.4;}
+.cat-ev{font-size:9px;color:var(--ink3);white-space:normal;max-width:110px;line-height:1.4;}
 .cat-hot{color:var(--sell);font-weight:500;}
 
-/* CATEGORY LEFT BORDER */
 tr.r1 td:first-child{border-left:3px solid var(--c1);}
 tr.r2 td:first-child{border-left:3px solid var(--c2);}
 tr.r3 td:first-child{border-left:3px solid var(--c3);}
@@ -125,10 +232,10 @@ tr.rr td:first-child{border-left:3px solid var(--c-radar);}
 tr.rl td:first-child{border-left:3px solid var(--locked);}
 tr.re td:first-child{border-left:3px solid var(--exit);}
 
-/* BUBBLE CHART */
-.bubble-section{padding:30px 40px;}
-.bubble-title{font-family:'Syne',sans-serif;font-weight:800;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;}
-.bubble-sub{font-size:10px;color:var(--ink4);margin-bottom:20px;}
+/* BUBBLE */
+.bubble-section{padding:28px 40px;}
+.bubble-title{font-family:'Syne',sans-serif;font-weight:800;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink3);margin-bottom:4px;}
+.bubble-sub{font-size:10px;color:var(--ink4);margin-bottom:18px;}
 .chart-outer{position:relative;padding-left:50px;padding-bottom:30px;}
 .axis-y-label{position:absolute;left:0;top:50%;transform:rotate(-90deg) translateX(-50%);font-size:9px;color:var(--ink4);letter-spacing:0.12em;text-transform:uppercase;white-space:nowrap;}
 #bubbleCanvas{border:1px solid var(--rule);background:white;display:block;width:100%;}
@@ -144,41 +251,43 @@ tr.re td:first-child{border-left:3px solid var(--exit);}
 .reg-cell:last-child{border-right:none;}
 .reg-cell.now{background:var(--paper2);}
 .now-tag{position:absolute;top:8px;right:10px;font-family:'Syne',sans-serif;font-weight:700;font-size:8px;letter-spacing:0.1em;color:var(--sell);}
-.reg-vix{font-family:'Playfair Display',serif;font-size:22px;font-style:italic;}
+.reg-vix{font-family:'Playfair Display',serif;font-size:20px;font-style:italic;}
 .reg-name{font-family:'Syne',sans-serif;font-weight:700;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;margin:4px 0 8px;}
-.reg-pct{font-family:'Playfair Display',serif;font-size:24px;color:var(--buy);}
+.reg-pct{font-family:'Playfair Display',serif;font-size:22px;color:var(--buy);}
 .reg-rule{font-size:10px;color:var(--ink3);line-height:1.5;margin-top:4px;}
 
 /* PRINCIPLES */
 .principles-section{padding:20px 40px;}
 .prin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);}
-.prin-card{background:var(--paper);padding:20px;}
-.prin-num{font-family:'Playfair Display',serif;font-size:36px;color:var(--paper3);line-height:1;margin-bottom:6px;}
-.prin-title{font-family:'Syne',sans-serif;font-weight:700;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:7px;}
+.prin-card{background:var(--paper);padding:18px;}
+.prin-num{font-family:'Playfair Display',serif;font-size:32px;color:var(--paper3);line-height:1;margin-bottom:6px;}
+.prin-title{font-family:'Syne',sans-serif;font-weight:700;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;}
 .prin-text{font-size:10px;color:var(--ink3);line-height:1.6;}
 
-/* GOD SCORE LEGEND */
-.god-legend{padding:16px 40px;background:var(--paper2);border-bottom:1px solid var(--rule);display:flex;gap:30px;align-items:center;flex-wrap:wrap;}
-.god-legend-title{font-family:'Syne',sans-serif;font-weight:800;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink3);}
-.god-legend-item{font-size:9px;color:var(--ink4);}
-.god-legend-item strong{color:var(--ink2);}
-
-footer{margin-top:50px;padding:18px 40px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;font-size:9px;color:var(--ink4);letter-spacing:0.08em;}
+footer{margin-top:40px;padding:16px 40px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;font-size:9px;color:var(--ink4);letter-spacing:0.08em;}
 .watermark{font-family:'Playfair Display',serif;font-style:italic;font-size:12px;}
 
-@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-table.master tbody tr{animation:fadeUp 0.25s ease both;}
-table.master tbody tr:nth-child(1){animation-delay:.02s}
-table.master tbody tr:nth-child(2){animation-delay:.04s}
-table.master tbody tr:nth-child(3){animation-delay:.06s}
-table.master tbody tr:nth-child(4){animation-delay:.08s}
-table.master tbody tr:nth-child(5){animation-delay:.10s}
-table.master tbody tr:nth-child(n+6){animation-delay:.12s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+table.master tbody tr{animation:fadeUp 0.2s ease both;}
+table.master tbody tr:nth-child(1){animation-delay:.02s}table.master tbody tr:nth-child(2){animation-delay:.04s}
+table.master tbody tr:nth-child(3){animation-delay:.06s}table.master tbody tr:nth-child(4){animation-delay:.08s}
+table.master tbody tr:nth-child(n+5){animation-delay:.10s}
 ::-webkit-scrollbar{width:3px;height:3px}::-webkit-scrollbar-track{background:var(--paper)}::-webkit-scrollbar-thumb{background:var(--rule)}
 </style>
 </head>
 <body>
 
+<!-- NUDGE BANNER -->
+<div class="nudge-banner">
+  <span class="nudge-icon">⚠</span>
+  <div class="nudge-text">
+    <strong>TODAY'S DIRECTIVE — 2026-03-22</strong> &nbsp;·&nbsp;
+    FEAR ZONE VIX 24.61 → Deploy 50% dry powder. Priority: (1) EXIT HUYA + GEVO on any green candle. (2) Add NTR before Mar 31 dividend record. (3) Hold all LEGEND positions — do not react to drawdowns.
+  </div>
+  <div class="nudge-date">Updated 07:00 CET</div>
+</div>
+
+<!-- MASTHEAD -->
 <header class="masthead">
   <div>
     <div class="sys-name">OLYMPUS</div>
@@ -190,12 +299,13 @@ table.master tbody tr:nth-child(n+6){animation-delay:.12s}
     <div class="vix-label">VIX · Live</div>
   </div>
   <div class="masthead-right">
-    <div class="meta-warn">⚠ Upload morning screenshots to sync live prices</div>
     <div class="meta-line">Composite Score: 54 / 100</div>
     <div class="meta-line">Environment: US–IRAN + FED WATCH</div>
+    <div class="meta-line" style="margin-top:6px;font-size:9px;color:var(--ink4)">Upload morning screenshots → Minerva syncs live prices</div>
   </div>
 </header>
 
+<!-- DRY POWDER -->
 <div class="dp-bar">
   <div class="dp-label">💰 Dry Powder</div>
   <div class="dp-broker"><div class="dp-broker-name">Trade Republic</div><input class="dp-input" id="dp-tr" type="text" placeholder="0.00" oninput="calcTotal()"><div class="dp-curr">EUR</div></div>
@@ -205,27 +315,53 @@ table.master tbody tr:nth-child(n+6){animation-delay:.12s}
   <div class="dp-total">Total (EUR eq.) &nbsp;<strong id="dp-total">—</strong></div>
 </div>
 
+<!-- 3-CARD MISSION BOARD -->
+<div class="mission-board">
+  <div class="mission-header">⚔ Current Mission — 3 Active Directives</div>
+  <div class="mission-cards">
+
+    <div class="mission-card strike">
+      <div class="mc-status strike">🟢 STRIKE — BUY</div>
+      <span class="mc-icon">🌾</span>
+      <div class="mc-asset">Nutrien (NTR)</div>
+      <div class="mc-sub">Food Security · War Fertilizer Premium · Already held TR €323</div>
+      <div class="mc-directive">War-driven fertilizer premium is NOT priced in. Belarus/Russia supply disruption = structural deficit. Add aggressively before Mar 31 dividend record. Deploy from HUYA/GEVO exit proceeds immediately.</div>
+      <span class="mc-trigger strike">Target: €63.50 – €64.20 · Mar 31 Dividend</span>
+    </div>
+
+    <div class="mission-card wait">
+      <div class="mc-status wait">⏳ OBSERVE — WAIT</div>
+      <span class="mc-icon">📱</span>
+      <div class="mc-asset">Xiaomi (1810.HK)</div>
+      <div class="mc-sub">Intelligence · AI Smartphone + EV Hardware · Held TR €602</div>
+      <div class="mc-directive">Do NOT average down before earnings. Wait for Mar 24 earnings confirmation. If beats + EV guidance strong → hold conviction. If misses → reassess position size. No new capital until signal is clear.</div>
+      <span class="mc-trigger wait">Trigger: Mar 24 Earnings Confirmation</span>
+    </div>
+
+    <div class="mission-card flush">
+      <div class="mc-status flush">📉 FLUSH — EXIT</div>
+      <span class="mc-icon">🗑</span>
+      <div class="mc-asset">HUYA + GEVO</div>
+      <div class="mc-sub">Legacy Thesis Rot · -76.96% and -86.61% · Kiwoom</div>
+      <div class="mc-directive">Total liquidation. These are thesis rot assets — no recovery path, no civilization-shift thesis, no analyst support. Sell on ANY green candle. Do not negotiate. Do not wait for break-even. Capital recovered → immediately into NTR or UEC.</div>
+      <span class="mc-trigger flush">Execute: Any Green Candle · No Exceptions</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ALERTS -->
 <div class="alert-bar">
   <div class="alert-lbl">⚑ Alerts</div>
-  <div class="alert-chip">AVAV ▼ Score 8→6 · Earnings miss · Do not add</div>
-  <div class="alert-chip">GEVO · EXIT Mar 26 · All scenarios → sell</div>
-  <div class="alert-chip">HUYA · EXIT NOW · -76% · All scenarios → sell</div>
+  <div class="alert-chip">HUYA -76.96% · EXIT NOW — any green candle</div>
+  <div class="alert-chip">GEVO -86.61% · EXIT MAR 26 — earnings = forced exit</div>
+  <div class="alert-chip">UEC -14.68% today · Stop $11.50 · HOLD — thesis intact</div>
+  <div class="alert-chip">AVAV ▼ 8→6 · Earnings miss · Do not add</div>
   <div class="alert-chip">xAI IPO · S-1 expected H1 2026 · Prepare capital</div>
-  <div class="alert-chip">UEC ▼ -14.68% today · Stop $11.50 active · Hold</div>
+  <div class="alert-chip">IAU +128% · Exit on next gold strength — redeploy</div>
 </div>
 
-<div class="god-legend">
-  <div class="god-legend-title">⚙ GOD Score = 30 Macro Indicators × 10 Legend Criteria</div>
-  <div class="god-legend-item"><strong>Graham:</strong> Valuation ceiling</div>
-  <div class="god-legend-item"><strong>Buffett/Greenblatt:</strong> ROIC &gt;25%</div>
-  <div class="god-legend-item"><strong>Lynch:</strong> PEG &lt;1.0</div>
-  <div class="god-legend-item"><strong>Graham/Buffett:</strong> D/E &lt;0.5</div>
-  <div class="god-legend-item"><strong>Magic Formula:</strong> Earnings Yield</div>
-  <div class="god-legend-item"><strong>Dalio:</strong> Correlation &lt;0.2</div>
-  <div class="god-legend-item"><strong>Lynch:</strong> Inventory &lt; Sales growth</div>
-  <div class="god-legend-item"><strong>Templeton/Munger:</strong> Margin stability</div>
-</div>
-
+<!-- NAV -->
 <nav class="nav">
   <div class="tab active" onclick="showTab('matrix')">Master Matrix</div>
   <div class="tab" onclick="showTab('bubble')">Bubble Chart</div>
@@ -233,27 +369,25 @@ table.master tbody tr:nth-child(n+6){animation-delay:.12s}
   <div class="tab" onclick="showTab('principles')">Principles</div>
 </nav>
 
-<!-- ═══ MATRIX ═══ -->
+<!-- ═══════════ MATRIX ═══════════ -->
 <div id="panel-matrix" class="panel active">
 <div class="tbl-scroll">
 <table class="master">
-<thead>
-<tr>
-  <th style="min-width:140px">Stock</th>
+<thead><tr>
+  <th style="min-width:130px">Stock</th>
   <th>Status</th>
-  <th class="r" style="min-width:80px">GOD Score</th>
-  <th class="r">Rank</th>
+  <th>Type</th>
+  <th class="r">GOD</th>
   <th class="r">Price</th>
+  <th class="r">Gap to 1Y</th>
   <th class="r">1W</th>
   <th class="r">1M</th>
-  <th class="r">6M</th>
   <th class="r">1Y</th>
   <th class="r">5Y</th>
   <th>Signal</th>
-  <th style="min-width:170px">Action</th>
-  <th style="min-width:120px">Catalyst</th>
-</tr>
-</thead>
+  <th style="min-width:160px">Action</th>
+  <th style="min-width:110px">Catalyst</th>
+</tr></thead>
 <tbody>
 
 <!-- ══ INTELLIGENCE ══ -->
@@ -262,210 +396,200 @@ table.master tbody tr:nth-child(n+6){animation-delay:.12s}
 <tr class="r1">
   <td><div class="tsym">000660.KS</div><div class="tname">SK Hynix</div></td>
   <td><span class="badge b-port">Portfolio</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:95%;background:#1e3a6e"></div></div><div class="god-num">95</div></div></td>
-  <td class="r"><span class="rank-cell rank-1">①</span></td>
+  <td><span class="spear-badge">⚔ SPEAR</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:95%;background:var(--c1)"></div></div><div class="god-num">95</div></div></td>
   <td class="r"><span class="pnow">₩955K</span></td>
-  <td class="r"><span class="fest pup">₩965K<span class="pct pup">+1.0%</span></span></td>
-  <td class="r"><span class="fest pup">₩995K<span class="pct pup">+4.2%</span></span></td>
-  <td class="r"><span class="fest pup">₩1.05M<span class="pct pup">+9.9%</span></span></td>
-  <td class="r"><span class="fest pup">₩1.12M<span class="pct pup">+17.3%</span></span></td>
-  <td class="r"><span class="fest pup">₩1.52M<span class="pct pup">+59%</span></span></td>
+  <td class="r"><div class="gap-cell"><span class="gap-up">+17.3%</span><span class="gap-label">to ₩1.12M</span></div></td>
+  <td class="r"><span class="fest pup">₩965K</span></td>
+  <td class="r"><span class="fest pup">₩995K</span></td>
+  <td class="r"><span class="fest pup">₩1.12M</span></td>
+  <td class="r"><span class="fest pup">₩1.52M</span></td>
   <td><span class="sig s-legend">LEGEND</span></td>
-  <td class="act">NEVER SELL. World #1 HBM3E. Every AGI stack runs on SK Hynix.</td>
-  <td class="cat-ev">HBM4 ramp 2026 · AI memory deals</td>
+  <td class="act">NEVER SELL. HBM3E backbone of AGI. Every AI stack runs here.</td>
+  <td class="cat-ev">HBM4 ramp 2026</td>
 </tr>
 
 <tr class="r1">
   <td><div class="tsym">TSM</div><div class="tname">TSMC ADR</div></td>
   <td><span class="badge b-port">Portfolio</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:90%;background:#1e3a6e"></div></div><div class="god-num">90</div></div></td>
-  <td class="r"><span class="rank-cell rank-2">②</span></td>
+  <td><span class="shield-badge">🛡 SHIELD</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:90%;background:var(--c1)"></div></div><div class="god-num">90</div></div></td>
   <td class="r"><span class="pnow">$178</span></td>
-  <td class="r"><span class="fest pup">$182<span class="pct pup">+2.2%</span></span></td>
-  <td class="r"><span class="fest pup">$188<span class="pct pup">+5.6%</span></span></td>
-  <td class="r"><span class="fest pup">$200<span class="pct pup">+12.4%</span></span></td>
-  <td class="r"><span class="fest pup">$220<span class="pct pup">+23.6%</span></span></td>
-  <td class="r"><span class="fest pup">$380<span class="pct pup">+113%</span></span></td>
+  <td class="r"><div class="gap-cell"><span class="gap-up">+23.6%</span><span class="gap-label">to $220</span></div></td>
+  <td class="r"><span class="fest pup">$182</span></td>
+  <td class="r"><span class="fest pup">$188</span></td>
+  <td class="r"><span class="fest pup">$220</span></td>
+  <td class="r"><span class="fest pup">$380</span></td>
   <td><span class="sig s-hold">HOLD</span></td>
-  <td class="act">World #1 foundry. Makes every leading chip. Unavoidable infrastructure.</td>
-  <td class="cat-ev">N2 node ramp · CoWoS demand</td>
+  <td class="act">World #1 foundry. Makes every leading chip. Irreplaceable infrastructure.</td>
+  <td class="cat-ev">N2 node · CoWoS demand</td>
 </tr>
 
 <tr class="r1">
   <td><div class="tsym">PLTR</div><div class="tname">Palantir Technologies</div></td>
   <td><span class="badge b-port">Portfolio</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:72%;background:#1e3a6e"></div></div><div class="god-num">72</div></div></td>
-  <td class="r"><span class="rank-cell">④</span></td>
-  <td class="r"><span class="pnow">$151.78</span></td>
-  <td class="r"><span class="fest pdn">$144<span class="pct pdn">-5.1%</span></span></td>
-  <td class="r"><span class="fest pfl">$151<span class="pct pfl">0%</span></span></td>
-  <td class="r"><span class="fest pup">$160<span class="pct pup">+5.4%</span></span></td>
-  <td class="r"><span class="fest pup">$171<span class="pct pup">+12.7%</span></span></td>
-  <td class="r"><span class="fest pup">$241<span class="pct pup">+58.8%</span></span></td>
+  <td><span class="spear-badge">⚔ SPEAR</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:72%;background:var(--c1)"></div></div><div class="god-num">72</div></div></td>
+  <td class="r"><span class="pnow">$150.68</span></td>
+  <td class="r"><div class="gap-cell"><span class="gap-up">+13.5%</span><span class="gap-label">to $171</span></div></td>
+  <td class="r"><span class="fest pdn">$144</span></td>
+  <td class="r"><span class="fest pfl">$151</span></td>
+  <td class="r"><span class="fest pup">$171</span></td>
+  <td class="r"><span class="fest pup">$241</span></td>
   <td><span class="sig s-hold">HOLD</span></td>
-  <td class="act">Hold + add dips. Maven Smart System = NATO war AI.</td>
+  <td class="act">Hold + add dips. Maven = NATO war AI. +65% gap to 2026 goal.</td>
   <td class="cat-ev">Defense contracts Q2</td>
 </tr>
 
 <tr class="r1">
   <td><div class="tsym">1810.HK</div><div class="tname">Xiaomi</div></td>
   <td><span class="badge b-port">Portfolio</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:68%;background:#1e3a6e"></div></div><div class="god-num">68</div></div></td>
-  <td class="r"><span class="rank-cell">⑤</span></td>
+  <td><span class="spear-badge">⚔ SPEAR</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:68%;background:var(--c1)"></div></div><div class="god-num">68</div></div></td>
   <td class="r"><span class="pnow">HK$40</span></td>
-  <td class="r"><span class="fest pup">HK$42<span class="pct pup">+5%</span></span></td>
-  <td class="r"><span class="fest pup">HK$45<span class="pct pup">+12%</span></span></td>
-  <td class="r"><span class="fest pup">HK$52<span class="pct pup">+30%</span></span></td>
-  <td class="r"><span class="fest pup">HK$65<span class="pct pup">+62%</span></span></td>
-  <td class="r"><span class="fest pup">HK$120<span class="pct pup">+200%</span></span></td>
+  <td class="r"><div class="gap-cell"><span class="gap-up">+62%</span><span class="gap-label">to HK$65</span></div></td>
+  <td class="r"><span class="fest pup">HK$42</span></td>
+  <td class="r"><span class="fest pup">HK$45</span></td>
+  <td class="r"><span class="fest pup">HK$65</span></td>
+  <td class="r"><span class="fest pup">HK$120</span></td>
   <td><span class="sig s-hold">HOLD</span></td>
-  <td class="act">AI smartphone + EV convergence. China's Apple. Growing ecosystem.</td>
-  <td class="cat-ev">EV launch · AI phone cycle</td>
+  <td class="act">⏳ OBSERVE. Wait Mar 24 earnings. No average down before signal.</td>
+  <td class="cat-ev cat-hot">Mar 24 Earnings ← WATCH</td>
 </tr>
 
 <tr class="r1">
   <td><div class="tsym">IONQ</div><div class="tname">IonQ Quantum</div></td>
   <td><span class="badge b-port">Portfolio</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:65%;background:#1e3a6e"></div></div><div class="god-num">65</div></div></td>
-  <td class="r"><span class="rank-cell">⑥</span></td>
-  <td class="r"><span class="pnow">$34.24</span></td>
-  <td class="r"><span class="fest pup">$35<span class="pct pup">+2.2%</span></span></td>
-  <td class="r"><span class="fest pup">$37<span class="pct pup">+8.1%</span></span></td>
-  <td class="r"><span class="fest pup">$40<span class="pct pup">+16.8%</span></span></td>
-  <td class="r"><span class="fest pup">$44<span class="pct pup">+28.5%</span></span></td>
-  <td class="r"><span class="fest pup">$69<span class="pct pup">+101%</span></span></td>
+  <td><span class="spear-badge">⚔ SPEAR</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:65%;background:var(--c1)"></div></div><div class="god-num">65</div></div></td>
+  <td class="r"><span class="pnow">$31.20</span></td>
+  <td class="r"><div class="gap-cell"><span class="gap-up">+41%</span><span class="gap-label">to $44</span></div></td>
+  <td class="r"><span class="fest pup">$35</span></td>
+  <td class="r"><span class="fest pup">$37</span></td>
+  <td class="r"><span class="fest pup">$44</span></td>
+  <td class="r"><span class="fest pup">$69</span></td>
   <td><span class="sig s-hold">HOLD</span></td>
-  <td class="act">Kiwoom limit $25 active. Quantum inflection 2026-2027.</td>
+  <td class="act">Limit $25 active. Quantum inflection 2026-2027. Near stop = asymmetry.</td>
   <td class="cat-ev">Quantum milestone Q3</td>
 </tr>
 
 <tr class="r1">
   <td><div class="tsym">NVDA</div><div class="tname">Nvidia Corporation</div></td>
   <td><span class="badge b-watch">Watchlist</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:96%;background:#1e3a6e"></div></div><div class="god-num">96</div></div></td>
-  <td class="r"><span class="rank-cell">—</span></td>
-  <td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td>
+  <td><span class="spear-badge">⚔ SPEAR</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:96%;background:var(--c1)"></div></div><div class="god-num">96</div></div></td>
+  <td class="r">—</td>
+  <td class="r">—</td><td class="r">—</td><td class="r">—</td>
   <td class="r"><span class="fest pup">$175+</span></td>
   <td class="r"><span class="fest pup">$400+</span></td>
   <td><span class="sig s-buy">BUY</span></td>
-  <td class="act">GPU = printing press of AGI era. #1 Future-Fit stock on earth. Enter on correction.</td>
-  <td class="cat-ev">GTC 2026 · Blackwell ramp</td>
+  <td class="act">GPU = printing press of AGI. #1 Future-Fit stock. Enter on correction.</td>
+  <td class="cat-ev">GTC 2026 · Blackwell</td>
 </tr>
 
 <!-- ══ ENERGY ══ -->
-<tr><td colspan="13" style="padding:0"><div class="cat-band"><div class="cdot" style="background:var(--c2)"></div><div class="cname" style="color:var(--c2)">Energy</div><div class="cdesc">Uranium · Nuclear Renaissance · Solid-State Batteries · Green Hydrogen</div></div></td></tr>
+<tr><td colspan="13" style="padding:0"><div class="cat-band"><div class="cdot" style="background:var(--c2)"></div><div class="cname" style="color:var(--c2)">Energy</div><div class="cdesc">Uranium · Nuclear Renaissance · Solid-State Batteries</div></div></td></tr>
 
 <tr class="r2">
   <td><div class="tsym">UEC</div><div class="tname">Uranium Energy Corp</div></td>
   <td><span class="badge b-port">Portfolio</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:78%;background:#1e5c2a"></div></div><div class="god-num">78</div></div></td>
-  <td class="r"><span class="rank-cell rank-3">③</span></td>
+  <td><span class="spear-badge">⚔ SPEAR</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:78%;background:var(--c2)"></div></div><div class="god-num">78</div></div></td>
   <td class="r"><span class="pnow">$12.09</span></td>
-  <td class="r"><span class="fest pup">$15.50<span class="pct pup">+28%</span></span></td>
-  <td class="r"><span class="fest pup">$16.50<span class="pct pup">+36%</span></span></td>
-  <td class="r"><span class="fest pup">$18<span class="pct pup">+49%</span></span></td>
-  <td class="r"><span class="fest pup">$20.50<span class="pct pup">+70%</span></span></td>
-  <td class="r"><span class="fest pup">$30.50<span class="pct pup">+152%</span></span></td>
+  <td class="r"><div class="gap-cell"><span class="gap-up">+69.6%</span><span class="gap-label">to $20.50</span></div></td>
+  <td class="r"><span class="fest pup">$15.50</span></td>
+  <td class="r"><span class="fest pup">$16.50</span></td>
+  <td class="r"><span class="fest pup">$20.50</span></td>
+  <td class="r"><span class="fest pup">$30.50</span></td>
   <td><span class="sig s-hold">HOLD</span></td>
-  <td class="act">Stop $11.50. Today -14.68% — hold. Nuclear renaissance locked in.</td>
-  <td class="cat-ev cat-hot">Stop $11.50 — watch closely</td>
+  <td class="act">Stop $11.50. -14.68% today = noise. Nuclear renaissance is structural.</td>
+  <td class="cat-ev cat-hot">Stop $11.50 · Watch</td>
 </tr>
 
 <tr class="r2">
-  <td><div class="tsym">URNM</div><div class="tname">Sprott Uranium Miners</div></td>
+  <td><div class="tsym">URNM</div><div class="tname">Sprott Uranium ETF</div></td>
   <td><span class="badge b-port">Portfolio</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:74%;background:#1e5c2a"></div></div><div class="god-num">74</div></div></td>
-  <td class="r"><span class="rank-cell">⑦</span></td>
+  <td><span class="shield-badge">🛡 SHIELD</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:74%;background:var(--c2)"></div></div><div class="god-num">74</div></div></td>
   <td class="r"><span class="pnow">$58.13</span></td>
-  <td class="r"><span class="fest pup">$70.50<span class="pct pup">+21%</span></span></td>
-  <td class="r"><span class="fest pup">$72.50<span class="pct pup">+25%</span></span></td>
-  <td class="r"><span class="fest pup">$79<span class="pct pup">+36%</span></span></td>
-  <td class="r"><span class="fest pup">$85.50<span class="pct pup">+47%</span></span></td>
-  <td class="r"><span class="fest pup">$121<span class="pct pup">+108%</span></span></td>
+  <td class="r"><div class="gap-cell"><span class="gap-up">+47%</span><span class="gap-label">to $85.50</span></div></td>
+  <td class="r"><span class="fest pup">$70.50</span></td>
+  <td class="r"><span class="fest pup">$72.50</span></td>
+  <td class="r"><span class="fest pup">$85.50</span></td>
+  <td class="r"><span class="fest pup">$121</span></td>
   <td><span class="sig s-hold">HOLD</span></td>
-  <td class="act">Uranium ETF basket. Nuclear is structural, not cyclical.</td>
-  <td class="cat-ev">Nuclear policy Q2 · AI power demand</td>
+  <td class="act">Uranium basket ETF. Structural not cyclical. Add in 2 weeks.</td>
+  <td class="cat-ev">Nuclear policy Q2</td>
 </tr>
 
 <tr class="r2">
   <td><div class="tsym">CCJ</div><div class="tname">Cameco Corporation</div></td>
   <td><span class="badge b-watch">Watchlist</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:82%;background:#1e5c2a"></div></div><div class="god-num">82</div></div></td>
-  <td class="r"><span class="rank-cell">—</span></td>
+  <td><span class="spear-badge">⚔ SPEAR</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:82%;background:var(--c2)"></div></div><div class="god-num">82</div></div></td>
   <td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td>
   <td class="r"><span class="fest pup">$65+</span></td>
   <td class="r"><span class="fest pup">$110+</span></td>
   <td><span class="sig s-buy">BUY</span></td>
-  <td class="act">Saudi Aramco of uranium. Largest Western producer. Set limit on pullback.</td>
-  <td class="cat-ev">Nuclear utility contracts</td>
+  <td class="act">Saudi Aramco of uranium. Set limit on pullback. Unavoidable.</td>
+  <td class="cat-ev">Utility contracts</td>
 </tr>
 
 <tr class="r2">
   <td><div class="tsym">OKLO</div><div class="tname">Oklo Inc</div></td>
   <td><span class="badge b-watch">Watchlist</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:70%;background:#1e5c2a"></div></div><div class="god-num">70</div></div></td>
-  <td class="r"><span class="rank-cell">—</span></td>
-  <td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td>
-  <td class="r">—</td><td class="r"><span class="fest pup">Very High</span></td>
+  <td><span class="spear-badge">⚔ SPEAR</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:70%;background:var(--c2)"></div></div><div class="god-num">70</div></div></td>
+  <td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td>
+  <td class="r"><span class="fest pup">Very High</span></td>
   <td><span class="sig s-buy">BUY</span></td>
-  <td class="act">Micro-nuclear for AI data centers. Sam Altman backed.</td>
+  <td class="act">Micro-nuclear for AI data centers. Sam Altman backed. NRC 2026.</td>
   <td class="cat-ev cat-hot">NRC license 2026</td>
 </tr>
 
 <!-- ══ SPACE ══ -->
-<tr><td colspan="13" style="padding:0"><div class="cat-band"><div class="cdot" style="background:var(--c3)"></div><div class="cname" style="color:var(--c3)">Space / Logistics</div><div class="cdesc">Orbital Infrastructure · Satellite Networks · Lunar Economy · Urban Air</div></div></td></tr>
+<tr><td colspan="13" style="padding:0"><div class="cat-band"><div class="cdot" style="background:var(--c3)"></div><div class="cname" style="color:var(--c3)">Space / Logistics</div><div class="cdesc">Orbital Infrastructure · Satellite Networks · Lunar Economy</div></div></td></tr>
 
 <tr class="r3">
   <td><div class="tsym">RKLB</div><div class="tname">Rocket Lab USA</div></td>
   <td><span class="badge b-port">Portfolio</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:58%;background:#4a1a7a"></div></div><div class="god-num">58</div></div></td>
-  <td class="r"><span class="rank-cell">⑨</span></td>
+  <td><span class="spear-badge">⚔ SPEAR</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:58%;background:var(--c3)"></div></div><div class="god-num">58</div></div></td>
   <td class="r"><span class="pnow">$67.23</span></td>
-  <td class="r"><span class="fest pdn">$70.50<span class="pct pdn">-2.2%</span></span></td>
-  <td class="r"><span class="fest pup">$73.50<span class="pct pup">+9%</span></span></td>
-  <td class="r"><span class="fest pup">$80<span class="pct pup">+19%</span></span></td>
-  <td class="r"><span class="fest pup">$87.50<span class="pct pup">+30%</span></span></td>
-  <td class="r"><span class="fest pup">$124<span class="pct pup">+84%</span></span></td>
+  <td class="r"><div class="gap-cell"><span class="gap-up">+30.2%</span><span class="gap-label">to $87.50</span></div></td>
+  <td class="r"><span class="fest pdn">$70.50</span></td>
+  <td class="r"><span class="fest pup">$73.50</span></td>
+  <td class="r"><span class="fest pup">$87.50</span></td>
+  <td class="r"><span class="fest pup">$124</span></td>
   <td><span class="sig s-hold">HOLD</span></td>
   <td class="act">Only vertically integrated small-launch co actually launching. Neutron next.</td>
-  <td class="cat-ev">Neutron first launch · NASA VADR</td>
+  <td class="cat-ev">Neutron launch · NASA</td>
 </tr>
 
 <tr class="r3">
   <td><div class="tsym">ASTS</div><div class="tname">AST SpaceMobile</div></td>
   <td><span class="badge b-watch">Watchlist</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:72%;background:#4a1a7a"></div></div><div class="god-num">72</div></div></td>
-  <td class="r"><span class="rank-cell">—</span></td>
+  <td><span class="spear-badge">⚔ SPEAR</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:72%;background:var(--c3)"></div></div><div class="god-num">72</div></div></td>
   <td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td>
   <td class="r"><span class="fest pup">Very High</span></td>
   <td class="r"><span class="fest pup">Extreme</span></td>
   <td><span class="sig s-buy">BUY</span></td>
-  <td class="act">Direct-to-phone satellite. AT&T + Verizon contracted. 3B unconnected humans.</td>
+  <td class="act">Direct-to-phone satellite. AT&T + Verizon. 3B unconnected humans.</td>
   <td class="cat-ev cat-hot">BlueBird deploy 2026</td>
 </tr>
 
 <tr class="r3">
-  <td><div class="tsym">xAI</div><div class="tname">xAI Corp — Grok/Colossus</div></td>
+  <td><div class="tsym">xAI</div><div class="tname">xAI Corp</div></td>
   <td><span class="badge b-ipo">IPO 2026</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:88%;background:#4a1a7a"></div></div><div class="god-num">88</div></div></td>
-  <td class="r"><span class="rank-cell">—</span></td>
+  <td><span class="spear-badge">⚔ SPEAR</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:88%;background:var(--c3)"></div></div><div class="god-num">88</div></div></td>
   <td class="r"><span style="font-size:9px;color:var(--ipo)">$50B+ val.</span></td>
   <td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td>
   <td class="r"><span class="fest" style="color:var(--ipo)">Civilizational</span></td>
   <td><span class="sig s-ipo">IPO READY</span></td>
-  <td class="act">Colossus = world's largest AI cluster. Buy IPO day. S-1 H1 2026.</td>
+  <td class="act">Colossus = world's largest AI cluster. Buy IPO day. Prepare capital now.</td>
   <td class="cat-ev cat-hot">S-1 filing H1 2026</td>
-</tr>
-
-<tr class="r3">
-  <td><div class="tsym">LUNR</div><div class="tname">Intuitive Machines</div></td>
-  <td><span class="badge b-watch">Watchlist</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:62%;background:#4a1a7a"></div></div><div class="god-num">62</div></div></td>
-  <td class="r"><span class="rank-cell">—</span></td>
-  <td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td>
-  <td><span class="sig s-watch">WATCH</span></td>
-  <td class="act">NASA lunar delivery partner. IM-1 landed Feb 2024. Moon = signed contracts.</td>
-  <td class="cat-ev">IM-3 mission · NASA CLPS</td>
 </tr>
 
 <!-- ══ BIO ══ -->
@@ -474,209 +598,198 @@ table.master tbody tr:nth-child(n+6){animation-delay:.12s}
 <tr class="r4">
   <td><div class="tsym">CRSP</div><div class="tname">CRISPR Therapeutics</div></td>
   <td><span class="badge b-watch">Watchlist</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:48%;background:#1a4f4f"></div></div><div class="god-num">48</div></div></td>
-  <td class="r"><span class="rank-cell">—</span></td>
+  <td><span class="spear-badge">⚔ SPEAR</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:48%;background:var(--c4)"></div></div><div class="god-num">48</div></div></td>
   <td class="r"><span class="pnow">$46.24</span></td>
-  <td class="r"><span class="fest pdn">$40<span class="pct pdn">-13%</span></span></td>
-  <td class="r"><span class="fest pdn">$42<span class="pct pdn">-9%</span></span></td>
-  <td class="r"><span class="fest pfl">$46<span class="pct pfl">0%</span></span></td>
-  <td class="r"><span class="fest pup">$50<span class="pct pup">+8%</span></span></td>
-  <td class="r"><span class="fest pup">$70<span class="pct pup">+51%</span></span></td>
+  <td class="r"><div class="gap-cell"><span class="gap-up">+8.1%</span><span class="gap-label">to $50</span></div></td>
+  <td class="r"><span class="fest pdn">$40</span></td>
+  <td class="r"><span class="fest pdn">$42</span></td>
+  <td class="r"><span class="fest pfl">$50</span></td>
+  <td class="r"><span class="fest pup">$70</span></td>
   <td><span class="sig s-sell">CAUTION</span></td>
-  <td class="act">Not held. $350M dilution overhang. Wait below $40 before buying.</td>
+  <td class="act">Not held. $350M dilution. Wait below $40. Mar 26 catalyst.</td>
   <td class="cat-ev cat-hot">Earnings Mar 26</td>
 </tr>
 
 <tr class="r4">
   <td><div class="tsym">NTLA</div><div class="tname">Intellia Therapeutics</div></td>
   <td><span class="badge b-watch">Watchlist</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:55%;background:#1a4f4f"></div></div><div class="god-num">55</div></div></td>
-  <td class="r"><span class="rank-cell">—</span></td>
+  <td><span class="spear-badge">⚔ SPEAR</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:55%;background:var(--c4)"></div></div><div class="god-num">55</div></div></td>
   <td class="r"><span class="pnow">$12.84</span></td>
-  <td class="r"><span class="fest pup">$14.70<span class="pct pup">+14%</span></span></td>
-  <td class="r"><span class="fest pup">$15.70<span class="pct pup">+22%</span></span></td>
-  <td class="r"><span class="fest pup">$18<span class="pct pup">+40%</span></span></td>
-  <td class="r"><span class="fest pup">$21.50<span class="pct pup">+67%</span></span></td>
-  <td class="r"><span class="fest pup">$36.50<span class="pct pup">+184%</span></span></td>
+  <td class="r"><div class="gap-cell"><span class="gap-up">+67.4%</span><span class="gap-label">to $21.50</span></div></td>
+  <td class="r"><span class="fest pup">$14.70</span></td>
+  <td class="r"><span class="fest pup">$15.70</span></td>
+  <td class="r"><span class="fest pup">$21.50</span></td>
+  <td class="r"><span class="fest pup">$36.50</span></td>
   <td><span class="sig s-watch">WATCH</span></td>
-  <td class="act">Not held. Limit $10 — set when ready to enter. In-vivo gene editing.</td>
-  <td class="cat-ev">Phase 3 TTR data H2 2026</td>
+  <td class="act">Not held. Limit $10 when ready. In-vivo gene editing. +67% gap.</td>
+  <td class="cat-ev">Phase 3 TTR H2 2026</td>
 </tr>
 
 <tr class="r4">
   <td><div class="tsym">BEAM</div><div class="tname">Beam Therapeutics</div></td>
   <td><span class="badge b-watch">Watchlist</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:70%;background:#1a4f4f"></div></div><div class="god-num">70</div></div></td>
-  <td class="r"><span class="rank-cell">—</span></td>
+  <td><span class="spear-badge">⚔ SPEAR</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:70%;background:var(--c4)"></div></div><div class="god-num">70</div></div></td>
   <td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td>
   <td><span class="sig s-buy">BUY</span></td>
-  <td class="act">Base editing = next-gen CRISPR. David Liu founded. More precise than scissors.</td>
+  <td class="act">Base editing = next-gen CRISPR. David Liu. More precise. Set limit.</td>
   <td class="cat-ev cat-hot">Phase 1/2 data 2026</td>
 </tr>
 
 <!-- ══ ROBOTICS ══ -->
-<tr><td colspan="13" style="padding:0"><div class="cat-band"><div class="cdot" style="background:var(--c5)"></div><div class="cname" style="color:var(--c5)">Robotics</div><div class="cdesc">Humanoids · Autonomous Manufacturing · Defense Drones · Physical Weapons Systems</div></div></td></tr>
+<tr><td colspan="13" style="padding:0"><div class="cat-band"><div class="cdot" style="background:var(--c5)"></div><div class="cname" style="color:var(--c5)">Robotics</div><div class="cdesc">Humanoids · Autonomous Manufacturing · Defense Drones · Physical Weapons</div></div></td></tr>
 
 <tr class="r5">
   <td><div class="tsym">272210.KS</div><div class="tname">Hanwha Systems</div></td>
   <td><span class="badge b-port">Portfolio</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:92%;background:#6b2d14"></div></div><div class="god-num">92</div></div></td>
-  <td class="r"><span class="rank-cell rank-1">①</span></td>
+  <td><span class="spear-badge">⚔ SPEAR</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:92%;background:var(--c5)"></div></div><div class="god-num">92</div></div></td>
   <td class="r"><span class="pnow">₩136K</span></td>
-  <td class="r"><span class="fest pup">₩158.5K<span class="pct pup">+16%</span></span></td>
-  <td class="r"><span class="fest pup">₩163.5K<span class="pct pup">+20%</span></span></td>
-  <td class="r"><span class="fest pup">₩175K<span class="pct pup">+29%</span></span></td>
-  <td class="r"><span class="fest pup">₩183.5K<span class="pct pup">+35%</span></span></td>
-  <td class="r"><span class="fest pup">₩253.5K<span class="pct pup">+86%</span></span></td>
+  <td class="r"><div class="gap-cell"><span class="gap-up">+34.9%</span><span class="gap-label">to ₩183.5K</span></div></td>
+  <td class="r"><span class="fest pup">₩158.5K</span></td>
+  <td class="r"><span class="fest pup">₩163.5K</span></td>
+  <td class="r"><span class="fest pup">₩183.5K</span></td>
+  <td class="r"><span class="fest pup">₩253.5K</span></td>
   <td><span class="sig s-legend">LEGEND</span></td>
-  <td class="act">NEVER SELL. Korea's premier autonomous weapons + propulsion. +820% thesis intact.</td>
+  <td class="act">NEVER SELL. Korea's autonomous weapons + propulsion. +820% thesis intact.</td>
   <td class="cat-ev">K-defense budget 2026</td>
 </tr>
 
 <tr class="r5">
   <td><div class="tsym">KTOS</div><div class="tname">Kratos Defense</div></td>
   <td><span class="badge b-port">Portfolio</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:80%;background:#6b2d14"></div></div><div class="god-num">80</div></div></td>
-  <td class="r"><span class="rank-cell rank-2">②</span></td>
+  <td><span class="spear-badge">⚔ SPEAR</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:80%;background:var(--c5)"></div></div><div class="god-num">80</div></div></td>
   <td class="r"><span class="pnow">$84.62</span></td>
-  <td class="r"><span class="fest pdn">$87.50<span class="pct pdn">-1.5%</span></span></td>
-  <td class="r"><span class="fest pup">$89.50<span class="pct pup">+5.8%</span></span></td>
-  <td class="r"><span class="fest pup">$94<span class="pct pup">+11%</span></span></td>
-  <td class="r"><span class="fest pup">$99.50<span class="pct pup">+17.6%</span></span></td>
-  <td class="r"><span class="fest pup">$130<span class="pct pup">+53.6%</span></span></td>
+  <td class="r"><div class="gap-cell"><span class="gap-up">+17.6%</span><span class="gap-label">to $99.50</span></div></td>
+  <td class="r"><span class="fest pdn">$87.50</span></td>
+  <td class="r"><span class="fest pup">$89.50</span></td>
+  <td class="r"><span class="fest pup">$99.50</span></td>
+  <td class="r"><span class="fest pup">$130</span></td>
   <td><span class="sig s-hold">HOLD</span></td>
-  <td class="act">Defense drones deployed in live conflict = real revenue. Add at $80.</td>
-  <td class="cat-ev">DoD contract Q2 · UTAP-22</td>
+  <td class="act">Drones deployed in live conflict = real revenue. Add at $80. Stop $75.</td>
+  <td class="cat-ev">DoD contract Q2</td>
 </tr>
 
 <tr class="r5">
   <td><div class="tsym">AVAV</div><div class="tname">AeroVironment</div></td>
   <td><span class="badge b-port">Portfolio</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:58%;background:#6b2d14"></div></div><div class="god-num">58</div></div></td>
-  <td class="r"><span class="rank-cell">⑧</span></td>
+  <td><span class="spear-badge">⚔ SPEAR</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:58%;background:var(--c5)"></div></div><div class="god-num">58</div></div></td>
   <td class="r"><span class="pnow">$197.72</span></td>
-  <td class="r"><span class="fest pdn">$180<span class="pct pdn">-9%</span></span></td>
-  <td class="r"><span class="fest pdn">$185<span class="pct pdn">-6.4%</span></span></td>
-  <td class="r"><span class="fest pdn">$195<span class="pct pdn">-1.4%</span></span></td>
-  <td class="r"><span class="fest pfl">$205<span class="pct pfl">+3.7%</span></span></td>
-  <td class="r"><span class="fest pup">$250<span class="pct pup">+26.4%</span></span></td>
+  <td class="r"><div class="gap-cell"><span class="gap-up">+3.7%</span><span class="gap-label">to $205</span></div></td>
+  <td class="r"><span class="fest pdn">$180</span></td>
+  <td class="r"><span class="fest pdn">$185</span></td>
+  <td class="r"><span class="fest pfl">$205</span></td>
+  <td class="r"><span class="fest pup">$250</span></td>
   <td><span class="sig s-hold">HOLD</span></td>
   <td class="act">⚠ Score 8→6. Earnings miss. Do not add. Switchblade still deployed.</td>
-  <td class="cat-ev">Q4 earnings review · DoD orders</td>
+  <td class="cat-ev">Q4 earnings review</td>
 </tr>
 
 <tr class="r5">
-  <td><div class="tsym">ARKQ</div><div class="tname">ARK Autonomous & Robotics ETF</div></td>
+  <td><div class="tsym">ARKQ</div><div class="tname">ARK Autonomous ETF</div></td>
   <td><span class="badge b-port">Portfolio</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:62%;background:#6b2d14"></div></div><div class="god-num">62</div></div></td>
-  <td class="r"><span class="rank-cell">⑦</span></td>
+  <td><span class="spear-badge">⚔ SPEAR</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:62%;background:var(--c5)"></div></div><div class="god-num">62</div></div></td>
   <td class="r"><span class="pnow">$62</span></td>
-  <td class="r"><span class="fest pup">$64<span class="pct pup">+3%</span></span></td>
-  <td class="r"><span class="fest pup">$67<span class="pct pup">+8%</span></span></td>
-  <td class="r"><span class="fest pup">$75<span class="pct pup">+21%</span></span></td>
-  <td class="r"><span class="fest pup">$85<span class="pct pup">+37%</span></span></td>
-  <td class="r"><span class="fest pup">$150<span class="pct pup">+142%</span></span></td>
+  <td class="r"><div class="gap-cell"><span class="gap-up">+37.1%</span><span class="gap-label">to $85</span></div></td>
+  <td class="r"><span class="fest pup">$64</span></td>
+  <td class="r"><span class="fest pup">$67</span></td>
+  <td class="r"><span class="fest pup">$85</span></td>
+  <td class="r"><span class="fest pup">$150</span></td>
   <td><span class="sig s-hold">HOLD</span></td>
   <td class="act">Autonomous vehicles + robotics basket. +30% unrealized. Hold.</td>
-  <td class="cat-ev">Tesla Optimus · EV autonomy</td>
+  <td class="cat-ev">Tesla Optimus · EV</td>
 </tr>
 
 <tr class="r5">
-  <td><div class="tsym">BOTZ</div><div class="tname">Global X Robotics & AI ETF</div></td>
+  <td><div class="tsym">BOTZ</div><div class="tname">Global X Robotics ETF</div></td>
   <td><span class="badge b-port">Portfolio</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:60%;background:#6b2d14"></div></div><div class="god-num">60</div></div></td>
-  <td class="r"><span class="rank-cell">⑧</span></td>
+  <td><span class="spear-badge">⚔ SPEAR</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:60%;background:var(--c5)"></div></div><div class="god-num">60</div></div></td>
   <td class="r"><span class="pnow">$33</span></td>
-  <td class="r"><span class="fest pup">$34<span class="pct pup">+3%</span></span></td>
-  <td class="r"><span class="fest pup">$36<span class="pct pup">+9%</span></span></td>
-  <td class="r"><span class="fest pup">$40<span class="pct pup">+21%</span></span></td>
-  <td class="r"><span class="fest pup">$45<span class="pct pup">+36%</span></span></td>
-  <td class="r"><span class="fest pup">$80<span class="pct pup">+142%</span></span></td>
+  <td class="r"><div class="gap-cell"><span class="gap-up">+36.4%</span><span class="gap-label">to $45</span></div></td>
+  <td class="r"><span class="fest pup">$34</span></td>
+  <td class="r"><span class="fest pup">$36</span></td>
+  <td class="r"><span class="fest pup">$45</span></td>
+  <td class="r"><span class="fest pup">$80</span></td>
   <td><span class="sig s-hold">HOLD</span></td>
-  <td class="act">AI + robotics ETF. +11.6% unrealized. Complements ARKQ.</td>
-  <td class="cat-ev">Humanoid production scale</td>
-</tr>
-
-<tr class="r5">
-  <td><div class="tsym">TSLA</div><div class="tname">Tesla — Optimus thesis</div></td>
-  <td><span class="badge b-watch">Watchlist</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:72%;background:#6b2d14"></div></div><div class="god-num">72</div></div></td>
-  <td class="r"><span class="rank-cell">—</span></td>
-  <td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td>
-  <td><span class="sig s-watch">WATCH</span></td>
-  <td class="act">NOT the car thesis. Optimus humanoid = most underdiscussed asset on earth.</td>
-  <td class="cat-ev">Optimus production scale</td>
+  <td class="act">AI + robotics basket. +11.6% unrealized. Complements ARKQ.</td>
+  <td class="cat-ev">Humanoid production</td>
 </tr>
 
 <tr class="r5">
   <td><div class="tsym">Figure AI</div><div class="tname">Figure AI Inc</div></td>
   <td><span class="badge b-ipo">IPO Watch</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:85%;background:#6b2d14"></div></div><div class="god-num">85</div></div></td>
-  <td class="r"><span class="rank-cell">—</span></td>
+  <td><span class="spear-badge">⚔ SPEAR</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:85%;background:var(--c5)"></div></div><div class="god-num">85</div></div></td>
   <td class="r"><span style="font-size:9px;color:var(--ipo)">$40B private</span></td>
   <td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td>
-  <td class="r"><span class="fest" style="color:var(--ipo)">Generational</span></td>
+  <td class="r"><span style="color:var(--ipo)">Generational</span></td>
   <td><span class="sig s-ipo">IPO WATCH</span></td>
-  <td class="act">BMW factory live. Most advanced humanoid in production. IPO 2026/27.</td>
-  <td class="cat-ev cat-hot">BMW deploy · IPO filing</td>
+  <td class="act">BMW factory live. Most advanced humanoid. IPO 2026/27. Watch S-1.</td>
+  <td class="cat-ev cat-hot">BMW deploy · IPO S-1</td>
 </tr>
 
 <!-- ══ INFRASTRUCTURE ══ -->
-<tr><td colspan="13" style="padding:0"><div class="cat-band"><div class="cdot" style="background:var(--c6)"></div><div class="cname" style="color:var(--c6)">Infrastructure</div><div class="cdesc">Photonics · Data Center Power · Semiconductor Equipment · Critical Materials</div></div></td></tr>
+<tr><td colspan="13" style="padding:0"><div class="cat-band"><div class="cdot" style="background:var(--c6)"></div><div class="cname" style="color:var(--c6)">Infrastructure</div><div class="cdesc">Photonics · Data Center Power · Semiconductor Equipment</div></div></td></tr>
 
 <tr class="r6">
   <td><div class="tsym">COHR</div><div class="tname">Coherent Corp</div></td>
   <td><span class="badge b-port">Portfolio</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:76%;background:#1e3050"></div></div><div class="god-num">76</div></div></td>
-  <td class="r"><span class="rank-cell rank-1">①</span></td>
+  <td><span class="shield-badge">🛡 SHIELD</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:76%;background:var(--c6)"></div></div><div class="god-num">76</div></div></td>
   <td class="r"><span class="pnow">$253.63</span></td>
-  <td class="r"><span class="fest pup">$275<span class="pct pup">+8.4%</span></span></td>
-  <td class="r"><span class="fest pup">$280<span class="pct pup">+10.4%</span></span></td>
-  <td class="r"><span class="fest pup">$298<span class="pct pup">+17.5%</span></span></td>
-  <td class="r"><span class="fest pup">$315<span class="pct pup">+24.2%</span></span></td>
-  <td class="r"><span class="fest pup">$425<span class="pct pup">+67.5%</span></span></td>
+  <td class="r"><div class="gap-cell"><span class="gap-up">+24.2%</span><span class="gap-label">to $315</span></div></td>
+  <td class="r"><span class="fest pup">$275</span></td>
+  <td class="r"><span class="fest pup">$280</span></td>
+  <td class="r"><span class="fest pup">$315</span></td>
+  <td class="r"><span class="fest pup">$425</span></td>
   <td><span class="sig s-hold">HOLD</span></td>
-  <td class="act">NVIDIA supply deal locked. 800G transceivers = photonics backbone of AI networks.</td>
-  <td class="cat-ev">800G ramp Q2 · NVDA review</td>
+  <td class="act">NVIDIA supply deal locked. 800G = photonics backbone of AI networks.</td>
+  <td class="cat-ev">800G ramp Q2</td>
 </tr>
 
 <tr class="r6">
   <td><div class="tsym">VRT</div><div class="tname">Vertiv Holdings</div></td>
   <td><span class="badge b-port">Portfolio</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:84%;background:#1e3050"></div></div><div class="god-num">84</div></div></td>
-  <td class="r"><span class="rank-cell rank-2">②</span></td>
+  <td><span class="shield-badge">🛡 SHIELD</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:84%;background:var(--c6)"></div></div><div class="god-num">84</div></div></td>
   <td class="r"><span class="pnow">$89</span></td>
-  <td class="r"><span class="fest pup">$92<span class="pct pup">+3.4%</span></span></td>
-  <td class="r"><span class="fest pup">$96<span class="pct pup">+7.9%</span></span></td>
-  <td class="r"><span class="fest pup">$108<span class="pct pup">+21.3%</span></span></td>
-  <td class="r"><span class="fest pup">$125<span class="pct pup">+40.4%</span></span></td>
-  <td class="r"><span class="fest pup">$220<span class="pct pup">+147%</span></span></td>
+  <td class="r"><div class="gap-cell"><span class="gap-up">+40.4%</span><span class="gap-label">to $125</span></div></td>
+  <td class="r"><span class="fest pup">$92</span></td>
+  <td class="r"><span class="fest pup">$96</span></td>
+  <td class="r"><span class="fest pup">$125</span></td>
+  <td class="r"><span class="fest pup">$220</span></td>
   <td><span class="sig s-hold">HOLD</span></td>
-  <td class="act">AI data center power + cooling. Every hyperscaler needs Vertiv. +? unrealized.</td>
+  <td class="act">AI data center power + cooling. Every hyperscaler needs Vertiv.</td>
   <td class="cat-ev">AI capex supercycle</td>
 </tr>
 
 <tr class="r6">
-  <td><div class="tsym">TMO</div><div class="tname">Thermo Fisher Scientific</div></td>
+  <td><div class="tsym">TMO</div><div class="tname">Thermo Fisher</div></td>
   <td><span class="badge b-port">Portfolio</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:68%;background:#1e3050"></div></div><div class="god-num">68</div></div></td>
-  <td class="r"><span class="rank-cell rank-3">③</span></td>
+  <td><span class="shield-badge">🛡 SHIELD</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:68%;background:var(--c6)"></div></div><div class="god-num">68</div></div></td>
   <td class="r"><span class="pnow">$474.39</span></td>
-  <td class="r"><span class="fest pup">$506<span class="pct pup">+6.7%</span></span></td>
-  <td class="r"><span class="fest pup">$521<span class="pct pup">+9.8%</span></span></td>
-  <td class="r"><span class="fest pup">$560<span class="pct pup">+18.1%</span></span></td>
-  <td class="r"><span class="fest pup">$601<span class="pct pup">+26.7%</span></span></td>
-  <td class="r"><span class="fest pup">$801<span class="pct pup">+68.9%</span></span></td>
+  <td class="r"><div class="gap-cell"><span class="gap-up">+26.7%</span><span class="gap-label">to $601</span></div></td>
+  <td class="r"><span class="fest pup">$506</span></td>
+  <td class="r"><span class="fest pup">$521</span></td>
+  <td class="r"><span class="fest pup">$601</span></td>
+  <td class="r"><span class="fest pup">$801</span></td>
   <td><span class="sig s-hold">HOLD</span></td>
-  <td class="act">Life science instruments. Every gene editing lab needs TMO equipment.</td>
+  <td class="act">Life science instruments. Every gene editing lab needs TMO.</td>
   <td class="cat-ev">Q1 2026 earnings</td>
 </tr>
 
 <tr class="r6">
   <td><div class="tsym">AMAT</div><div class="tname">Applied Materials</div></td>
   <td><span class="badge b-watch">Watchlist</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:79%;background:#1e3050"></div></div><div class="god-num">79</div></div></td>
-  <td class="r"><span class="rank-cell">—</span></td>
+  <td><span class="shield-badge">🛡 SHIELD</span></td>
+  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:79%;background:var(--c6)"></div></div><div class="god-num">79</div></div></td>
   <td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td>
   <td><span class="sig s-buy">BUY</span></td>
   <td class="act">Chip manufacturing equipment. SK Hynix partner. Cannot build chips without AMAT.</td>
@@ -684,124 +797,117 @@ table.master tbody tr:nth-child(n+6){animation-delay:.12s}
 </tr>
 
 <!-- ══ GLOBAL ISSUE RADAR ══ -->
-<tr><td colspan="13" style="padding:0"><div class="cat-band" style="background:#fff8f0"><div class="cdot" style="background:var(--c-radar)"></div><div class="cname" style="color:var(--c-radar)">⚑ Global Issue Radar</div><div class="cdesc">Current: Food Security / War Fertilizer Premium · Wolsong Nuclear Signal · Review weekly</div></div></td></tr>
+<tr><td colspan="13" style="padding:0"><div class="cat-band" style="background:#fff8f0"><div class="cdot" style="background:var(--c-radar)"></div><div class="cname" style="color:var(--c-radar)">⚑ Global Issue Radar</div><div class="cdesc">Current: Food Security / War Fertilizer · Wolsong Nuclear Signal · Review weekly</div></div></td></tr>
 
 <tr class="rr">
   <td><div class="tsym">NTR</div><div class="tname">Nutrien Ltd</div></td>
   <td><span class="badge b-port">Portfolio</span></td>
+  <td><span class="shield-badge">🛡 SHIELD</span></td>
   <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:72%;background:var(--c-radar)"></div></div><div class="god-num">72</div></div></td>
-  <td class="r"><span class="rank-cell">④</span></td>
   <td class="r"><span class="pnow">$47</span></td>
-  <td class="r"><span class="fest pup">$50<span class="pct pup">+6.4%</span></span></td>
-  <td class="r"><span class="fest pup">$54<span class="pct pup">+14.9%</span></span></td>
-  <td class="r"><span class="fest pup">$62<span class="pct pup">+31.9%</span></span></td>
-  <td class="r"><span class="fest pup">$72<span class="pct pup">+53.2%</span></span></td>
-  <td class="r"><span class="fest pup">$110<span class="pct pup">+134%</span></span></td>
-  <td><span class="sig s-hold">HOLD</span></td>
-  <td class="act">World's largest potash producer. War disrupted 40% global supply. Hold.</td>
-  <td class="cat-ev">Spring planting · War escalation</td>
+  <td class="r"><div class="gap-cell"><span class="gap-up">+53.2%</span><span class="gap-label">to $72</span></div></td>
+  <td class="r"><span class="fest pup">$50</span></td>
+  <td class="r"><span class="fest pup">$54</span></td>
+  <td class="r"><span class="fest pup">$72</span></td>
+  <td class="r"><span class="fest pup">$110</span></td>
+  <td><span class="sig s-strike">🟢 STRIKE</span></td>
+  <td class="act">⚔ ACTIVE MISSION. Add before Mar 31 dividend. War premium not priced in.</td>
+  <td class="cat-ev cat-hot">Mar 31 Dividend · War</td>
 </tr>
 
 <tr class="rr">
   <td><div class="tsym">POSCO</div><div class="tname">POSCO Holdings</div></td>
   <td><span class="badge b-radar">Radar</span></td>
+  <td><span class="spear-badge">⚔ SPEAR</span></td>
   <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:65%;background:var(--c-radar)"></div></div><div class="god-num">65</div></div></td>
-  <td class="r"><span class="rank-cell">—</span></td>
   <td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td>
   <td><span class="sig s-watch">WATCH</span></td>
-  <td class="act">NEW — Wolsong tritium + hydrogen steelmaking. ranto28 signal today. Research needed.</td>
-  <td class="cat-ev cat-hot">Wolsong acquisition · H2 steel</td>
-</tr>
-
-<tr class="rr">
-  <td><div class="tsym">MOS</div><div class="tname">Mosaic Company</div></td>
-  <td><span class="badge b-radar">Radar</span></td>
-  <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:60%;background:var(--c-radar)"></div></div><div class="god-num">60</div></div></td>
-  <td class="r"><span class="rank-cell">—</span></td>
-  <td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td>
-  <td><span class="sig s-watch">WATCH</span></td>
-  <td class="act">Second largest fertilizer. Same thesis as NTR, higher volatility.</td>
-  <td class="cat-ev">Potash price · Belarus sanctions</td>
+  <td class="act">NEW — ranto28 signal today. Wolsong tritium + H2 steelmaking. Research needed.</td>
+  <td class="cat-ev cat-hot">Wolsong · H2 steel</td>
 </tr>
 
 <!-- ══ LOCKED ══ -->
-<tr><td colspan="13" style="padding:0"><div class="cat-band" style="background:#f4f4f8"><div class="cdot" style="background:var(--locked)"></div><div class="cname" style="color:var(--locked)">Locked Position</div><div class="cdesc">Trade Republic promotional gift — cannot sell for 1 year from first transaction</div></div></td></tr>
+<tr><td colspan="13" style="padding:0"><div class="cat-band" style="background:#f4f4f8"><div class="cdot" style="background:var(--locked)"></div><div class="cname" style="color:var(--locked)">Locked Position</div><div class="cdesc">TR promotional gift — cannot sell for 1 year</div></div></td></tr>
 
 <tr class="rl">
   <td><div class="tsym">MC.PA</div><div class="tname">LVMH</div></td>
   <td><span class="badge b-locked">Locked</span></td>
+  <td><span class="shield-badge">🛡 SHIELD</span></td>
   <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:75%;background:var(--locked)"></div></div><div class="god-num">75</div></div></td>
-  <td class="r"><span class="rank-cell">—</span></td>
   <td class="r"><span class="pnow">$500</span></td>
-  <td class="r">—</td><td class="r">—</td><td class="r">—</td>
+  <td class="r"><div class="gap-cell"><span class="gap-up">+20.4%</span><span class="gap-label">to $602</span></div></td>
+  <td class="r">—</td><td class="r">—</td>
   <td class="r"><span class="fest pup">$602</span></td>
   <td class="r"><span class="fest pup">$802</span></td>
   <td><span class="sig s-locked">LOCKED</span></td>
   <td class="act">TR gift. Cannot sell ~1yr. Track only. Generational brand basket.</td>
-  <td class="cat-ev">Lock expiry — check TR date</td>
+  <td class="cat-ev">Lock expiry — check TR</td>
 </tr>
 
 <!-- ══ EXIT QUEUE ══ -->
-<tr><td colspan="13" style="padding:0"><div class="cat-band" style="background:#f8f8f8"><div class="cdot" style="background:var(--exit)"></div><div class="cname" style="color:var(--exit)">Exit Queue — Legacy</div><div class="cdesc">Not aligned with civilization thesis · Exit at next opportunity · Do not average down</div></div></td></tr>
+<tr><td colspan="13" style="padding:0"><div class="cat-band" style="background:#f8f8f8"><div class="cdot" style="background:var(--exit)"></div><div class="cname" style="color:var(--exit)">Legacy Flush — Exit Queue</div><div class="cdesc">Thesis Rot · Capital recovered → immediately into SPEAR positions · Do not average down</div></div></td></tr>
 
 <tr class="re">
   <td><div class="tsym">GEVO</div><div class="tname">Gevo Inc</div></td>
   <td><span class="badge b-exit">Exit</span></td>
+  <td>—</td>
   <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:15%;background:var(--exit)"></div></div><div class="god-num">15</div></div></td>
-  <td class="r"><span class="rank-cell">—</span></td>
   <td class="r"><span class="pnow" style="color:var(--exit)">$2.27</span></td>
-  <td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td>
-  <td><span class="sig s-exit">EXIT MAR 26</span></td>
-  <td class="act">-86.61%. Hold ONLY until Mar 26. All scenarios → exit. Dead thesis.</td>
-  <td class="cat-ev cat-hot">Earnings Mar 26 — EXIT DAY</td>
+  <td class="r"><div class="gap-cell"><span class="gap-dn">-86.6%</span><span class="gap-label">from entry</span></div></td>
+  <td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td>
+  <td><span class="sig s-flush">📉 FLUSH</span></td>
+  <td class="act">LEGACY FLUSH. Mar 26 = forced exit. All scenarios → sell. Proceeds → NTR.</td>
+  <td class="cat-ev cat-hot">Mar 26 EXIT DAY</td>
 </tr>
 
 <tr class="re">
   <td><div class="tsym">HUYA</div><div class="tname">HUYA Inc</div></td>
   <td><span class="badge b-exit">Exit</span></td>
+  <td>—</td>
   <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:12%;background:var(--exit)"></div></div><div class="god-num">12</div></div></td>
-  <td class="r"><span class="rank-cell">—</span></td>
   <td class="r"><span class="pnow" style="color:var(--exit)">$3.04</span></td>
-  <td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td>
-  <td><span class="sig s-exit">EXIT NOW</span></td>
-  <td class="act">-76.96%. All scenarios → sell. China ADR risk. No thesis. Execute immediately.</td>
-  <td class="cat-ev cat-hot">EXIT — overdue</td>
+  <td class="r"><div class="gap-cell"><span class="gap-dn">-76.9%</span><span class="gap-label">from entry</span></div></td>
+  <td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td>
+  <td><span class="sig s-flush">📉 FLUSH</span></td>
+  <td class="act">LEGACY FLUSH. Any green candle → sell ALL. China ADR = thesis rot. Proceeds → UEC.</td>
+  <td class="cat-ev cat-hot">EXIT NOW — overdue</td>
 </tr>
 
 <tr class="re">
   <td><div class="tsym">FCX</div><div class="tname">Freeport-McMoRan</div></td>
   <td><span class="badge b-exit">Exit</span></td>
+  <td>—</td>
   <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:45%;background:var(--exit)"></div></div><div class="god-num">45</div></div></td>
-  <td class="r"><span class="rank-cell">—</span></td>
   <td class="r"><span class="pnow" style="color:var(--exit)">$52.09</span></td>
-  <td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td>
+  <td class="r"><div class="gap-cell"><span class="gap-dn">-0.8%</span><span class="gap-label">from entry</span></div></td>
+  <td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td>
   <td><span class="sig s-exit">REDUCE</span></td>
-  <td class="act">-0.76%. Stop $54.50 active on Kiwoom. Copper long-term intact but exit this position.</td>
-  <td class="cat-ev">Stop $54.50 · Apr 16 review</td>
+  <td class="act">Stop $54.50 on Kiwoom. Copper long-term intact but exit this position.</td>
+  <td class="cat-ev">Stop $54.50 · Apr 16</td>
 </tr>
 
 <tr class="re">
   <td><div class="tsym">IAU</div><div class="tname">iShares Gold ETF</div></td>
   <td><span class="badge b-exit">Exit</span></td>
+  <td>—</td>
   <td class="r"><div class="god-score"><div class="god-bar"><div class="god-fill" style="width:30%;background:var(--exit)"></div></div><div class="god-num">30</div></div></td>
-  <td class="r"><span class="rank-cell">—</span></td>
   <td class="r"><span class="pnow">$84.70</span></td>
-  <td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td>
+  <td class="r"><div class="gap-cell"><span class="gap-up">+128%</span><span class="gap-label">unrealized</span></div></td>
+  <td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td>
   <td><span class="sig s-exit">EXIT SOON</span></td>
-  <td class="act">+128% unrealized — this is the exit gift. Sell on next gold strength. Redeploy.</td>
-  <td class="cat-ev">Next gold rally = exit window</td>
+  <td class="act">+128% = EXIT GIFT. Sell on next gold strength. Redeploy into NVDA or CCJ.</td>
+  <td class="cat-ev">Next gold rally = exit</td>
 </tr>
 
-</tbody>
-</table>
+</tbody></table>
 </div>
 </div>
 
-<!-- ═══ BUBBLE CHART ═══ -->
+<!-- ═══ BUBBLE ═══ -->
 <div id="panel-bubble" class="panel">
 <div class="bubble-section">
   <div class="bubble-title">Future-State Portfolio Map</div>
-  <div class="bubble-sub">X = Risk · Y = 1Y Upside · Size = GOD Score · Color = Category · Click bubble = jump to matrix row</div>
+  <div class="bubble-sub">X = Risk · Y = 1Y Upside · Size = GOD Score · Number inside = GOD Score · ⚔ = SPEAR · 🛡 = SHIELD · ✕ = EXIT</div>
   <div class="chart-outer">
     <div class="axis-y-label">1Y Upside Potential →</div>
     <canvas id="bubbleCanvas" height="520"></canvas>
@@ -814,7 +920,7 @@ table.master tbody tr:nth-child(n+6){animation-delay:.12s}
     <div class="bl-item"><div class="bl-dot" style="background:var(--c4)"></div>Bio-Engineering</div>
     <div class="bl-item"><div class="bl-dot" style="background:var(--c5)"></div>Robotics</div>
     <div class="bl-item"><div class="bl-dot" style="background:var(--c6)"></div>Infrastructure</div>
-    <div class="bl-item"><div class="bl-dot" style="background:var(--c-radar)"></div>Radar/Exit</div>
+    <div class="bl-item"><div class="bl-dot" style="background:var(--c-radar)"></div>Radar</div>
   </div>
 </div>
 </div>
@@ -823,13 +929,10 @@ table.master tbody tr:nth-child(n+6){animation-delay:.12s}
 <div id="panel-regime" class="panel">
 <div class="regime-section">
   <div class="reg-grid">
-    <div class="reg-cell"><div class="reg-vix">VIX &lt;15</div><div class="reg-name">Calm Market</div><div class="reg-pct">0%</div><div class="reg-rule">Market complacent. Protect positions. Deploy nothing new.</div></div>
-    <div class="reg-cell"><div class="reg-vix">VIX 15–20</div><div class="reg-name">Normal Range</div><div class="reg-pct">25%</div><div class="reg-rule">Selective. Only 8+ GOD score stocks. Limit orders only.</div></div>
-    <div class="reg-cell now"><div class="now-tag">▶ NOW</div><div class="reg-vix">VIX 20–30</div><div class="reg-name">Fear Zone</div><div class="reg-pct">50%</div><div class="reg-rule">Sweet spot for paradigm stocks. Deploy 50% dry powder into highest conviction.</div></div>
-    <div class="reg-cell"><div class="reg-vix">VIX &gt;30</div><div class="reg-name">Crisis Zone</div><div class="reg-pct">100%</div><div class="reg-rule">Generational entry. Deploy all reserves. Legends made here.</div></div>
-  </div>
-  <div style="padding:20px;font-size:11px;color:var(--ink3);line-height:1.7;border-top:1px solid var(--rule)">
-    <strong style="font-family:'Syne',sans-serif;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;">Current:</strong> VIX 24.61 — deep in Fear Zone. 50% deployment authorized. Limits armed. The market comes to your prices.
+    <div class="reg-cell"><div class="reg-vix">VIX &lt;15</div><div class="reg-name">Calm</div><div class="reg-pct">0%</div><div class="reg-rule">Market complacent. Protect. Deploy nothing.</div></div>
+    <div class="reg-cell"><div class="reg-vix">VIX 15–20</div><div class="reg-name">Normal</div><div class="reg-pct">25%</div><div class="reg-rule">Selective. GOD score 80+ only. Limit orders.</div></div>
+    <div class="reg-cell now"><div class="now-tag">▶ NOW</div><div class="reg-vix">VIX 20–30</div><div class="reg-name">Fear Zone</div><div class="reg-pct">50%</div><div class="reg-rule">Deploy 50% dry powder. SPEAR positions. Limits armed.</div></div>
+    <div class="reg-cell"><div class="reg-vix">VIX &gt;30</div><div class="reg-name">Crisis</div><div class="reg-pct">100%</div><div class="reg-rule">Generational entry. Full deploy. Legends made here.</div></div>
   </div>
 </div>
 </div>
@@ -839,23 +942,23 @@ table.master tbody tr:nth-child(n+6){animation-delay:.12s}
 <div class="principles-section">
   <div class="prin-grid">
     <div class="prin-card"><div class="prin-num">G1</div><div class="prin-title">Graham Number</div><div class="prin-text">Never pay more than √(22.5 × EPS × Book Value). Hard valuation ceiling. Margin of safety is non-negotiable.</div></div>
-    <div class="prin-card"><div class="prin-num">G2</div><div class="prin-title">ROIC &gt; 25%</div><div class="prin-text">Buffett + Greenblatt: A good business generates 25%+ return on every dollar invested. Strong moat indicator.</div></div>
-    <div class="prin-card"><div class="prin-num">G3</div><div class="prin-title">PEG &lt; 1.0</div><div class="prin-text">Lynch: P/E ÷ Growth Rate. If growth is 20% and P/E is 10, PEG = 0.5 — a bargain. Growth at a reasonable price.</div></div>
-    <div class="prin-card"><div class="prin-num">G4</div><div class="prin-title">Debt/Equity &lt; 0.5</div><div class="prin-text">Graham + Buffett: Financial bulletproofing. Long-term debt less than 50% of equity. Payable within 2 years of earnings.</div></div>
-    <div class="prin-card"><div class="prin-num">G5</div><div class="prin-title">Earnings Yield</div><div class="prin-text">Magic Formula: EBIT ÷ Enterprise Value. Treats stock like a bond. Higher = more bang for your buck including debt.</div></div>
-    <div class="prin-card"><div class="prin-num">G6</div><div class="prin-title">Correlation &lt; 0.2</div><div class="prin-text">Dalio: 15–20 uncorrelated assets reduce risk 80% without reducing returns. The Holy Grail of portfolio construction.</div></div>
-    <div class="prin-card"><div class="prin-num">G7</div><div class="prin-title">NCAV Net-Net</div><div class="prin-text">Graham: Buy if market cap &lt; 66% of (Current Assets − Total Liabilities). You get the business essentially for free.</div></div>
-    <div class="prin-card"><div class="prin-num">G8</div><div class="prin-title">Inventory &lt; Sales</div><div class="prin-text">Lynch: If inventory grows 15% but sales only 5% — red flag. Products piling up = price cut and earnings hit incoming.</div></div>
-    <div class="prin-card"><div class="prin-num">G9</div><div class="prin-title">Margin Stability</div><div class="prin-text">Templeton + Munger: 10-year operating margin stability = pricing power. Fluctuating margin = commodity business.</div></div>
+    <div class="prin-card"><div class="prin-num">G2</div><div class="prin-title">ROIC &gt; 25%</div><div class="prin-text">Buffett + Greenblatt: 25%+ return on every dollar invested. The measure of a true moat.</div></div>
+    <div class="prin-card"><div class="prin-num">G3</div><div class="prin-title">PEG &lt; 1.0</div><div class="prin-text">Lynch: P/E ÷ Growth Rate &lt; 1.0. Growth at a reasonable price. The tenbagger filter.</div></div>
+    <div class="prin-card"><div class="prin-num">G4</div><div class="prin-title">Debt/Equity &lt; 0.5</div><div class="prin-text">Graham + Buffett: Financial bulletproofing. Long-term debt payable within 2 years of earnings.</div></div>
+    <div class="prin-card"><div class="prin-num">G5</div><div class="prin-title">Earnings Yield</div><div class="prin-text">Magic Formula: EBIT ÷ EV. How much you earn per dollar invested including debt. Higher is better.</div></div>
+    <div class="prin-card"><div class="prin-num">G6</div><div class="prin-title">Correlation &lt; 0.2</div><div class="prin-text">Dalio: 15–20 uncorrelated assets reduce risk 80% without reducing returns. The Holy Grail.</div></div>
+    <div class="prin-card"><div class="prin-num">G7</div><div class="prin-title">NCAV Net-Net</div><div class="prin-text">Graham: Buy if market cap &lt; 66% of (Current Assets − Liabilities). Getting the business for free.</div></div>
+    <div class="prin-card"><div class="prin-num">G8</div><div class="prin-title">Inventory &lt; Sales</div><div class="prin-text">Lynch: Inventory growing faster than sales = red flag. Price cuts and earnings miss incoming.</div></div>
+    <div class="prin-card"><div class="prin-num">G9</div><div class="prin-title">Margin Stability</div><div class="prin-text">Templeton + Munger: 10-year stable margins = pricing power. Fluctuating = commodity business.</div></div>
   </div>
   <div style="padding:20px 0;font-family:'Playfair Display',serif;font-style:italic;font-size:13px;color:var(--ink3);line-height:1.8;border-top:1px solid var(--rule);margin-top:1px">
-    "We play a 30, 40, 50-year game. Every decision we make is a brick. Some bricks are gold. Some are mistakes. But no brick is wasted if you learn from it."
+    "A Titan doesn't carry luggage — he carries a weapon. If it doesn't help us hit €115M, it's out."
   </div>
 </div>
 </div>
 
 <footer>
-  <div>OLYMPUS · TITAN Investment System · v5.1 · 2026-03-22 · Real Portfolio Synced · GOD Score Active</div>
+  <div>OLYMPUS · TITAN v5.1 · 2026-03-22 · 3-Card Mission · Spear/Shield · GOD Score · Legacy Flush Protocol</div>
   <div class="watermark">Minerva Protocol — 90% Mentor · 10% Battle-Brother 🔱</div>
 </footer>
 
@@ -867,13 +970,12 @@ function showTab(id){
   event.target.classList.add('active');
   if(id==='bubble') drawBubble();
 }
-
 function calcTotal(){
   const tr=parseFloat(document.getElementById('dp-tr').value)||0;
   const kw=parseFloat(document.getElementById('dp-kw').value)||0;
-  document.getElementById('dp-total').textContent=((tr+(kw/1.09))>0)?'€'+(tr+(kw/1.09)).toFixed(0):'—';
+  const t=tr+(kw/1.09);
+  document.getElementById('dp-total').textContent=t>0?'€'+t.toFixed(0):'—';
 }
-
 function drawBubble(){
   const canvas=document.getElementById('bubbleCanvas');
   if(!canvas)return;
@@ -884,111 +986,87 @@ function drawBubble(){
   canvas.width=W*dpr;canvas.height=H*dpr;
   const ctx=canvas.getContext('2d');
   ctx.scale(dpr,dpr);
-  const PAD={l:50,r:30,t:30,b:40};
-  const CW=W-PAD.l-PAD.r,CH=H-PAD.t-PAD.b;
-  const COLORS={c1:'#1e3a6e',c2:'#1e5c2a',c3:'#4a1a7a',c4:'#1a4f4f',c5:'#6b2d14',c6:'#1e3050',cr:'#7a3500'};
+  const P={l:50,r:30,t:30,b:40};
+  const CW=W-P.l-P.r,CH=H-P.t-P.b;
+  const C={c1:'#1e3a6e',c2:'#1e5c2a',c3:'#4a1a7a',c4:'#1a4f4f',c5:'#6b2d14',c6:'#1e3050',cr:'#7a3500'};
 
-  // [ticker, risk 0-10, upside 0-10, god_score, color, signal, matrixId]
+  // [label, risk, upside, god, color, type, signal]
+  // type: S=spear, D=shield, E=exit
   const stocks=[
-    ['000660',2,7,95,COLORS.c1,'LEGEND'],
-    ['TSM',3,7,90,COLORS.c1,'HOLD'],
-    ['NVDA',4,9,96,COLORS.c1,'BUY'],
-    ['PLTR',4,6,72,COLORS.c1,'HOLD'],
-    ['Xiaomi',6,8,68,COLORS.c1,'HOLD'],
-    ['IONQ',7,7,65,COLORS.c1,'HOLD'],
-    ['UEC',6,9,78,COLORS.c2,'HOLD'],
-    ['URNM',5,8,74,COLORS.c2,'HOLD'],
-    ['CCJ',4,7,82,COLORS.c2,'BUY'],
-    ['OKLO',8,9,70,COLORS.c2,'BUY'],
-    ['RKLB',7,7,58,COLORS.c3,'HOLD'],
-    ['ASTS',9,9,72,COLORS.c3,'BUY'],
-    ['xAI',8,10,88,COLORS.c3,'IPO'],
-    ['CRSP',6,3,48,COLORS.c4,'CAUTION'],
-    ['NTLA',7,8,55,COLORS.c4,'WATCH'],
-    ['BEAM',8,8,70,COLORS.c4,'BUY'],
-    ['272210',3,7,92,COLORS.c5,'LEGEND'],
-    ['KTOS',5,6,80,COLORS.c5,'HOLD'],
-    ['AVAV',6,3,58,COLORS.c5,'HOLD'],
-    ['ARKQ',5,6,62,COLORS.c5,'HOLD'],
-    ['BOTZ',5,6,60,COLORS.c5,'HOLD'],
-    ['TSLA',5,7,72,COLORS.c5,'WATCH'],
-    ['COHR',5,7,76,COLORS.c6,'HOLD'],
-    ['VRT',4,8,84,COLORS.c6,'HOLD'],
-    ['TMO',4,6,68,COLORS.c6,'HOLD'],
-    ['AMAT',4,7,79,COLORS.c6,'BUY'],
-    ['NTR',4,7,72,COLORS.cr,'HOLD'],
-    ['GEVO',5,1,15,COLORS.cr,'EXIT'],
-    ['HUYA',6,1,12,COLORS.cr,'EXIT'],
-    ['FCX',5,2,45,COLORS.cr,'EXIT'],
-    ['IAU',3,2,30,COLORS.cr,'EXIT'],
+    ['000660',2,7,95,C.c1,'S','LEGEND'],['TSM',3,7,90,C.c1,'D','HOLD'],
+    ['NVDA',4,9,96,C.c1,'S','BUY'],['PLTR',4,6,72,C.c1,'S','HOLD'],
+    ['Xiaomi',6,8,68,C.c1,'S','HOLD'],['IONQ',7,7,65,C.c1,'S','HOLD'],
+    ['UEC',6,9,78,C.c2,'S','HOLD'],['URNM',5,8,74,C.c2,'D','HOLD'],
+    ['CCJ',4,7,82,C.c2,'S','BUY'],['OKLO',8,9,70,C.c2,'S','BUY'],
+    ['RKLB',7,7,58,C.c3,'S','HOLD'],['ASTS',9,9,72,C.c3,'S','BUY'],
+    ['xAI',8,10,88,C.c3,'S','IPO'],
+    ['CRSP',6,3,48,C.c4,'S','CAUTION'],['NTLA',7,8,55,C.c4,'S','WATCH'],
+    ['BEAM',8,8,70,C.c4,'S','BUY'],
+    ['272210',3,7,92,C.c5,'S','LEGEND'],['KTOS',5,6,80,C.c5,'S','HOLD'],
+    ['AVAV',6,3,58,C.c5,'S','HOLD'],['ARKQ',5,6,62,C.c5,'S','HOLD'],
+    ['BOTZ',5,6,60,C.c5,'S','HOLD'],
+    ['COHR',5,7,76,C.c6,'D','HOLD'],['VRT',4,8,84,C.c6,'D','HOLD'],
+    ['TMO',4,6,68,C.c6,'D','HOLD'],['AMAT',4,7,79,C.c6,'D','BUY'],
+    ['NTR',4,7,72,C.cr,'D','STRIKE'],
+    ['GEVO',5,1,15,C.cr,'E','EXIT'],['HUYA',6,1,12,C.cr,'E','EXIT'],
+    ['FCX',5,2,45,C.cr,'E','EXIT'],['IAU',3,2,30,C.cr,'E','EXIT'],
   ];
 
-  // Grid
+  // Grid lines
   ctx.strokeStyle='#e8e5db';ctx.lineWidth=1;
   for(let i=0;i<=4;i++){
-    const y=PAD.t+(CH/4)*i;
-    ctx.beginPath();ctx.moveTo(PAD.l,y);ctx.lineTo(PAD.l+CW,y);ctx.stroke();
-    const x=PAD.l+(CW/4)*i;
-    ctx.beginPath();ctx.moveTo(x,PAD.t);ctx.lineTo(x,PAD.t+CH);ctx.stroke();
+    const y=P.t+(CH/4)*i;ctx.beginPath();ctx.moveTo(P.l,y);ctx.lineTo(P.l+CW,y);ctx.stroke();
+    const x=P.l+(CW/4)*i;ctx.beginPath();ctx.moveTo(x,P.t);ctx.lineTo(x,P.t+CH);ctx.stroke();
   }
-
   // Y axis labels
   ctx.fillStyle='#8a8a8a';ctx.font='10px DM Mono';ctx.textAlign='right';
-  ['0%','+25%','+50%','+75%','+100%+'].forEach((l,i)=>{
-    ctx.fillText(l,PAD.l-6,PAD.t+CH-(CH/4)*i+4);
-  });
+  ['0%','+25%','+50%','+75%','+100%+'].forEach((l,i)=>{ctx.fillText(l,P.l-6,P.t+CH-(CH/4)*i+4);});
 
-  // Quadrant labels
-  ctx.fillStyle='#e8e5db';ctx.font='italic 10px Playfair Display,serif';ctx.textAlign='center';
-  ctx.fillText('SAFE · LOW UPSIDE',PAD.l+CW*0.15,PAD.t+CH*0.9);
-  ctx.fillText('SAFE · HIGH UPSIDE',PAD.l+CW*0.15,PAD.t+CH*0.1);
-  ctx.fillText('RISKY · HIGH UPSIDE',PAD.l+CW*0.85,PAD.t+CH*0.1);
-  ctx.fillText('RISKY · LOW UPSIDE',PAD.l+CW*0.85,PAD.t+CH*0.9);
+  // Quadrant shading
+  ctx.fillStyle='rgba(26,92,53,0.03)';
+  ctx.fillRect(P.l,P.t,CW/2,CH/2); // low risk, high upside — ideal zone
 
-  // Bubbles
-  const positions={};
-  stocks.forEach(([label,risk,upside,score,color,signal])=>{
-    const x=PAD.l+(risk/10)*CW;
-    const y=PAD.t+CH-(upside/10)*CH;
-    const r=5+(score/100)*18;
+  stocks.forEach(([label,risk,upside,god,color,type,signal])=>{
+    const x=P.l+(risk/10)*CW;
+    const y=P.t+CH-(upside/10)*CH;
+    const r=5+(god/100)*16;
 
     // Shadow
-    ctx.beginPath();ctx.arc(x+1,y+1,r,0,Math.PI*2);ctx.fillStyle='rgba(0,0,0,0.06)';ctx.fill();
+    ctx.beginPath();ctx.arc(x+1,y+1,r,0,Math.PI*2);ctx.fillStyle='rgba(0,0,0,0.05)';ctx.fill();
 
     // Fill
     ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);
-    ctx.fillStyle=color+'cc';ctx.fill();
-    ctx.strokeStyle=color;ctx.lineWidth=1.5;ctx.stroke();
+    ctx.fillStyle=type==='E'?'#f5f5f5':color+'bb';ctx.fill();
+    ctx.strokeStyle=type==='E'?'#ccc':color;ctx.lineWidth=type==='E'?1:1.5;ctx.stroke();
 
-    // Glow ring for BUY/LEGEND/IPO
-    if(['BUY','LEGEND','IPO'].includes(signal)){
+    // Glow for BUY/LEGEND/IPO/STRIKE
+    if(['BUY','LEGEND','IPO','STRIKE'].includes(signal)){
       ctx.beginPath();ctx.arc(x,y,r+4,0,Math.PI*2);
-      ctx.strokeStyle=color+'55';ctx.lineWidth=2;ctx.stroke();
+      ctx.strokeStyle=color+'44';ctx.lineWidth=2;ctx.stroke();
     }
 
     // EXIT cross
-    if(signal==='EXIT'){
+    if(type==='E'){
       ctx.strokeStyle='#cc0000';ctx.lineWidth=1.5;
       ctx.beginPath();ctx.moveTo(x-r*0.5,y-r*0.5);ctx.lineTo(x+r*0.5,y+r*0.5);ctx.stroke();
       ctx.beginPath();ctx.moveTo(x+r*0.5,y-r*0.5);ctx.lineTo(x-r*0.5,y+r*0.5);ctx.stroke();
     }
 
-    // GOD score inside bubble
-    ctx.fillStyle='rgba(255,255,255,0.9)';
-    ctx.font=`bold ${Math.max(8,r*0.55)}px DM Mono`;
-    ctx.textAlign='center';
-    ctx.fillText(score,x,y+r*0.2);
+    // GOD score inside
+    ctx.fillStyle=type==='E'?'#aaa':'rgba(255,255,255,0.92)';
+    ctx.font=`bold ${Math.max(7,r*0.55)}px DM Mono`;ctx.textAlign='center';
+    ctx.fillText(god,x,y+r*0.22);
 
-    // Ticker label outside
+    // Type icon
+    if(type==='S'&&r>10){ctx.font=`${Math.max(8,r*0.45)}px serif`;ctx.fillText('⚔',x,y-r*0.2);}
+    if(type==='D'&&r>10){ctx.font=`${Math.max(8,r*0.45)}px serif`;ctx.fillText('🛡',x,y-r*0.2);}
+
+    // Ticker label
     ctx.fillStyle='#0d0d0d';
-    ctx.font='bold 9px Syne,sans-serif';
-    ctx.textAlign='center';
+    ctx.font='bold 9px Syne,sans-serif';ctx.textAlign='center';
     ctx.fillText(label,x,y+r+13);
-
-    positions[label]={x,y,r};
   });
 }
-
 window.addEventListener('load',()=>{setTimeout(()=>{if(document.getElementById('panel-bubble').classList.contains('active'))drawBubble();},300);});
 window.addEventListener('resize',()=>{if(document.getElementById('panel-bubble').classList.contains('active'))drawBubble();});
 </script>
