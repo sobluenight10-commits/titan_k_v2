@@ -21,6 +21,7 @@ from typing import Dict
 import requests
 from openai import OpenAI
 from config import (
+    STOCKS,
     OPENAI_API_KEY, PORTFOLIO, WATCHLIST, EARNINGS_CALENDAR,
     TITAN_SYSTEM_URL, TIMEZONE, TELEGRAM_CHAT_ID, TITAN_BOT_TOKEN,
 )
@@ -29,6 +30,15 @@ from market_data import (
     get_vix_regime, fetch_fx_rate,
 )
 from config import WEIGHTS
+
+FUTURE_STATE_CATEGORIES = ["Intelligence", "Energy", "Space", "Bio-Engineering", "Robotics", "Infrastructure"]
+
+PORTFOLIO = {
+    "TR":        [s for s in STOCKS if s.get("broker") == "TR"        and s["status"] == "portfolio"],
+    "Kiwoom_US": [s for s in STOCKS if s.get("broker") == "Kiwoom_US" and s["status"] == "portfolio"],
+    "Kiwoom_KR": [s for s in STOCKS if s.get("broker") == "Kiwoom_KR" and s["status"] == "portfolio"],
+}
+WATCHLIST = [s for s in STOCKS if s["status"] == "watchlist"]
 
 logger = logging.getLogger("titan_k.battle_rhythm")
 
@@ -356,71 +366,71 @@ _last_seen_headlines: Dict[str, set] = {}
 
 
 def run_news_pulse():
-    """
-    Layer 3 — runs every 30 min during US session (15:30-23:00 Berlin).
-    Detects NEW headlines since last check and fires immediate Telegram alert.
-    Called from main.py scheduler.
-    """
+    """Runs every 2 hours. Synthesizes new headlines into ONE actionable brief."""
     import pytz
     berlin = pytz.timezone(TIMEZONE)
     now = datetime.now(berlin)
-
-    # Only during US session weekdays
     if now.weekday() >= 5:
         return
     hour = now.hour + now.minute / 60
     if hour < 15.5 or hour > 23.1:
         return
-
-    logger.info("Running 30-min news pulse...")
-
+    logger.info("Running news pulse synthesis...")
     try:
         fresh_news = _fetch_portfolio_news()
     except Exception as e:
         logger.error(f"News pulse fetch failed: {e}")
         return
-
-    alerts = []
+    new_items = []
     for ticker, headlines in fresh_news.items():
         if ticker not in _last_seen_headlines:
             _last_seen_headlines[ticker] = set()
-
         new_headlines = [h for h in headlines if h not in _last_seen_headlines[ticker]]
-
         if new_headlines:
             _last_seen_headlines[ticker].update(new_headlines)
-            for headline in new_headlines[:2]:
-                alerts.append(f"📰 <b>{ticker}</b>: {headline[:100]}")
-
-    if alerts:
+            for h in new_headlines[:2]:
+                new_items.append(f"{ticker}: {h[:120]}")
+    if not new_items:
+        logger.info("News pulse: no new headlines")
+        return
+    try:
+        headline_block = chr(10).join(new_items[:20])
+        system = (
+            "You are MINERVA, investment intelligence for a civilization-shift portfolio. "
+            "Analyze NEW headlines and produce ONE concise actionable briefing. "
+            "Format: "
+            "Line 1: Market mood in one sentence. "
+            "Line 2-3: 2-3 portfolio impacts (ticker + what it means). "
+            "Line 4: SO WHAT — one concrete directive: BUY/HOLD/SELL/WATCH + ticker + reason + price level if relevant. "
+            "If nothing actionable reply exactly: SKIP. "
+            "Never list raw headlines. Always end with SO WHAT directive."
+        )
+        user = (
+            f"Today {now.strftime('%Y-%m-%d %H:%M')} Berlin. New headlines:{chr(10)}{chr(10)}"
+            f"{headline_block}{chr(10)}{chr(10)}"
+            "Portfolio: SK Hynix(LEGEND), Hanwha(LEGEND), PLTR(HOLD), COHR(HOLD), "
+            "UEC(HOLD+stop$11.50), AVAV(CAUTION), VRT(HOLD), ARKQ/BOTZ(HOLD), "
+            "RKLB(HOLD), TMO(HOLD), URNM(HOLD), NTR(STRIKE-add before Mar31), "
+            "Xiaomi(OBSERVE-Mar24earnings), IONQ(HOLD), TSMC(HOLD). "
+            "EXIT: HUYA(-77%), GEVO(-87%Mar26), FCX(stop$54.50), IAU(+128%-sell-on-strength). "
+            "Synthesize. End with SO WHAT directive."
+        )
+        response = _gpt_call(system, user, max_tokens=250)
+        if not response or response.strip() == "SKIP":
+            logger.info("News pulse: nothing actionable")
+            return
         from telegram_bot import send_telegram
         msg = (
-            f"⚡ <b>NEWS PULSE ALERT</b> | {now.strftime('%H:%M')} Berlin\n"
-            f"{'━' * 28}\n\n"
-            + "\n".join(alerts) +
-            f"\n\n🔱 Check TITAN for analysis."
+            f"⚡ <b>PULSE | {now.strftime('%H:%M')} Berlin</b>"
+            f"{chr(10)}{'━' * 22}{chr(10)}{chr(10)}"
+            f"{response.strip()}"
+            f"{chr(10)}{chr(10)}<i>{len(new_items)} headlines synthesized</i>"
         )
         send_telegram(msg)
+        logger.info(f"News pulse sent: {len(new_items)} headlines synthesized")
+    except Exception as e:
+        logger.error(f"News pulse GPT failed: {e}")
 
-        # Also notify TITAN
-        titan_msg = (
-            f"⚡ <b>MINERVA → TITAN: BREAKING NEWS</b>\n"
-            f"📅 {now.strftime('%H:%M')} Berlin\n\n"
-            + "\n".join(alerts) +
-            f"\n\n{'━' * 28}\n"
-            f"🎯 IMMEDIATE TASK:\n"
-            f"• Search for full story on each ticker above\n"
-            f"• Run Gate 0: does this change GOD's position?\n"
-            f"• If actionable → alert GOD with: TICKER | BUY/HOLD/SELL | reason\n"
-            f"• Response within 5 minutes."
-        )
-        _send_to_titan(titan_msg)
-        logger.info(f"News pulse: {len(alerts)} new headlines detected")
-
-
-# ══════════════════════════════════════════════════════════════════════════════
-# TITAN MESSENGER — Minerva sends orders to TITAN
-# ══════════════════════════════════════════════════════════════════════════════
 
 def _send_to_titan(message: str):
     """Send a message to GOD's Telegram using TITAN's bot token."""

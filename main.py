@@ -120,6 +120,8 @@ def run_briefing(briefing_id: str, description: str = ""):
         _run_blog()
     elif briefing_id in ("olympus", "olympus_weekly"):
         _run_olympus()
+    elif briefing_id in ("master_daily", "us_open", "us_interim", "us_close"):
+        _run_daily_brief(briefing_id)
     else:
         _run_battle_rhythm(briefing_id)
 
@@ -214,7 +216,7 @@ def _setup_schedule():
 
     # Layer 3 — 30-min news pulse during US session
     from battle_rhythm import run_news_pulse
-    schedule.every(30).minutes.do(run_news_pulse)
+    schedule.every(120).minutes.do(run_news_pulse)
 
     logger.info(f"Registered {len(DAILY_SCHEDULE)} daily + {len(WEEKLY_SCHEDULE)} weekly briefings + 30min news pulse (Berlin time)")
 

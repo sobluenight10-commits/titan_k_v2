@@ -8,7 +8,9 @@ import logging
 from typing import Dict
 
 from openai import OpenAI
-from config import OPENAI_API_KEY, FUTURE_STATE_CATEGORIES
+from config import OPENAI_API_KEY
+
+FUTURE_STATE_CATEGORIES = ["Intelligence", "Energy", "Space", "Bio-Engineering", "Robotics", "Infrastructure"]
 
 logger = logging.getLogger("titan_k.analyzer")
 
