@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OLYMPUS — TITAN INVESTMENT SYSTEM</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=Barlow:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  --bg:      #eef1f6;
+  --white:   #ffffff;
+  --ink:     #080c18;
+  --ink2:    #1e2640;
+  --ink3:    #5a6585;
+  --border:  #dde3ee;
+  --bull:    #008c35; --bull-lt:#e6f5ed; --bull-vv:#00e855;
+  --bear:    #cc0022; --bear-lt:#fce8ec; --bear-vv:#ff2244;
+  --warn:    #b35c00; --warn-lt:#fff3e0; --warn-vv:#ff9100;
+  --blue:    #0050cc; --blue-lt:#e8f0ff;
+  --gold:    #b07d00; --gold-lt:#fffaeb; --gold-vv:#fbbf24;
+  --purple:  #5b21b6; --purp-lt:#f0ebff;
+  --sh:      0 2px 12px rgba(0,0,0,0.07);
+  --sh-lg:   0 8px 36px rgba(0,0,0,0.13);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;}
+
+/* ── HEADER ── */
+.hdr{
+  background:var(--ink);height:62px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;position:sticky;top:0;z-index:300;
+  box-shadow:0 2px 20px rgba(0,0,0,0.4);
+}
+.hdr-brand{display:flex;align-items:center;gap:12px;}
+.hdr-name{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#fff;letter-spacing:3px;}
+.hdr-sub{font-size:10px;color:var(--gold-vv);letter-spacing:3px;font-weight:700;}
+.hdr-right{display:flex;align-items:center;gap:14px;}
+.live-pill{display:flex;align-items:center;gap:5px;background:rgba(0,232,85,0.15);border:1px solid rgba(0,232,85,0.4);padding:4px 12px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:2px;color:#00e855;}
+.ldot{width:6px;height:6px;border-radius:50%;background:#00e855;animation:blink 1.4s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+.hdr-time{font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.3);}
+
+/* ── TAB NAV ── */
+.tab-nav{
+  background:var(--white);border-bottom:3px solid var(--border);
+  display:flex;padding:0 28px;gap:0;overflow-x:auto;position:sticky;top:62px;z-index:200;
+  box-shadow:var(--sh);
+}
+.tab-btn{
+  padding:14px 22px;font-size:12px;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;border:none;background:none;cursor:pointer;
+  color:var(--ink3);border-bottom:3px solid transparent;margin-bottom:-3px;
+  white-space:nowrap;transition:all 0.2s;
+}
+.tab-btn:hover{color:var(--ink);}
+.tab-btn.active{color:var(--blue);border-bottom-color:var(--blue);}
+.tab-btn.liq-tab.active{color:#7c3aed;border-bottom-color:#7c3aed;}
+
+/* ── TAB PANELS ── */
+.tab-panel{display:none;padding:24px 28px;max-width:1440px;margin:0 auto;}
+.tab-panel.active{display:block;}
+
+/* ── SECTION TITLE ── */
+.sec-t{
+  font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--ink);
+  display:flex;align-items:center;gap:12px;margin-bottom:18px;
+}
+.sec-t::after{content:'';flex:1;height:2px;background:var(--bg);}
+.layer-badge{
+  display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:100px;
+  font-size:10px;font-weight:800;letter-spacing:2px;margin-bottom:12px;
+}
+.lb-4{background:#fce8ff;color:#7c00b3;border:1px solid #d9b3ff;}
+.lb-3{background:var(--bear-lt);color:var(--bear);border:1px solid #f8b3bf;}
+.lb-2{background:var(--gold-lt);color:var(--gold);border:1px solid #f0d090;}
+.lb-1{background:var(--blue-lt);color:var(--blue);border:1px solid #b3ccff;}
+
+/* ── CARDS ── */
+.card{background:var(--white);border-radius:12px;padding:24px;box-shadow:var(--sh);margin-bottom:20px;}
+.card-sm{background:var(--white);border-radius:10px;padding:18px;box-shadow:var(--sh);}
+
+/* ── PORTFOLIO TAB ── */
+.port-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-bottom:20px;}
+.port-card{
+  background:var(--white);border-radius:10px;padding:18px;
+  border-left:4px solid var(--blue);box-shadow:var(--sh);
+  transition:transform 0.2s,box-shadow 0.2s;
+}
+.port-card:hover{transform:translateY(-2px);box-shadow:var(--sh-lg);}
+.pc-name{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.pc-val{font-family:'Bebas Neue',sans-serif;font-size:32px;line-height:1;color:var(--blue);margin:6px 0;}
+.pc-chg{font-size:13px;font-weight:700;}
+.pc-chg.up{color:var(--bull);}
+.pc-chg.dn{color:var(--bear);}
+.pc-score{font-size:11px;color:var(--ink3);margin-top:6px;}
+.score-pill{display:inline-block;padding:2px 10px;border-radius:100px;font-size:10px;font-weight:800;letter-spacing:1px;}
+.sp-87{background:#fff0e0;color:#b35c00;}
+.sp-85{background:#e8f5e9;color:#008c35;}
+.sp-82{background:#e8f0ff;color:#0050cc;}
+.sp-low{background:#fce8ec;color:#cc0022;}
+
+/* ── SCORE TABLE ── */
+.score-table{width:100%;border-collapse:collapse;}
+.score-table th{font-size:10px;letter-spacing:2px;font-weight:800;text-transform:uppercase;color:var(--ink3);padding:8px 12px;text-align:left;border-bottom:2px solid var(--bg);}
+.score-table td{padding:10px 12px;font-size:13px;border-bottom:1px solid var(--bg);font-family:'DM Mono',monospace;}
+.score-table tr:hover td{background:var(--bg);}
+
+/* ── BIG SIGNAL ── */
+.big-signal{border-radius:14px;padding:32px 36px;margin-bottom:18px;position:relative;overflow:hidden;box-shadow:var(--sh-lg);animation:fadeUp 0.4s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+.big-signal.bull{background:linear-gradient(135deg,#007a2e,#00b341,#00e855);}
+.big-signal.warn{background:linear-gradient(135deg,#b35c00,#e07000,#ff9100);}
+.big-signal.bear{background:linear-gradient(135deg,#99001a,#cc0022,#ff2244);}
+.big-signal.danger{background:linear-gradient(135deg,#3d0010,#7f0014,#cc0022);}
+.bs-orb{position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,0.08);}
+.bs-layer{font-size:10px;font-weight:800;letter-spacing:4px;color:rgba(255,255,255,0.55);margin-bottom:4px;position:relative;z-index:1;}
+.bs-cmd{font-family:'Bebas Neue',sans-serif;font-size:60px;color:#fff;line-height:1;letter-spacing:2px;position:relative;z-index:1;margin-bottom:10px;}
+.bs-detail{font-size:15px;color:rgba(255,255,255,0.88);font-weight:500;max-width:680px;line-height:1.5;position:relative;z-index:1;}
+.bs-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;position:relative;z-index:1;}
+.bs-chip{background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);padding:5px 16px;border-radius:100px;font-size:11px;font-weight:700;color:#fff;}
+
+/* ── EARLY WARNING ── */
+.ew{border-radius:10px;padding:18px 22px;margin-bottom:18px;display:flex;align-items:center;gap:16px;border:2px solid transparent;}
+.ew.safe{background:#f0fff6;border-color:var(--bull);}
+.ew.watch{background:#fff8e6;border-color:var(--warn);}
+.ew.alert{background:#fff0f3;border-color:var(--bear);}
+.ew-icon{font-size:30px;flex-shrink:0;}
+.ew-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;}
+.ew.safe .ew-title{color:var(--bull);}
+.ew.watch .ew-title{color:var(--warn);}
+.ew.alert .ew-title{color:var(--bear);}
+.ew-desc{font-size:12px;color:var(--ink2);line-height:1.5;margin-top:3px;}
+.ew-r{margin-left:auto;text-align:right;flex-shrink:0;}
+.ew-fsi{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:1px;}
+.ew.safe .ew-fsi{color:var(--bull);}
+.ew.watch .ew-fsi{color:var(--warn);}
+.ew.alert .ew-fsi{color:var(--bear);}
+
+/* ── TRINITY ── */
+.trinity-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px;}
+.tc{background:var(--white);border-radius:10px;padding:20px;box-shadow:var(--sh);border-top:4px solid transparent;}
+.tc.rrp{border-top-color:var(--blue);}
+.tc.res{border-top-color:var(--bull);}
+.tc.tga{border-top-color:var(--bear);}
+.tc-tag{font-size:9px;letter-spacing:2px;font-weight:800;text-transform:uppercase;color:var(--ink3);margin-bottom:2px;}
+.tc-nm{font-size:13px;font-weight:700;margin-bottom:2px;}
+.tc-kr{font-size:10px;color:var(--ink3);margin-bottom:12px;}
+.tc-val{font-family:'Bebas Neue',sans-serif;font-size:38px;line-height:1;letter-spacing:1px;}
+.tc.rrp .tc-val{color:var(--blue);}
+.tc.res .tc-val{color:var(--bull);}
+.tc.tga .tc-val{color:var(--bear);}
+.tc-unit{font-size:10px;color:var(--ink3);font-family:'DM Mono',monospace;margin-bottom:10px;}
+.tp{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:800;letter-spacing:1px;}
+.tp-bull{background:var(--bull-lt);color:var(--bull);}
+.tp-bear{background:var(--bear-lt);color:var(--bear);}
+.tp-neut{background:var(--warn-lt);color:var(--warn);}
+
+/* ── NET LIQ BAR ── */
+.nliq-card{background:var(--ink);border-radius:12px;padding:24px;margin-bottom:18px;box-shadow:var(--sh-lg);}
+.nliq-top{display:grid;grid-template-columns:200px 1fr;gap:24px;align-items:center;margin-bottom:16px;}
+.nliq-num{font-family:'Bebas Neue',sans-serif;font-size:52px;line-height:1;transition:color 0.4s;}
+.nliq-num.bull{color:#00e855;}
+.nliq-num.warn{color:#ff9100;}
+.nliq-num.bear{color:#ff2244;}
+.nliq-label{font-size:10px;letter-spacing:3px;font-weight:800;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:3px;}
+.nliq-form{font-family:'DM Mono',monospace;font-size:10px;color:var(--gold-vv);margin-bottom:10px;}
+.nliq-sub{font-size:11px;color:rgba(255,255,255,0.35);font-family:'DM Mono',monospace;}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.bar-lbl{font-size:10px;color:rgba(255,255,255,0.4);width:55px;text-align:right;font-family:'DM Mono',monospace;}
+.bar-track{flex:1;height:7px;border-radius:4px;background:rgba(255,255,255,0.08);overflow:hidden;}
+.bar-fill{height:100%;border-radius:4px;transition:width 0.6s ease;}
+.bar-val{font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,0.5);width:70px;}
+.bar-note{font-size:9px;color:rgba(255,255,255,0.2);font-family:'DM Mono',monospace;margin-top:6px;}
+
+/* ── FSI ── */
+.fsi-row{display:grid;grid-template-columns:160px 1fr 260px;gap:24px;align-items:center;}
+.fsi-big{font-family:'Bebas Neue',sans-serif;font-size:72px;line-height:1;letter-spacing:1px;}
+.fsi-safe{color:var(--bull);}
+.fsi-warn{color:var(--warn);}
+.fsi-dng{color:var(--bear);}
+.fsi-lbl{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--ink3);margin-bottom:4px;}
+.fsi-pill{display:inline-block;padding:4px 14px;border-radius:100px;font-size:11px;font-weight:800;letter-spacing:1px;margin-top:6px;}
+.fp-safe{background:var(--bull-lt);color:var(--bull);}
+.fp-dng{background:var(--bear-lt);color:var(--bear);}
+.sub-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.sub-c{padding:14px;border-radius:8px;border:2px solid transparent;}
+.sub-c.s-safe{background:var(--bull-lt);border-color:#90e8b0;}
+.sub-c.s-warn{background:var(--warn-lt);border-color:#f0c060;}
+.sub-c.s-dng{background:var(--bear-lt);border-color:#f0a0a8;}
+.sub-nm{font-size:12px;font-weight:800;color:var(--ink);margin-bottom:2px;}
+.sub-v{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;}
+.sub-c.s-safe .sub-v{color:var(--bull);}
+.sub-c.s-warn .sub-v{color:var(--warn);}
+.sub-c.s-dng .sub-v{color:var(--bear);}
+.sub-r{font-size:10px;margin-top:3px;}
+.sub-c.s-safe .sub-r{color:var(--bull);}
+.sub-c.s-dng .sub-r{color:var(--bear);}
+
+/* ── CALENDAR ── */
+.cal-evt{display:grid;grid-template-columns:90px 50px 1fr 120px;align-items:center;gap:14px;padding:14px 18px;border-radius:8px;border-left:4px solid transparent;margin-bottom:8px;}
+.cal-evt.drain{background:#fff5f7;border-left-color:var(--bear);}
+.cal-evt.inject{background:#f0fff5;border-left-color:var(--bull);}
+.cal-evt.tight{background:#fffbf0;border-left-color:var(--warn);}
+.cal-evt.catalyst{background:#f0f5ff;border-left-color:var(--blue);}
+.cal-evt.critical{background:#fff0f3;border-left-color:#7f0014;}
+.cal-date{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--ink);}
+.cal-days{font-family:'DM Mono',monospace;font-size:10px;font-weight:700;color:var(--bear);}
+.cal-evt.inject .cal-days{color:var(--bull);}
+.cal-evt.catalyst .cal-days{color:var(--blue);}
+.cal-evt.tight .cal-days{color:var(--warn);}
+.cal-nm{font-size:13px;font-weight:700;}
+.cal-imp{font-size:11px;color:var(--ink3);margin-top:1px;}
+.cal-tag{padding:3px 12px;border-radius:100px;font-size:9px;font-weight:800;letter-spacing:1px;text-align:center;}
+.cal-evt.drain .cal-tag{background:var(--bear-lt);color:var(--bear);}
+.cal-evt.inject .cal-tag{background:var(--bull-lt);color:var(--bull);}
+.cal-evt.catalyst .cal-tag{background:var(--blue-lt);color:var(--blue);}
+.cal-evt.tight .cal-tag{background:var(--warn-lt);color:var(--warn);}
+.cal-evt.critical .cal-tag{background:var(--bear-lt);color:#7f0014;}
+
+/* ── CMD CARDS ── */
+.cmd-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.cmd-c{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:18px;transition:background 0.2s;}
+.cmd-c:hover{background:rgba(255,255,255,0.1);}
+.cmd-n{font-family:'Bebas Neue',sans-serif;font-size:44px;color:rgba(255,255,255,0.08);line-height:1;margin-bottom:6px;}
+.cmd-a{font-size:14px;font-weight:800;color:#fff;margin-bottom:6px;}
+.cmd-d{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.6;}
+.cmd-tag{display:inline-block;margin-top:8px;padding:3px 10px;border-radius:4px;font-size:9px;font-weight:800;letter-spacing:1px;}
+.ctag-buy{background:rgba(0,232,85,0.2);color:#00e855;}
+.ctag-hold{background:rgba(255,145,0,0.2);color:#ff9100;}
+.ctag-prot{background:rgba(255,34,68,0.2);color:#ff2244;}
+.ctag-snipe{background:rgba(0,98,255,0.2);color:#60a5fa;}
+
+/* ── INPUT ── */
+.inp-grid{display:grid;grid-template-columns:repeat(4,1fr) auto;gap:12px;align-items:end;margin-bottom:16px;}
+.ig label{display:block;font-size:10px;letter-spacing:2px;font-weight:800;text-transform:uppercase;margin-bottom:5px;}
+.ig.rrp label{color:var(--blue);}
+.ig.res label{color:var(--bull);}
+.ig.tga label{color:var(--bear);}
+.ig.fsi label{color:var(--purple);}
+.ig input{
+  width:100%;background:var(--bg);border:2px solid var(--border);border-radius:6px;
+  padding:10px 12px;font-family:'DM Mono',monospace;font-size:14px;color:var(--ink);outline:none;
+  transition:border-color 0.2s,background 0.2s;
+}
+.ig.rrp input:focus{border-color:var(--blue);background:var(--blue-lt);}
+.ig.res input:focus{border-color:var(--bull);background:var(--bull-lt);}
+.ig.tga input:focus{border-color:var(--bear);background:var(--bear-lt);}
+.ig.fsi input:focus{border-color:var(--purple);background:var(--purp-lt);}
+.ig-hint{font-size:9px;color:var(--ink3);margin-top:3px;font-family:'DM Mono',monospace;}
+.btn-run{background:var(--ink);color:var(--gold-vv);border:none;padding:12px 24px;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;white-space:nowrap;box-shadow:var(--sh);transition:all 0.2s;}
+.btn-run:hover{background:#1a2040;transform:translateY(-2px);}
+
+/* ── TG PREVIEW ── */
+.tg-phone{background:#17212b;border-radius:16px;padding:18px 16px;max-width:400px;}
+.tg-msg{background:#2b5278;border-radius:12px 12px 12px 4px;padding:12px 16px;font-family:'DM Mono',monospace;font-size:11px;line-height:1.9;color:#e8edf5;}
+.tg-gold{color:#fbbf24;font-weight:700;}
+.tg-g{color:#4ade80;} .tg-r{color:#f87171;} .tg-b{color:#60a5fa;} .tg-o{color:#fb923c;} .tg-gr{color:#475569;}
+.tg-ts{text-align:right;font-size:9px;color:#475569;margin-top:4px;font-family:'DM Mono',monospace;}
+
+/* ── TUITION / OTHER SECTIONS ── */
+.tuition-card{background:var(--warn-lt);border-left:4px solid var(--warn);border-radius:8px;padding:16px 20px;margin-bottom:12px;}
+.lesson-num{font-size:10px;font-weight:800;letter-spacing:2px;color:var(--warn);margin-bottom:4px;}
+.lesson-title{font-size:15px;font-weight:800;color:var(--ink);margin-bottom:6px;}
+.lesson-body{font-size:13px;color:var(--ink2);line-height:1.6;}
+
+.mission-card{background:linear-gradient(135deg,var(--ink),#1a2040);border-radius:12px;padding:24px;color:#fff;box-shadow:var(--sh-lg);}
+.mission-top{font-size:10px;letter-spacing:4px;font-weight:700;color:rgba(255,255,255,0.4);margin-bottom:6px;}
+.mission-num{font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--gold-vv);letter-spacing:1px;}
+.mission-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:16px;}
+.mrow-item{text-align:center;}
+.mrow-val{font-family:'Bebas Neue',sans-serif;font-size:24px;color:#fff;letter-spacing:1px;}
+.mrow-lbl{font-size:10px;color:rgba(255,255,255,0.4);letter-spacing:1px;margin-top:2px;}
+
+/* ── FOOTER ── */
+.footer{text-align:center;padding:20px 28px;font-size:10px;letter-spacing:3px;font-weight:700;color:var(--ink3);border-top:1px solid var(--border);}
+@media(max-width:960px){
+  .trinity-grid,.cmd-grid,.port-grid,.mission-row{grid-template-columns:1fr 1fr;}
+  .fsi-row,.nliq-top{grid-template-columns:1fr;}
+  .inp-grid{grid-template-columns:1fr 1fr;}
+  .cal-evt{grid-template-columns:80px 40px 1fr;}
+  .cal-tag{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-brand">
+    <span style="font-size:20px;">🔱</span>
+    <div>
+      <div class="hdr-name">OLYMPUS · TITAN INVESTMENT SYSTEM</div>
+      <div class="hdr-sub">GOD / MINERVA / OPENCLAW · ISLAND MISSION 2036</div>
+    </div>
+  </div>
+  <div class="hdr-right">
+    <div class="live-pill"><div class="ldot"></div>LIVE</div>
+    <div class="hdr-time" id="hdrTime">—</div>
+  </div>
+</div>
+
+<!-- TAB NAV -->
+<div class="tab-nav">
+  <button class="tab-btn active"   onclick="showTab('mission')">🏝️ ISLAND MISSION</button>
+  <button class="tab-btn"          onclick="showTab('portfolio')">💼 PORTFOLIO</button>
+  <button class="tab-btn"          onclick="showTab('watchlist')">📊 WATCHLIST</button>
+  <button class="tab-btn liq-tab"  onclick="showTab('liquidity')">⚡ §11 LIQUIDITY</button>
+  <button class="tab-btn"          onclick="showTab('telegram')">📱 TELEGRAM</button>
+  <button class="tab-btn"          onclick="showTab('tuition')">📖 TUITION LOG</button>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- TAB: ISLAND MISSION                -->
+<!-- ═══════════════════════════════════ -->
+<div class="tab-panel active" id="tab-mission">
+  <div class="mission-card" style="margin-bottom:20px;">
+    <div class="mission-top">🏝️ ISLAND MISSION — 10-YEAR COMPOUNDING PLAN</div>
+    <div class="mission-num">₩170,000,000,000</div>
+    <div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px;">Target by 2036 · ~€115M · Required CAGR: 47%</div>
+    <div class="mission-row">
+      <div class="mrow-item"><div class="mrow-val">47%</div><div class="mrow-lbl">REQUIRED CAGR</div></div>
+      <div class="mrow-item"><div class="mrow-val">2036</div><div class="mrow-lbl">TARGET YEAR</div></div>
+      <div class="mrow-item"><div class="mrow-val">BUFFETT</div><div class="mrow-lbl">BENCHMARK TO BEAT</div></div>
+      <div class="mrow-item"><div class="mrow-val">€1,500</div><div class="mrow-lbl">MONTHLY ADD</div></div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div class="card">
+      <div class="sec-t">CURRENT FRAMEWORK</div>
+      <div style="font-size:13px;color:var(--ink2);line-height:2;">
+        <strong>Accounts:</strong> Trade Republic (TR) + Kiwoom<br>
+        <strong>Strategy:</strong> Limit orders only — no market buys<br>
+        <strong>Signal engine:</strong> TITAN Composite Score (GOD Score)<br>
+        <strong>Intelligence:</strong> ranto28 blog · Minerva analysis<br>
+        <strong>Liquidity layer:</strong> §11-PREDICT (TGA/RRP/Reserves/FSI)<br>
+        <strong>Currency:</strong> All prices dual EUR/USD<br>
+        <strong>Reserve rule:</strong> Always keep 20–30% dry powder
+      </div>
+    </div>
+    <div class="card">
+      <div class="sec-t">SCORING FORMULA</div>
+      <div style="font-size:12px;color:var(--ink2);line-height:2.2;font-family:'DM Mono',monospace;">
+        <span style="color:var(--bear);font-weight:700;">P × 0.30</span> — Paradigm Fit<br>
+        <span style="color:var(--bull);font-weight:700;">Q × 0.25</span> — Capital Quality<br>
+        <span style="color:var(--blue);font-weight:700;">V × 0.20</span> — Price vs Value<br>
+        <span style="color:var(--warn);font-weight:700;">T × 0.15</span> — Thesis Clarity<br>
+        <span style="color:var(--purple);font-weight:700;">B × 0.10</span> — Balance Sheet<br>
+        <span style="color:var(--gold);font-weight:800;">═══════════════<br>SCORE / 100</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- TAB: PORTFOLIO                     -->
+<!-- ═══════════════════════════════════ -->
+<div class="tab-panel" id="tab-portfolio">
+  <div class="sec-t" style="margin-bottom:18px;">TR PORTFOLIO — TOTAL POSITION VALUES</div>
+  <div class="port-grid">
+    <div class="port-card" style="border-left-color:#cc0022;">
+      <div class="pc-name">TSMC (ADR)</div>
+      <div class="pc-val" style="color:#cc0022;">€1,420</div>
+      <div class="pc-chg dn">-1.18% today</div>
+      <div class="pc-score">GOD Score: <span class="score-pill sp-87">87</span> CORE</div>
+    </div>
+    <div class="port-card" style="border-left-color:#008c35;">
+      <div class="pc-name">Nutrien (NTR)</div>
+      <div class="pc-val" style="color:#008c35;">€1,082</div>
+      <div class="pc-chg up">+2.55% today</div>
+      <div class="pc-score">GOD Score: <span class="score-pill sp-82">81</span> ⏳ EX-DATE MAR 31</div>
+    </div>
+    <div class="port-card" style="border-left-color:#0050cc;">
+      <div class="pc-name">Coherent (COHR)</div>
+      <div class="pc-val">€915</div>
+      <div class="pc-chg dn">-0.55%</div>
+      <div class="pc-score">GOD Score: <span class="score-pill sp-82">77</span></div>
+    </div>
+    <div class="port-card" style="border-left-color:#cc0022;">
+      <div class="pc-name">AeroVironment (AVAV)</div>
+      <div class="pc-val" style="color:#cc0022;">€801</div>
+      <div class="pc-chg dn">-7.21%</div>
+      <div class="pc-score">GOD Score: <span class="score-pill sp-82">78</span></div>
+    </div>
+    <div class="port-card" style="border-left-color:#cc0022;">
+      <div class="pc-name">Uranium Energy (UEC)</div>
+      <div class="pc-val" style="color:#cc0022;">€789</div>
+      <div class="pc-chg dn">-7.10%</div>
+      <div class="pc-score">GOD Score: <span class="score-pill sp-low">60</span> HOLD ONLY</div>
+    </div>
+    <div class="port-card" style="border-left-color:#0050cc;">
+      <div class="pc-name">Xiaomi</div>
+      <div class="pc-val" style="color:#cc0022;">€591</div>
+      <div class="pc-chg dn">-7.73%</div>
+      <div class="pc-score">GOD Score: <span class="score-pill sp-87">85</span></div>
+    </div>
+    <div class="port-card" style="border-left-color:#008c35;">
+      <div class="pc-name">Thermo Fisher (TMO)</div>
+      <div class="pc-val">€493</div>
+      <div class="pc-chg dn">-5.62%</div>
+      <div class="pc-score">GOD Score: <span class="score-pill sp-85">84</span></div>
+    </div>
+    <div class="port-card" style="border-left-color:#0050cc;">
+      <div class="pc-name">Rocket Lab (RKLB)</div>
+      <div class="pc-val" style="color:#cc0022;">€444</div>
+      <div class="pc-chg dn">-11.16%</div>
+      <div class="pc-score">GOD Score: <span class="score-pill sp-82">82</span> ✅ Filled @€58</div>
+    </div>
+    <div class="port-card" style="border-left-color:#008c35;">
+      <div class="pc-name">Planet Labs (PL)</div>
+      <div class="pc-val" style="color:#008c35;">€324</div>
+      <div class="pc-chg up">+0.43%</div>
+      <div class="pc-score">GOD Score: <span class="score-pill sp-85">84</span> ✅ Holding</div>
+    </div>
+    <div class="port-card" style="border-left-color:#cc0022;">
+      <div class="pc-name">Sprott Uranium</div>
+      <div class="pc-val" style="color:#cc0022;">€267</div>
+      <div class="pc-chg dn">-11.22%</div>
+      <div class="pc-score">GOD Score: <span class="score-pill sp-low">65</span></div>
+    </div>
+  </div>
+  <div class="card" style="background:var(--gold-lt);border:1px solid #f0d090;">
+    <div style="font-size:11px;font-weight:800;letter-spacing:2px;color:var(--gold);margin-bottom:8px;">⚠️ TR DISPLAY RULE</div>
+    <div style="font-size:13px;color:var(--ink2);">Values shown above are <strong>total position values</strong> — NOT per-share prices. TSMC shows €1,420 = total of all TSMC shares held.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- TAB: WATCHLIST                     -->
+<!-- ═══════════════════════════════════ -->
+<div class="tab-panel" id="tab-watchlist">
+  <div class="sec-t">FULL WATCHLIST — GOD SCORES</div>
+  <div class="card">
+    <table class="score-table">
+      <thead><tr><th>Rank</th><th>Stock</th><th>Score</th><th>Price</th><th>Tier</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>TSMC</td><td style="color:var(--bull);font-weight:700;">87</td><td>€295</td><td><span class="score-pill sp-87">CORE</span></td><td>Add on dips</td></tr>
+        <tr><td>1</td><td>ASML</td><td style="color:var(--bull);font-weight:700;">87</td><td>€1,133</td><td><span class="score-pill sp-87">CORE</span></td><td>Limit €1,100 armed</td></tr>
+        <tr><td>3</td><td>Xiaomi</td><td style="color:var(--bull);font-weight:700;">85</td><td>€3.50/sh</td><td><span class="score-pill sp-85">STRONG</span></td><td>Hold</td></tr>
+        <tr><td>4</td><td>Planet Labs (PL)</td><td style="color:var(--bull);font-weight:700;">84</td><td>€28–30</td><td><span class="score-pill sp-85">STRONG</span></td><td>Holding</td></tr>
+        <tr><td>5</td><td>Thermo Fisher</td><td style="color:var(--bull);font-weight:700;">84</td><td>€441</td><td><span class="score-pill sp-85">STRONG</span></td><td>Hold</td></tr>
+        <tr><td>6</td><td>Applied Materials</td><td style="color:var(--warn);font-weight:700;">83</td><td>€313</td><td><span class="score-pill sp-82">WATCH</span></td><td>Month target</td></tr>
+        <tr><td>7</td><td>RKLB</td><td style="color:var(--warn);font-weight:700;">82</td><td>€52–58</td><td><span class="score-pill sp-82">WATCH</span></td><td>✅ Filled @€58</td></tr>
+        <tr><td>8</td><td>Nutrien (NTR)</td><td style="color:var(--warn);font-weight:700;">81</td><td>€65</td><td><span class="score-pill sp-82">WATCH</span></td><td>⏳ Ex-date Mar 31</td></tr>
+        <tr><td>9</td><td>Cheniere Energy</td><td style="color:var(--warn);font-weight:700;">81</td><td>€250</td><td><span class="score-pill sp-82">WATCH</span></td><td>Iran LNG play</td></tr>
+        <tr><td>10</td><td>Palantir (PLTR)</td><td style="color:var(--warn);font-weight:700;">78</td><td>€135</td><td><span class="score-pill sp-82">WATCH</span></td><td>Running — hold</td></tr>
+        <tr><td>11</td><td>AeroVironment</td><td style="color:var(--warn);font-weight:700;">78</td><td>€169</td><td><span class="score-pill sp-82">WATCH</span></td><td>Hold</td></tr>
+        <tr><td>12</td><td>AVAV</td><td style="color:var(--blue);font-weight:700;">75</td><td>€139</td><td><span class="score-pill sp-82">WATCH</span></td><td>Wait €125–132</td></tr>
+        <tr><td>13</td><td>IonQ</td><td style="color:var(--ink3);">68</td><td>€27</td><td><span class="score-pill sp-low">SPEC</span></td><td>Limit $25 armed</td></tr>
+        <tr><td>14</td><td>Tesla</td><td style="color:var(--ink3);">65</td><td>€330</td><td><span class="score-pill sp-low">WAIT</span></td><td>Wait €285–300</td></tr>
+        <tr><td>15</td><td>UEC</td><td style="color:var(--bear);">60</td><td>€11.60</td><td><span class="score-pill sp-low">HOLD</span></td><td>No add</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- TAB: §11 LIQUIDITY ENGINE          -->
+<!-- ═══════════════════════════════════ -->
+<div class="tab-panel" id="tab-liquidity">
+
+  <!-- LAYER 4: EARLY WARNING -->
+  <div class="layer-badge lb-4">🚨 LAYER 4 — EARLY WARNING SYSTEM</div>
+  <div class="ew safe" id="ewBanner">
+    <div class="ew-icon" id="ewIcon">🛡️</div>
+    <div>
+      <div class="ew-title" id="ewTitle">ALL CLEAR — NO PRE-CRASH SIGNALS</div>
+      <div class="ew-desc" id="ewDesc">FSI at historically low levels. Sub-indices safe. No velocity spike. Proceed with liquidity logic.</div>
+    </div>
+    <div class="ew-r">
+      <div class="ew-fsi" id="ewFsi">-0.568</div>
+      <div style="font-size:10px;letter-spacing:2px;font-weight:700;color:var(--ink3);">OFR FSI</div>
+      <div style="font-size:9px;color:var(--ink3);margin-top:4px;font-family:'DM Mono',monospace;" id="ewVelDisplay">Vel: —</div>
+    </div>
+  </div>
+
+  <!-- LAYER 1: BIG SIGNAL -->
+  <div class="layer-badge lb-1">📊 LAYER 1 — CURRENT LIQUIDITY STATE</div>
+  <div class="big-signal warn" id="bigSig">
+    <div class="bs-orb"></div>
+    <div class="bs-layer">🔱 GOD COMMAND · OLYMPUS §11-PREDICT</div>
+    <div class="bs-cmd" id="bsCmd">SELECTIVE DEPLOY</div>
+    <div class="bs-detail" id="bsDet">Enter data below and click RUN to generate today's command.</div>
+    <div class="bs-chips">
+      <div class="bs-chip" id="bsNet">Net Liq: $—</div>
+      <div class="bs-chip" id="bsSig">Signal: —</div>
+      <div class="bs-chip" id="bsMin">Min Score: —</div>
+      <div class="bs-chip" id="bsFsi">FSI: -0.568 ✅</div>
+    </div>
+  </div>
+
+  <!-- TRINITY -->
+  <div class="layer-badge lb-1" style="margin-top:4px;">📊 TRINITY DATA</div>
+  <div class="nliq-card">
+    <div class="nliq-top">
+      <div>
+        <div class="nliq-label">Net Liquidity</div>
+        <div class="nliq-form">RES − TGA − RRP</div>
+        <div class="nliq-num warn" id="nliqNum">$2,121B</div>
+        <div class="nliq-sub" id="nliqSub">→ Borderline — disciplined</div>
+      </div>
+      <div>
+        <div class="bar-row">
+          <div class="bar-lbl">RES</div>
+          <div class="bar-track"><div class="bar-fill" id="barRes" style="width:75%;background:#00e855;"></div></div>
+          <div class="bar-val" id="bvRes">$2,994B</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-lbl">TGA</div>
+          <div class="bar-track"><div class="bar-fill" id="barTga" style="width:35%;background:#ff2244;"></div></div>
+          <div class="bar-val" id="bvTga">$871B</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-lbl">RRP</div>
+          <div class="bar-track"><div class="bar-fill" id="barRrp" style="width:1%;background:#60a5fa;"></div></div>
+          <div class="bar-val" id="bvRrp">$2.8B</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-lbl" style="color:var(--gold-vv);">NET</div>
+          <div class="bar-track"><div class="bar-fill" id="barNet" style="width:55%;background:#ff9100;"></div></div>
+          <div class="bar-val" id="bvNet" style="color:#ff9100;">$2,121B</div>
+        </div>
+        <div class="bar-note">Thresholds: &gt;$2,500 DEPLOY · $2,200 SELECTIVE · $1,900 HOLD · &lt;$1,900 MAX CASH</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="trinity-grid">
+    <div class="tc rrp">
+      <div class="tc-tag">RRPONTSYD · DAILY</div>
+      <div class="tc-nm">Reverse Repo (RRP)</div>
+      <div class="tc-kr">역레포</div>
+      <div class="tc-val" id="tcRrp">$2.8B</div>
+      <div class="tc-unit">Billions USD</div>
+      <div class="tp tp-bull">📉 NEAR ZERO · BULLISH</div>
+    </div>
+    <div class="tc res">
+      <div class="tc-tag">WRESBAL · WEEKLY WED</div>
+      <div class="tc-nm">Reserve Balances</div>
+      <div class="tc-kr">지급준비금</div>
+      <div class="tc-val" id="tcRes">$2.99T</div>
+      <div class="tc-unit">$2,993,955M · Mar 25</div>
+      <div class="tp tp-neut">➡ SLIGHT DECLINE</div>
+    </div>
+    <div class="tc tga">
+      <div class="tc-tag">DTS · DAILY 4PM EST</div>
+      <div class="tc-nm">Treasury General Account</div>
+      <div class="tc-kr">국고 계좌</div>
+      <div class="tc-val" id="tcTga">$870B</div>
+      <div class="tc-unit">$870.86B · Mar 20</div>
+      <div class="tp tp-bear">📈 ELEVATED · HEADWIND</div>
+    </div>
+  </div>
+
+  <!-- LAYER 3: FSI -->
+  <div class="layer-badge lb-3">🔦 LAYER 3 — FSI EJECTION SEAT</div>
+  <div class="card">
+    <div class="fsi-row">
+      <div>
+        <div class="fsi-lbl">OFR FSI</div>
+        <div class="fsi-big fsi-safe" id="fsiBig">-0.568</div>
+        <div class="fsi-pill fp-safe" id="fsiPill">✅ SAFE — PROCEED</div>
+        <div style="font-size:11px;color:var(--ink3);margin-top:10px;line-height:1.7;">
+          FSI &lt; 0 → Normal logic<br>
+          FSI &gt; 0 → <span style="color:var(--bear);font-weight:700;">ABORT ALL BUYS</span><br>
+          Funding OR Safe &gt; 0 → <span style="color:#7f0014;font-weight:700;">50% CASH — PANIC SIGN</span><br>
+          FSI &gt; 1 → <span style="color:#7f0014;font-weight:700;">MAXIMUM CASH — EJECT</span>
+        </div>
+      </div>
+      <div style="padding:16px;background:var(--bg);border-radius:10px;">
+        <div style="font-size:11px;font-weight:800;letter-spacing:2px;color:var(--ink3);margin-bottom:12px;">HOW FSI OVERRIDES EVERYTHING</div>
+        <div style="font-size:13px;color:var(--ink2);line-height:1.9;">
+          Even if Net Liquidity says <span style="color:var(--bull);font-weight:700;">DEPLOY</span>,<br>
+          if FSI &gt; 0 → <span style="color:var(--bear);font-weight:700;">DO NOT BUY.</span><br>
+          if Funding OR Safe &gt; 0 → <span style="color:#7f0014;font-weight:700;">MOVE TO 50% CASH INSTANTLY.</span><br><br>
+          The ejection seat has two levels:<br>
+          <b>Level 1</b> — FSI &gt; 0: Abort new buys, raise stops.<br>
+          <b>Level 2</b> — Sub-index &gt; 0: Sell half speculative positions.<br><br>
+          V4 Layer 4 fires 2–3 weeks <i>before</i> the ejection seat.
+        </div>
+      </div>
+      <div class="sub-grid">
+        <div class="sub-c s-safe" id="fundCard">
+          <div class="sub-nm">Funding Index</div>
+          <div class="sub-v" id="fundVal">-0.42</div>
+          <div class="sub-r">✅ Banks lending freely</div>
+        </div>
+        <div class="sub-c s-safe" id="safeCard">
+          <div class="sub-nm">Safe Assets Index</div>
+          <div class="sub-v" id="safeVal">-0.31</div>
+          <div class="sub-r">✅ No panic buying</div>
+        </div>
+        <div class="sub-c s-safe" id="velCard" style="grid-column:1/-1;padding:10px 14px;">
+          <div class="sub-nm">5-Day Velocity</div>
+          <div style="font-size:12px;color:var(--ink2);margin-top:4px;" id="velText">No acceleration. System stable.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LAYER 2: CALENDAR -->
+  <div class="layer-badge lb-2">📅 LAYER 2 — 60-DAY FORWARD MAP · 21-DAY ADVANCE WARNINGS</div>
+  <div class="card">
+    <div class="sec-t">PREDICTIVE LIQUIDITY CALENDAR</div>
+    <div id="convergenceAlert" style="display:none;margin-bottom:12px;padding:10px 14px;background:var(--warn-lt);border-left:4px solid var(--warn);border-radius:6px;font-size:12px;color:var(--warn);font-family:'DM Mono',monospace;"></div>
+    <div id="calDiv"></div>
+  </div>
+
+  <!-- GOD COMMANDS -->
+  <div class="sec-t">🎯 GOD COMMANDS — SPECIFIC ACTIONS</div>
+  <div style="background:var(--ink);border-radius:12px;padding:24px;margin-bottom:20px;box-shadow:var(--sh-lg);">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--gold-vv);margin-bottom:4px;">THREE ACTIONS FOR DRY POWDER</div>
+    <div style="font-size:11px;color:rgba(255,255,255,0.3);font-family:'DM Mono',monospace;margin-bottom:20px;" id="cmdSub">Run calculation to generate commands</div>
+    <div class="cmd-grid" id="cmdGrid"></div>
+  </div>
+
+  <!-- INPUT — §11-PREDICT V4 -->
+  <div class="sec-t">⚙️ UPDATE ENGINE — §11-PREDICT V4</div>
+  <div class="card">
+    <div style="font-size:12px;color:var(--ink3);margin-bottom:16px;font-family:'DM Mono',monospace;">
+      Cron: 06:45 fetch · 07:00 recalc · 13:25 US open · 18:55 close · 23:25 Asia open · Wednesday = full 4-layer recalculation
+    </div>
+
+    <div style="font-size:10px;font-weight:800;letter-spacing:2px;color:var(--ink3);margin-bottom:8px;">LAYER 1 — TRINITY INPUTS (today)</div>
+    <div class="inp-grid">
+      <div class="ig rrp">
+        <label>RRP ($B)</label>
+        <input type="number" id="iRrp" value="2.844" step="0.001">
+        <div class="ig-hint">FRED: RRPONTSYD · daily</div>
+      </div>
+      <div class="ig res">
+        <label>Reserves ($B)</label>
+        <input type="number" id="iRes" value="2993.955" step="0.001">
+        <div class="ig-hint">FRED: WRESBAL · Wed release</div>
+      </div>
+      <div class="ig tga">
+        <label>TGA ($B)</label>
+        <input type="number" id="iTga" value="870.86" step="0.001">
+        <div class="ig-hint">fiscaldata.treasury.gov · daily 4PM EST</div>
+      </div>
+      <div class="ig fsi">
+        <label>OFR FSI (today)</label>
+        <input type="number" id="iFsi" value="-0.568" step="0.001">
+        <div class="ig-hint">ofr.gov · daily</div>
+      </div>
+      <button class="btn-run" onclick="runLiq()">⚡ RUN V4</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-top:12px;">
+      <div class="ig fsi">
+        <label>Funding Sub-Index</label>
+        <input type="number" id="iFund" value="-0.42" step="0.001">
+        <div class="ig-hint">ofr.gov · panic if &gt; 0</div>
+      </div>
+      <div class="ig fsi">
+        <label>Safe Assets Sub-Index</label>
+        <input type="number" id="iSafe" value="-0.31" step="0.001">
+        <div class="ig-hint">ofr.gov · panic if &gt; 0</div>
+      </div>
+      <div class="ig" style="border-left:3px solid #7c3aed;padding-left:8px;">
+        <label style="color:#7c3aed;">FSI — 5 days ago</label>
+        <input type="number" id="iFsiPrev" value="-0.598" step="0.001">
+        <div class="ig-hint">Layer 4 velocity calc · required</div>
+      </div>
+      <div class="ig" style="border-left:3px solid #7c3aed;padding-left:8px;">
+        <label style="color:#7c3aed;">Net Liq — prev week ($B)</label>
+        <input type="number" id="iNetPrev" value="2150" step="1">
+        <div class="ig-hint">Layer 4 convergence check</div>
+      </div>
+    </div>
+    <div style="margin-top:10px;padding:8px 12px;background:var(--purp-lt);border-radius:6px;font-size:10px;color:#5b21b6;font-family:'DM Mono',monospace;">
+      🟣 V4 LAYER 4 ACTIVE: Velocity (+0.3/5d) · Credit Creep (Funding &gt; -0.2) · Convergence (Net&#x2193; + FSI&#x2191; simultaneously)
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- TAB: TELEGRAM                      -->
+<!-- ═══════════════════════════════════ -->
+<div class="tab-panel" id="tab-telegram">
+  <div class="sec-t">TELEGRAM ALERT SCHEDULE</div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px;">
+    <div class="card-sm" style="text-align:center;border-top:4px solid var(--gold);">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--ink);">07:00</div>
+      <div style="font-size:9px;font-weight:800;letter-spacing:2px;color:var(--ink3);margin:4px 0 8px;">MORNING BRIEF</div>
+      <div style="font-size:11px;color:var(--ink2);line-height:1.7;">Liquidity brief<br>FSI reading<br>Calendar alerts<br>GOD command<br>ranto28 check</div>
+      <div style="background:var(--blue);color:#fff;border-radius:4px;padding:3px 8px;font-size:9px;font-weight:800;margin-top:8px;">🔵 MAIN LIQUIDITY</div>
+    </div>
+    <div class="card-sm" style="text-align:center;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--ink);">13:30</div>
+      <div style="font-size:9px;font-weight:800;letter-spacing:2px;color:var(--ink3);margin:4px 0 8px;">US OPEN</div>
+      <div style="font-size:11px;color:var(--ink2);line-height:1.7;">Market open level<br>VIX · Oil<br>Portfolio P&L<br>Limit order status</div>
+    </div>
+    <div class="card-sm" style="text-align:center;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--ink);">16:30</div>
+      <div style="font-size:9px;font-weight:800;letter-spacing:2px;color:var(--ink3);margin:4px 0 8px;">MIDDAY</div>
+      <div style="font-size:11px;color:var(--ink2);line-height:1.7;">Intraday movers<br>Iran headlines<br>Watchlist alerts<br>Entry check</div>
+    </div>
+    <div class="card-sm" style="text-align:center;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--ink);">19:00</div>
+      <div style="font-size:9px;font-weight:800;letter-spacing:2px;color:var(--ink3);margin:4px 0 8px;">CLOSE</div>
+      <div style="font-size:11px;color:var(--ink2);line-height:1.7;">Day summary<br>Net P&L change<br>Next day setup<br>GOD Score alerts</div>
+    </div>
+    <div class="card-sm" style="text-align:center;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--ink);">23:30</div>
+      <div style="font-size:9px;font-weight:800;letter-spacing:2px;color:var(--ink3);margin:4px 0 8px;">ASIA OPEN</div>
+      <div style="font-size:11px;color:var(--ink2);line-height:1.7;">Nikkei / HSI<br>Xiaomi HK<br>Overnight futures<br>ranto28 check</div>
+    </div>
+  </div>
+
+  <div style="background:linear-gradient(135deg,#5b21b6,#4f46e5);border-radius:12px;padding:20px 24px;display:flex;align-items:center;gap:20px;color:#fff;margin-bottom:20px;">
+    <div style="font-size:28px;">📅</div>
+    <div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;margin-bottom:4px;">WEDNESDAY 07:00 — WEEKLY FULL RECALCULATION</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.75);">FRED releases WRESBAL every Wednesday. Full 3-index recalc + week-over-week change + deployment signal update.</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:380px 1fr;gap:24px;align-items:start;">
+    <div>
+      <div class="sec-t">07:00 MESSAGE PREVIEW</div>
+      <div class="tg-phone">
+        <div class="tg-msg" id="tgMsgPrev">
+          <span class="tg-gold">🔱 OLYMPUS §11-PREDICT</span><br>
+          <span class="tg-gr">07:00 · <span id="tgDatePrev">—</span></span><br><br>
+          <span class="tg-gold">━━━ ⚡ COMMAND ━━━</span><br>
+          <span class="tg-o" id="tgCmdPrev">🟡 SELECTIVE DEPLOY</span><br>
+          <span class="tg-gr" id="tgDetPrev" style="font-size:10px;">Run calculation first</span><br><br>
+          <span class="tg-gold">━━━ 📊 TRINITY ━━━</span><br>
+          RRP: <span class="tg-b" id="tgRrpPrev">$2.844B</span> ✅<br>
+          RES: <span class="tg-g" id="tgResPrev">$2,994B</span><br>
+          TGA: <span class="tg-r" id="tgTgaPrev">$871B</span> ⚠️<br>
+          NET: <span class="tg-o" id="tgNetPrev">$2,121B</span><br><br>
+          <span class="tg-gold">━━━ 🔦 FSI ━━━</span><br>
+          FSI: <span class="tg-g" id="tgFsiPrev">-0.568</span> ✅<br>
+          Fund: <span class="tg-g" id="tgFundPrev">-0.42</span> Safe: <span class="tg-g" id="tgSafePrev">-0.31</span><br><br>
+          <span class="tg-gold">━━━ 📅 NEXT EVENTS ━━━</span><br>
+          <span class="tg-r">⚔️ Apr 6 — Iran Deadline (7d)</span><br>
+          <span class="tg-r">🔴 Apr 15 — Tax Day drain (16d)</span><br><br>
+          <span class="tg-gold">━━━ 🎯 ACTIONS ━━━</span><br>
+          <span id="tgA1">1. Hold NTR through Mar 31</span><br>
+          <span id="tgA2">2. ASML limit €1,100 armed</span><br>
+          <span id="tgA3">3. Reduce exposure by Apr 10</span><br><br>
+          <span class="tg-gr">MINERVA · TITAN · 2036 🔱</span>
+        </div>
+        <div class="tg-ts">07:00 · Berlin</div>
+      </div>
+    </div>
+    <div>
+      <div class="sec-t">SETUP GUIDE</div>
+      <div class="card">
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;gap:12px;">
+            <div style="background:var(--blue);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;">1</div>
+            <div style="font-size:13px;color:var(--ink2);line-height:1.5;">Telegram → @BotFather → /newbot → name: <strong>TITAN OLYMPUS</strong> → copy token</div>
+          </div>
+          <div style="display:flex;gap:12px;">
+            <div style="background:var(--bull);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;">2</div>
+            <div style="font-size:13px;color:var(--ink2);line-height:1.5;">Get Chat ID: <code style="background:var(--bg);padding:2px 6px;border-radius:4px;font-size:12px;">api.telegram.org/bot[TOKEN]/getUpdates</code></div>
+          </div>
+          <div style="display:flex;gap:12px;">
+            <div style="background:var(--bear);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;">3</div>
+            <div style="font-size:13px;color:var(--ink2);line-height:1.5;">Get free FRED API key at <strong>fred.stlouisfed.org/docs/api/api_key.html</strong></div>
+          </div>
+          <div style="display:flex;gap:12px;">
+            <div style="background:var(--purple);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;">4</div>
+            <div style="font-size:13px;color:var(--ink2);line-height:1.5;">Paste token + chat ID + FRED key into <strong>config.py</strong> → upload to Contabo → run titan_bot.py</div>
+          </div>
+          <div style="display:flex;gap:12px;">
+            <div style="background:var(--gold);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;">5</div>
+            <div style="font-size:13px;color:var(--ink2);line-height:1.5;">Install as systemd service so it runs forever: <code style="background:var(--bg);padding:2px 6px;border-radius:4px;font-size:11px;">systemctl enable titan_bot && systemctl start titan_bot</code></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- TAB: TUITION LOG                   -->
+<!-- ═══════════════════════════════════ -->
+<div class="tab-panel" id="tab-tuition">
+  <div class="sec-t">§08 TUITION LOG — LESSONS FORGED IN REAL CAPITAL</div>
+  <div class="tuition-card">
+    <div class="lesson-num">LESSON #01 — THE €1 GAP TRAP · Mar 11, 2026</div>
+    <div class="lesson-title">Never negotiate over €1 on a GOD Score 7+ stock in the target zone.</div>
+    <div class="lesson-body">CRSP was in the target zone. Missed entry by €1. Stock moved. The €1 saved cost thousands in missed upside. When a high-conviction stock is in the zone — execute.</div>
+  </div>
+  <div class="tuition-card">
+    <div class="lesson-num">LESSON #02 — THE HOPE-HOLD TRAP · GEVO -83%</div>
+    <div class="lesson-title">A spike in a broken thesis is an exit gift, not a reason to hold.</div>
+    <div class="lesson-body">GEVO spiked temporarily. Thesis was broken. Held hoping for recovery. Lost -83%. When the thesis breaks — the next green day is the exit, not the reversal.</div>
+  </div>
+  <div class="tuition-card" style="background:var(--blue-lt);border-left-color:var(--blue);">
+    <div class="lesson-num" style="color:var(--blue);">LESSON #03 — LET THE MARKET COME TO GOD · RKLB Mar 27, 2026</div>
+    <div class="lesson-title">Discipline on limit orders beats patience. The €58 filled exactly.</div>
+    <div class="lesson-body">RKLB was at €65+. Set limit at €58. Market came down on Iran war risk. Filled perfectly. This is the 47% CAGR edge — letting price come to GOD, not chasing it.</div>
+  </div>
+</div>
+
+<div class="footer">
+  OLYMPUS · TITAN INVESTMENT SYSTEM · GOD / MINERVA / OPENCLAW · §11 LIQUIDITY ENGINE INTEGRATED · ISLAND MISSION 2036 🔱
+</div>
+
+<script>
+// ── INIT ──
+const NOW = new Date();
+document.getElementById('hdrTime').textContent =
+  NOW.toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+document.getElementById('tgDatePrev').textContent =
+  NOW.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+
+// ── TABS ──
+function showTab(id){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ── CALENDAR ──
+const CAL = [
+  {d:'Apr 6',  days:7,  t:'critical', n:'Iran Strike Deadline',  i:'Trump pause expires. Binary: ceasefire=rally, no deal=-5% tech.',  tag:'⚔️ BINARY'},
+  {d:'Apr 15', days:16, t:'drain',    n:'US Tax Day — TGA Drain', i:'TGA spikes $200-400B. Reduce exposure by Apr 10.',                  tag:'🔴 DRAIN'},
+  {d:'Apr 15', days:16, t:'catalyst', n:'ASML Q1 Earnings',       i:'GOD Score 87. Buy before at €1,100. Key catalyst.',                tag:'🟢 CATALYST'},
+  {d:'Apr 30', days:31, t:'catalyst', n:'FOMC Meeting',            i:'Rate decision. Watch RRP shift. No cut expected.',                 tag:'🔵 FED'},
+  {d:'May 13', days:44, t:'catalyst', n:'RKLB Q1 Earnings',        i:'Neutron rocket update. Portfolio position.',                      tag:'🚀 PORT'},
+  {d:'Jun 15', days:77, t:'drain',    n:'Q2 Estimated Taxes',      i:'Mild TGA rise $100-200B. Mild tightening.',                       tag:'🟡 DRAIN'},
+];
+function buildCal(){
+  const d = document.getElementById('calDiv');
+  d.innerHTML = CAL.map(e=>`
+    <div class="cal-evt ${e.t}">
+      <div class="cal-date">${e.d}</div>
+      <div class="cal-days">${e.days}d</div>
+      <div>
+        <div class="cal-nm">${e.n}</div>
+        <div class="cal-imp">${e.i}</div>
+      </div>
+      <div class="cal-tag">${e.tag}</div>
+    </div>
+  `).join('');
+}
+buildCal();
+
+// ── LIQUIDITY ENGINE §11-PREDICT V4 ──
+function runLiq(){
+  const rrp     = parseFloat(document.getElementById('iRrp').value)     || 0;
+  const res     = parseFloat(document.getElementById('iRes').value)     || 0;
+  const tga     = parseFloat(document.getElementById('iTga').value)     || 0;
+  const fsi     = parseFloat(document.getElementById('iFsi').value)     || 0;
+  const fund    = parseFloat(document.getElementById('iFund').value)    || 0;
+  const safe    = parseFloat(document.getElementById('iSafe').value)    || 0;
+  const fsiPrev = parseFloat(document.getElementById('iFsiPrev').value) || fsi;
+  const netPrev = parseFloat(document.getElementById('iNetPrev').value) || 0;
+
+  const net = res - tga - rrp;
+
+  // ── V4 LAYER 4: EARLY WARNING ENGINE ──
+  const vel = fsi - fsiPrev;                          // 5-day FSI velocity
+  const creditCreep = fund > -0.2;                   // Funding index approaching danger
+  const convergence = (net < netPrev) && (fsi > fsiPrev); // Net Liq falling + FSI rising
+  const velSpike = vel > 0.3;                        // +0.3 in 5 days = acceleration
+
+  let ewState, ewIcon, ewTitle, ewDesc, fsiOverride = false, fsiCls;
+  let layer4Warning = velSpike || creditCreep || convergence;
+
+  // ── V4 LAYER 3: FSI EJECTION SEAT ──
+  // Panic Sign: Funding OR Safe Assets > 0 → 50% CASH
+  if(fsi > 1.0 || fund > 0.5 || safe > 0.5){
+    fsiOverride = true; fsiCls = 'fsi-dng'; ewState = 'alert';
+    ewIcon = '🚨'; ewTitle = 'EJECTION SEAT FIRED — MAXIMUM CASH';
+    ewDesc = 'FSI critical. All logic overridden. Exit speculative positions. Protect island capital.';
+  } else if(fund > 0 || safe > 0){
+    fsiOverride = true; fsiCls = 'fsi-dng'; ewState = 'alert';
+    ewIcon = '⛔'; ewTitle = 'PANIC SIGN — MOVE TO 50% CASH INSTANTLY';
+    ewDesc = 'Sub-index crossed zero. Banks hoarding OR flight to safety active. Sell half of speculative positions immediately.';
+  } else if(fsi > 0){
+    fsiOverride = true; fsiCls = 'fsi-dng'; ewState = 'alert';
+    ewIcon = '⛔'; ewTitle = 'FSI CROSSED ZERO — ABORT ALL NEW BUYS';
+    ewDesc = 'Abort new positions. Raise stops. Wait for FSI < -0.2 before re-engaging.';
+  } else if(layer4Warning){
+    fsiCls = 'fsi-warn'; ewState = 'watch';
+    ewIcon = '👁️';
+    const warnings = [];
+    if(velSpike) warnings.push('FSI velocity +' + vel.toFixed(3) + ' in 5d (threshold: +0.3)');
+    if(creditCreep) warnings.push('Credit Creep: Funding at ' + fund.toFixed(3) + ' → approaching 0.0');
+    if(convergence) warnings.push('Convergence: Net Liq falling + FSI rising simultaneously');
+    ewTitle = 'LAYER 4 EARLY WARNING — ' + warnings.length + ' SIGNAL(S) ACTIVE';
+    ewDesc = warnings.join(' | ') + ' → Reduce to 70% invested. No new speculative positions. Fires 2-3 weeks before crash.';
+  } else {
+    fsiCls = 'fsi-safe'; ewState = 'safe';
+    ewIcon = '🛡️'; ewTitle = 'ALL CLEAR — NO PRE-CRASH SIGNALS';
+    ewDesc = 'FSI safe. Sub-indices normal. No velocity spike. No convergence. Proceed with Layer 1 liquidity logic.';
+  }
+
+  // ── V4 LAYER 1: NET LIQUIDITY STATE ──
+  // Formula: Net Liquidity = (Fed Reserve Balances) − TGA − RRP
+  let cls, cmd, det, minScore, tgCmd;
+  if(fsiOverride){
+    cls='danger'; cmd='MAXIMUM CASH — EJECT'; tgCmd='🔴 MAXIMUM CASH — FSI OVERRIDE';
+    det='FSI override active. Capital preservation only. Exit weak positions immediately.';
+    minScore='N/A — protect capital';
+  } else if(layer4Warning){
+    cls='warn'; cmd='REDUCE TO 70% — LAYER 4 WARNING'; tgCmd='🟠 LAYER 4 WARNING — REDUCE EXPOSURE';
+    det='Early warning signals active. Reduce to 70% invested. Raise stop-losses. No new speculative positions.';
+    minScore='No new buys — hold only';
+  } else if(net > 2200){
+    cls='bull'; cmd='SELECTIVE DEPLOY'; tgCmd='🟢 SELECTIVE DEPLOY';
+    det='Net Liq > $2,200B. GOD Score 85+ positions only. Keep 30% reserve. Discipline enforced.';
+    minScore='Min GOD Score: 85';
+  } else if(net > 1900){
+    cls='warn'; cmd='HOLD — PROTECT'; tgCmd='🟠 HOLD — PROTECT';
+    det='Net Liq below optimal $2,200B. Only GOD Score 87+ on confirmed -5%+ dips. No new positions.';
+    minScore='Min GOD Score: 87 dips only';
+  } else {
+    cls='bear'; cmd='MAXIMUM CASH'; tgCmd='🔴 MAXIMUM CASH';
+    det='Net Liq critical < $1,900B. Exit speculative positions. Hold maximum cash. Wait for recovery.';
+    minScore='N/A — cash is king';
+  }
+
+  // ── UPDATE LAYER 4: EARLY WARNING BANNER ──
+  const ewB = document.getElementById('ewBanner');
+  ewB.className = 'ew ' + ewState;
+  document.getElementById('ewIcon').textContent = ewIcon;
+  document.getElementById('ewTitle').textContent = ewTitle;
+  document.getElementById('ewDesc').textContent = ewDesc;
+  document.getElementById('ewFsi').textContent = fsi.toFixed(3);
+  const velDisplay = document.getElementById('ewVelDisplay');
+  if(velDisplay) velDisplay.textContent = 'Vel/5d: ' + (vel>=0?'+':'') + vel.toFixed(3) + (velSpike?' 🚨':creditCreep?' ⚠️ Creep':convergence?' ⚠️ Conv':'  ✅');
+
+  // ── UPDATE LAYER 1: BIG SIGNAL ──
+  document.getElementById('bigSig').className = 'big-signal ' + cls;
+  document.getElementById('bsCmd').textContent = cmd;
+  document.getElementById('bsDet').textContent = det;
+  document.getElementById('bsNet').textContent = 'Net Liq: $' + net.toFixed(0) + 'B';
+  document.getElementById('bsSig').textContent = cmd;
+  document.getElementById('bsMin').textContent = minScore;
+  document.getElementById('bsFsi').textContent = 'FSI: ' + fsi.toFixed(3) + ' ' + (fsi<0?'✅':'🚨');
+
+  // ── UPDATE TRINITY BARS ──
+  const nliqEl = document.getElementById('nliqNum');
+  nliqEl.textContent = '$' + net.toFixed(0) + 'B';
+  nliqEl.className = 'nliq-num ' + (net>2200?'bull':net>1900?'warn':'bear');
+  document.getElementById('nliqSub').textContent = net>2200?'↑ Above $2,200B threshold — selective deploy':net>1900?'→ $1,900–2,200B borderline — disciplined':'↓ Below $1,900B — maximum cash';
+  document.getElementById('barRes').style.width = Math.min(100,res/4000*100)+'%';
+  document.getElementById('barTga').style.width = Math.min(100,tga/1400*100)+'%';
+  document.getElementById('barRrp').style.width = Math.max(1,Math.min(100,rrp/500*100))+'%';
+  const np = Math.max(0,Math.min(100,(net-1500)/1500*100));
+  const nb = document.getElementById('barNet');
+  nb.style.width = np+'%';
+  nb.style.background = net>2200?'#00e855':net>1900?'#ff9100':'#ff2244';
+  document.getElementById('bvRes').textContent = '$'+res.toFixed(0)+'B';
+  document.getElementById('bvTga').textContent = '$'+tga.toFixed(0)+'B';
+  document.getElementById('bvRrp').textContent = '$'+rrp.toFixed(3)+'B';
+  const bvn = document.getElementById('bvNet');
+  bvn.textContent = '$'+net.toFixed(0)+'B';
+  bvn.style.color = net>2200?'#00e855':net>1900?'#ff9100':'#ff2244';
+
+  // ── UPDATE TRINITY CARDS ──
+  document.getElementById('tcRrp').textContent = '$'+rrp.toFixed(1)+'B';
+  document.getElementById('tcRes').textContent = '$'+(res/1000).toFixed(2)+'T';
+  document.getElementById('tcTga').textContent = '$'+tga.toFixed(0)+'B';
+
+  // ── UPDATE LAYER 3: FSI PANEL ──
+  document.getElementById('fsiBig').textContent = fsi.toFixed(3);
+  document.getElementById('fsiBig').className = 'fsi-big ' + fsiCls;
+  const fsiPill = document.getElementById('fsiPill');
+  if(fsi < 0 && fund <= 0 && safe <= 0){
+    fsiPill.textContent = '✅ SAFE — PROCEED'; fsiPill.className = 'fsi-pill fp-safe';
+  } else if(fund > 0 || safe > 0){
+    fsiPill.textContent = '⛔ PANIC SIGN — 50% CASH'; fsiPill.className = 'fsi-pill fp-dng';
+  } else {
+    fsiPill.textContent = '⛔ FSI > 0 — ABORT BUYS'; fsiPill.className = 'fsi-pill fp-dng';
+  }
+
+  const fCls = fund > 0 ? 's-dng' : fund > -0.2 ? 's-warn' : 's-safe';
+  const sCls = safe > 0 ? 's-dng' : safe > -0.2 ? 's-warn' : 's-safe';
+  document.getElementById('fundCard').className = 'sub-c '+fCls;
+  document.getElementById('fundVal').textContent = fund.toFixed(3);
+  document.getElementById('safeCard').className = 'sub-c '+sCls;
+  document.getElementById('safeVal').textContent = safe.toFixed(3);
+
+  // V4: Velocity card — live calculated
+  const velCls = velSpike ? 's-dng' : Math.abs(vel) > 0.1 ? 's-warn' : 's-safe';
+  document.getElementById('velCard').className = 'sub-c ' + velCls;
+  let velMsg = 'FSI stable. Vel: ' + (vel >= 0 ? '+' : '') + vel.toFixed(3) + '/5d. No spike.';
+  if(velSpike) velMsg = '🚨 VELOCITY SPIKE +' + vel.toFixed(3) + '/5d. Layer 4 FIRED. Reduce to 70%.';
+  else if(Math.abs(vel) > 0.1) velMsg = '⚠️ FSI moving ' + (vel>=0?'+':'') + vel.toFixed(3) + '/5d. Watch closely.';
+  document.getElementById('velText').textContent = velMsg;
+
+  // ── LAYER 2: CONVERGENCE ALERT in calendar area if active ──
+  const convEl = document.getElementById('convergenceAlert');
+  if(convEl){
+    convEl.style.display = convergence ? 'block' : 'none';
+    if(convergence) convEl.textContent = '⚠️ CONVERGENCE ACTIVE: Net Liq $' + net.toFixed(0) + 'B (↓ from $' + netPrev.toFixed(0) + 'B) while FSI rising (' + fsiPrev.toFixed(3) + ' → ' + fsi.toFixed(3) + '). Early Warning fires 2-3 weeks before crash.';
+  }
+
+  // ── GOD COMMANDS (5-section V4 format) ──
+  const cmds = genCmds(cls, fsiOverride, net, fsi, layer4Warning, fund, safe);
+  document.getElementById('cmdGrid').innerHTML = cmds.map((c,i)=>`
+    <div class="cmd-c">
+      <div class="cmd-n">0${i+1}</div>
+      <div class="cmd-a">${c.a}</div>
+      <div class="cmd-d">${c.d}</div>
+      <span class="cmd-tag ${c.t}">${c.tl}</span>
+    </div>
+  `).join('');
+
+  // ── TELEGRAM PREVIEW ──
+  document.getElementById('tgRrpPrev').textContent = '$'+rrp.toFixed(3)+'B';
+  document.getElementById('tgResPrev').textContent = '$'+res.toFixed(0)+'B';
+  document.getElementById('tgTgaPrev').textContent = '$'+tga.toFixed(0)+'B';
+  const tn = document.getElementById('tgNetPrev');
+  tn.textContent = '$'+net.toFixed(0)+'B';
+  tn.style.color = net>2200?'#4ade80':net>1900?'#fb923c':'#f87171';
+  const tc = document.getElementById('tgCmdPrev');
+  tc.textContent = tgCmd;
+  tc.style.color = cls==='bull'?'#4ade80':cls==='bear'||fsiOverride?'#f87171':'#fb923c';
+  document.getElementById('tgDetPrev').textContent = det.substring(0,80)+'...';
+  const tf = document.getElementById('tgFsiPrev');
+  tf.textContent = fsi.toFixed(3);
+  tf.style.color = fsi<0?'#4ade80':'#f87171';
+  document.getElementById('tgFundPrev').textContent = fund.toFixed(3);
+  document.getElementById('tgSafePrev').textContent = safe.toFixed(3);
+  if(cmds[0]) document.getElementById('tgA1').textContent = '1. '+cmds[0].a.substring(0,45);
+  if(cmds[1]) document.getElementById('tgA2').textContent = '2. '+cmds[1].a.substring(0,45);
+  if(cmds[2]) document.getElementById('tgA3').textContent = '3. '+cmds[2].a.substring(0,45);
+}
+function genCmds(cls, fsiOverride, net, fsi, layer4Warning, fund, safe){
+  if(fsiOverride) return [
+    {a:'MOVE TO MAXIMUM CASH — FSI OVERRIDE',d:'Sell speculative positions (GOD Score <75). Protect TSMC/ASML as core only.',t:'ctag-prot',tl:'🚨 EJECT'},
+    {a:'RAISE ALL STOP-LOSSES',d:'Set hard stops 5% below current on all positions. Do not average down.',t:'ctag-prot',tl:'🛡️ PROTECT'},
+    {a:'HOLD NTR THROUGH MAR 31 DIVIDEND',d:'Even in FSI override — collect the €0.55/share dividend. Mechanical. Free.',t:'ctag-hold',tl:'💰 DIVIDEND'},
+  ];
+  if(cls==='bull') return [
+    {a:'DEPLOY €700 INTO ASML — LIMIT €1,100',d:'GOD Score 87. Monopoly. Apr 15 earnings catalyst. Net Liq green light. 1 share = €1,100 target.',t:'ctag-buy',tl:'🟢 BUY'},
+    {a:'ADD PL 15 SHARES AT €28–30',d:'GOD Score 84. Defense satellite intelligence. Revenue +41% YoY. Backlog +80%. Entry below revised target.',t:'ctag-buy',tl:'🟢 BUY'},
+    {a:'HOLD NTR THROUGH MAR 31 DIVIDEND',d:'Ex-date Mar 31. ~15 shares × €0.55 = ~€8. Automatic. Do not sell before Tuesday.',t:'ctag-hold',tl:'💰 DIVIDEND'},
+  ];
+  if(cls==='warn'&&net>2200) return [
+    {a:'ASML LIMIT €1,100 — ARMED',d:'Current €1,133 — above target. Wait for dip. Apr 6 Iran deadline may create entry.',t:'ctag-snipe',tl:'🎯 SNIPE'},
+    {a:'HOLD NTR — COLLECT MAR 31 DIVIDEND',d:'Ex-date tomorrow. ~€8 free cash. Do not sell before collecting.',t:'ctag-hold',tl:'💰 DIVIDEND'},
+    {a:'REDUCE EXPOSURE BEFORE APRIL 10',d:'Tax Day Apr 15 will drain TGA massively. Reduce speculative positions by Apr 10.',t:'ctag-hold',tl:'⚠️ PREP'},
+  ];
+  return [
+    {a:'PROTECT DRY POWDER — DO NOT DEPLOY',d:'Net Liq below optimal. Hold for Apr 6 Iran or Apr 15 post-drain recovery.',t:'ctag-hold',tl:'🛡️ HOLD'},
+    {a:'HOLD NTR — COLLECT DIVIDEND',d:'Ex-date Mar 31. Free cash. Reassess position April 2.',t:'ctag-hold',tl:'💰 DIVIDEND'},
+    {a:'MONITOR FSI VELOCITY DAILY',d:`Current FSI ${fsi.toFixed(3)} — safe. If it crosses -0.3 in 5 days, early warning fires.`,t:'ctag-hold',tl:'👁️ WATCH'},
+  ];
+}
+
+// ── AUTO RUN ──
+runLiq();
+</script>
+</body>
+</html>
