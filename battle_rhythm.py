@@ -20,29 +20,25 @@ from typing import Dict
 
 import requests
 from openai import OpenAI
-from config import (
-    STOCKS,
-    OPENAI_API_KEY, PORTFOLIO, WATCHLIST, EARNINGS_CALENDAR,
-    TITAN_SYSTEM_URL, TIMEZONE, TELEGRAM_CHAT_ID, TITAN_BOT_TOKEN,
-)
+import config
 from market_data import (
-    fetch_stock_prices, fetch_market_snapshot, calculate_titan_k_index,
-    get_vix_regime, fetch_fx_rate,
+    fetch_stock_prices,
+    fetch_market_snapshot,
+    calculate_titan_k_index,
+    get_vix_regime,
+    fetch_fx_rate,
 )
-from config import WEIGHTS
-
-FUTURE_STATE_CATEGORIES = ["Intelligence", "Energy", "Space", "Bio-Engineering", "Robotics", "Infrastructure"]
-
-PORTFOLIO = {
-    "TR":        [s for s in STOCKS if s.get("broker") == "TR"        and s["status"] == "portfolio"],
-    "Kiwoom_US": [s for s in STOCKS if s.get("broker") == "Kiwoom_US" and s["status"] == "portfolio"],
-    "Kiwoom_KR": [s for s in STOCKS if s.get("broker") == "Kiwoom_KR" and s["status"] == "portfolio"],
-}
-WATCHLIST = [s for s in STOCKS if s["status"] == "watchlist"]
 
 logger = logging.getLogger("titan_k.battle_rhythm")
 
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(api_key=config.OPENAI_API_KEY)
+
+# config.DAILY_SCHEDULE / config.WEEKLY_SCHEDULE — same source as main.py scheduler
+logger.debug(
+    "Schedule aligned with config: %d daily + %d weekly briefing slots",
+    len(config.DAILY_SCHEDULE),
+    len(config.WEEKLY_SCHEDULE),
+)
 
 # ── Model selection ───────────────────────────────────────────────────────────
 FAST_MODEL = "gpt-4o-mini"   # cost-efficient for all briefings
@@ -60,6 +56,21 @@ GOD_MISSION = (
     "🔱 Belief: <b>INVINCIBLE</b>\n"
 )
 
+TEN_CRITERIA = """
+THE 10 GREATEST INVESTORS — QUANTIFIED CRITERIA (apply to every analysis):
+Gate 0: "Does this move GOD toward €115M by 2036?" — reject immediately if NO
+1. Graham Number = sqrt(22.5 × EPS × BVPS) — never pay above this
+2. ROIC > 25% — strong moat indicator (Buffett + Greenblatt)
+3. PEG < 1.0 — growth at reasonable price (Peter Lynch)
+4. Debt/Equity < 0.5 — financial fortress (Graham + Buffett)
+5. Earnings Yield (EBIT/EV) — higher = more value (Magic Formula)
+6. Correlation < 0.2 — Holy Grail diversification (Ray Dalio)
+7. NCAV Net-Net — buy if Market Cap < 66% of (Current Assets - Total Liabilities)
+8. Inventory Growth < Sales Growth — early warning flag (Lynch)
+9. Operating Margin Stability 10yr — pricing power = moat (Templeton + Munger)
+10. ETF Expense Ratio < 0.15% — cost is the enemy of returns (Bogle)
+"""
+
 
 # ══════════════════════════════════════════════════════════════════════════════
 # SHARED UTILITIES
@@ -67,7 +78,7 @@ GOD_MISSION = (
 
 def _berlin_now():
     import pytz
-    return datetime.now(pytz.timezone(TIMEZONE))
+    return datetime.now(pytz.timezone(config.TIMEZONE))
 
 
 def _is_weekday() -> bool:
@@ -90,7 +101,7 @@ def _build_header(title: str, ctx: Dict) -> str:
 def _build_footer() -> str:
     return (
         f"\n{'━' * 28}\n"
-        f"🔱 <a href=\"{TITAN_SYSTEM_URL}\">Open TITAN SYSTEM</a>"
+        f"🔱 <a href=\"{config.TITAN_SYSTEM_URL}\">Open TITAN SYSTEM</a>"
     )
 
 
@@ -114,16 +125,16 @@ def _gpt_call(system: str, user: str, max_tokens: int = 500, model: str = FAST_M
 def _fetch_live_context() -> Dict:
     logger.info("Fetching live market context...")
     all_tickers = set()
-    for broker, positions in PORTFOLIO.items():
+    for broker, positions in config.PORTFOLIO.items():
         for pos in positions:
             all_tickers.add(pos["ticker"])
-    for w in WATCHLIST:
+    for w in config.WATCHLIST:
         all_tickers.add(w["ticker"])
 
     prices = fetch_stock_prices(list(all_tickers))
     fx_rate = fetch_fx_rate()
     snapshot = fetch_market_snapshot()
-    composite = calculate_titan_k_index(snapshot, WEIGHTS)
+    composite = calculate_titan_k_index(snapshot, config.WEIGHTS)
 
     vix_val = snapshot.get("VIX", {}).get("value", 25)
     if isinstance(vix_val, (int, float)):
@@ -132,7 +143,7 @@ def _fetch_live_context() -> Dict:
         regime, deploy_pct, label = "UNKNOWN", 0, "?"
 
     portfolio_lines = []
-    for broker, positions in PORTFOLIO.items():
+    for broker, positions in config.PORTFOLIO.items():
         for pos in positions:
             t = pos["ticker"]
             p = prices.get(t, {})
@@ -142,7 +153,7 @@ def _fetch_live_context() -> Dict:
             )
 
     watchlist_lines = []
-    for w in WATCHLIST:
+    for w in config.WATCHLIST:
         p = prices.get(w["ticker"], {})
         watchlist_lines.append(
             f"{w['ticker']} ({w['name']}) | ${p.get('price','?')} | Entry:{w['entry']} | Score:{w.get('score','?')}/10"
@@ -162,7 +173,7 @@ def _fetch_live_context() -> Dict:
                 key_moves.append(f"  {direction} {ind} {d['value']} ({chg:+.1f}%)")
 
     today = _berlin_now().strftime("%Y-%m-%d")
-    earnings_today = [e for e in EARNINGS_CALENDAR if e["date"] == today]
+    earnings_today = [e for e in config.EARNINGS_CALENDAR if e["date"] == today]
 
     return {
         "prices": prices,
@@ -187,10 +198,10 @@ def _fetch_portfolio_news() -> Dict[str, list]:
     """Fetch latest headlines for every portfolio + watchlist stock via yfinance."""
     import yfinance as yf
     all_tickers = set()
-    for broker, positions in PORTFOLIO.items():
+    for broker, positions in config.PORTFOLIO.items():
         for pos in positions:
             all_tickers.add(pos["ticker"])
-    for w in WATCHLIST:
+    for w in config.WATCHLIST:
         all_tickers.add(w["ticker"])
 
     news_by_ticker = {}
@@ -327,11 +338,11 @@ def _scan_premarket(prices: Dict) -> str:
 
     movers = []
     all_tickers = []
-    for broker, positions in PORTFOLIO.items():
+    for broker, positions in config.PORTFOLIO.items():
         for pos in positions:
             if ".KS" not in pos["ticker"]:  # US stocks only
                 all_tickers.append(pos["ticker"])
-    for w in WATCHLIST:
+    for w in config.WATCHLIST:
         if ".KS" not in w["ticker"]:
             all_tickers.append(w["ticker"])
 
@@ -359,28 +370,38 @@ def _scan_premarket(prices: Dict) -> str:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# LAYER 3 — 30-MIN NEWS PULSE (background task)
+# LAYER 3 — NEWS PULSE (GPT synthesis + SO WHAT)
 # ══════════════════════════════════════════════════════════════════════════════
 
 _last_seen_headlines: Dict[str, set] = {}
 
 
 def run_news_pulse():
-    """Runs every 2 hours. Synthesizes new headlines into ONE actionable brief."""
+    """Fetch new portfolio headlines; synthesize one SO WHAT brief via GPT (see schedule interval)."""
     import pytz
-    berlin = pytz.timezone(TIMEZONE)
+
+    if not logging.root.handlers:
+        logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
+
+    berlin = pytz.timezone(config.TIMEZONE)
     now = datetime.now(berlin)
+
     if now.weekday() >= 5:
         return
-    hour = now.hour + now.minute / 60
-    if hour < 15.5 or hour > 23.1:
+    hour = now.hour + now.minute / 60.0
+    start_h = float(getattr(config, "NEWS_PULSE_START_HOUR", 7.0))
+    end_h = float(getattr(config, "NEWS_PULSE_END_HOUR", 23.5))
+    if hour < start_h or hour > end_h:
         return
+
     logger.info("Running news pulse synthesis...")
+
     try:
         fresh_news = _fetch_portfolio_news()
     except Exception as e:
-        logger.error(f"News pulse fetch failed: {e}")
+        logger.error("News pulse fetch failed: %s", e)
         return
+
     new_items = []
     for ticker, headlines in fresh_news.items():
         if ticker not in _last_seen_headlines:
@@ -390,9 +411,11 @@ def run_news_pulse():
             _last_seen_headlines[ticker].update(new_headlines)
             for h in new_headlines[:2]:
                 new_items.append(f"{ticker}: {h[:120]}")
+
     if not new_items:
         logger.info("News pulse: no new headlines")
         return
+
     try:
         headline_block = chr(10).join(new_items[:20])
         system = (
@@ -420,6 +443,7 @@ def run_news_pulse():
             logger.info("News pulse: nothing actionable")
             return
         from telegram_bot import send_telegram
+
         msg = (
             f"⚡ <b>PULSE | {now.strftime('%H:%M')} Berlin</b>"
             f"{chr(10)}{'━' * 22}{chr(10)}{chr(10)}"
@@ -427,18 +451,23 @@ def run_news_pulse():
             f"{chr(10)}{chr(10)}<i>{len(new_items)} headlines synthesized</i>"
         )
         send_telegram(msg)
-        logger.info(f"News pulse sent: {len(new_items)} headlines synthesized")
+        logger.info("News pulse sent: %s headlines synthesized", len(new_items))
     except Exception as e:
-        logger.error(f"News pulse GPT failed: {e}")
+        logger.error("News pulse GPT failed: %s", e)
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# TITAN MESSENGER — Minerva sends orders to TITAN
+# ══════════════════════════════════════════════════════════════════════════════
 
 
 def _send_to_titan(message: str):
     """Send a message to GOD's Telegram using TITAN's bot token."""
-    if not TITAN_BOT_TOKEN or not TELEGRAM_CHAT_ID:
+    if not config.TITAN_BOT_TOKEN or not config.TELEGRAM_CHAT_ID:
         logger.warning("TITAN_BOT_TOKEN or TELEGRAM_CHAT_ID not set — skipping TITAN message")
         return
     try:
-        url = f"https://api.telegram.org/bot{TITAN_BOT_TOKEN}/sendMessage"
+        url = f"https://api.telegram.org/bot{config.TITAN_BOT_TOKEN}/sendMessage"
         chunks = []
         if len(message) <= 4096:
             chunks = [message]
@@ -457,7 +486,7 @@ def _send_to_titan(message: str):
 
         for chunk in chunks:
             requests.post(url, json={
-                "chat_id": TELEGRAM_CHAT_ID,
+                "chat_id": config.TELEGRAM_CHAT_ID,
                 "text": chunk,
                 "parse_mode": "HTML",
                 "disable_web_page_preview": True,
@@ -532,23 +561,24 @@ def _generate_titan_orders(ctx: Dict, blog_analyses: list, scores_summary: str, 
 
     # Generate TITAN orders via GPT
     orders_analysis = _gpt_call(
-        system="""You are Minerva briefing TITAN — GOD's autonomous investment strategist.
+        system=f"""You are Minerva briefing TITAN — GOD's autonomous investment strategist.
 GOD's mission: ₩170,000,000,000 (~€115M) by 2036. ~47% CAGR required.
-TITAN Filter (Gate 0): "Does this position move GOD toward €115M by 2036?"
+{TEN_CRITERIA}
 
 Generate specific, actionable orders for TITAN today.
 FORMAT: Direct commands. Max 15 words per bullet. No fluff.
 
 Structure:
 🔍 RESEARCH TODAY
-• [specific things to search and verify]
+• [specific stocks or themes to research — reference 10 criteria]
 
-📊 ANALYZE
-• [specific positions or candidates to run ARCHITECT gate on]
+📊 ANALYZE — RUN FULL ARCHITECT GATE
+• [specific positions or new candidates to screen]
+• For each: Gate 0 + Graham + ROIC + PEG + D/E + NCAV + margins
 
 🎯 OUTPUT REQUIRED BY 14:00 BERLIN
-• [exact format of what TITAN must deliver]
-• Include: stock name, Gate 0 verdict, gates passed, buy/skip recommendation""",
+• Stock name | Gate 0 | gates passed/10 | BUY/HOLD/SKIP
+• Include: entry price, position size suggestion, correlation to existing portfolio""",
         user=f"""TODAY'S DATA:
 {quant_content[:2000]}
 
@@ -648,7 +678,7 @@ def generate_master_daily() -> str:
         system=f"""You are Minerva. 07:00 Berlin master daily brief. Weekday: {weekday}.
 FORMAT: Bullet points. Max 15 words per bullet. Phone reading.
 GOD's mission: ₩170,000,000,000 (~€115M) by 2036. ~47% CAGR required.
-Gate 0: "Does this position move GOD toward €115M by 2036?"
+{TEN_CRITERIA}
 
 Structure:
 🌍 OVERNIGHT
@@ -656,10 +686,11 @@ Structure:
 
 💼 PORTFOLIO IMPACT
 • [only affected positions — TICKER → event → action]
-• Flag any ARCHITECT gate changes
+• Flag any position failing Gate 0 or ARCHITECT criteria
 
 🏛 SCORE ALERTS
 • [any position whose score should change today and why]
+• Reference specific criteria: Graham/ROIC/PEG/D-E
 
 📋 TODAY'S ACTION PLAN
 • [3-5 specific actions with prices]
@@ -680,7 +711,7 @@ EARNINGS TODAY: {', '.join(e['ticker'] + ' ' + e['timing'] for e in ctx['earning
 
     # Extract scores summary for TITAN
     scores_summary = ""
-    for broker, positions in PORTFOLIO.items():
+    for broker, positions in config.PORTFOLIO.items():
         for pos in positions:
             if pos.get("action") and ("EXIT" in pos.get("action","") or "SELL" in pos.get("action","")):
                 scores_summary += f"⚠️ {pos['ticker']}: {pos.get('action','')}\n"
@@ -756,6 +787,121 @@ EARNINGS TODAY: {', '.join(e['ticker'] + ' ' + e['timing'] for e in ctx['earning
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# BRIEFING: xiaomi_earnings (12:30 Berlin — aligns with HKT 19:30 earnings call)
+# ══════════════════════════════════════════════════════════════════════════════
+
+def generate_xiaomi_earnings() -> str:
+    """12:30 Berlin — live read on XIACY / Xiaomi earnings + portfolio touchpoints."""
+    ctx = _fetch_live_context()
+    catalyst_section = ""
+    try:
+        portfolio_news = _fetch_portfolio_news()
+        catalyst_alert = _detect_catalysts(ctx["prices"], portfolio_news)
+        if catalyst_alert:
+            catalyst_section = catalyst_alert + "\n\n"
+    except Exception as e:
+        logger.error(f"Xiaomi earnings pulse news scan failed: {e}")
+    xi_news = ""
+    try:
+        import yfinance as yf
+        t = yf.Ticker("XIACY")
+        items = t.news or []
+        if items:
+            titles = []
+            for item in items[:5]:
+                c = item.get("content", {})
+                titles.append(c.get("title", item.get("title", ""))[:120])
+            xi_news = "\n".join("  • " + x for x in titles if x)
+    except Exception as e:
+        logger.debug(f"XIACY headline fetch: {e}")
+    analysis = _gpt_call(
+        system="""You are Minerva. Xiaomi (XIACY) earnings context — call live around HKT 19:30.
+FORMAT: Bullet points. Max 15 words per bullet.
+GOD's mission: ₩170,000,000,000 by 2036.
+
+Structure:
+📱 XIACY / XIAOMI — EARNINGS LIVE
+• [key numbers or themes if inferable from context]
+• [guidance / IoT-auto-EV angle in one line]
+
+💼 PORTFOLIO TOUCHPOINTS
+• [how XIACY result affects PLTR, semis, or ADR risk appetite]
+
+⚡ ACTIONS NEXT 6 HOURS
+• [specific: hold/add/trim/watch levels]""",
+        user=f"""PORTFOLIO:
+{ctx['portfolio_text']}
+
+WATCHLIST:
+{ctx['watchlist_text']}
+
+MACRO:
+{ctx['key_moves']}
+
+RECENT XIACY HEADLINES (yfinance):
+{xi_news or '(none fetched)'}""",
+        max_tokens=500,
+    )
+    msg = _build_header("📱 XIAOMI EARNINGS LIVE (HKT 19:30)", ctx)
+    msg += catalyst_section
+    msg += analysis
+    msg += "\n\n<b>📊 KEY MOVES</b>\n" + ctx["key_moves"]
+    msg += _build_footer()
+    return msg
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# BRIEFING: hk_deep_pulse (18:00 Berlin — HK midnight leak / grey-market read-through)
+# ══════════════════════════════════════════════════════════════════════════════
+
+def generate_hk_deep_pulse() -> str:
+    """18:00 Berlin — Asia leak window + grey-market / ADR read-through (XIACY focus)."""
+    ctx = _fetch_live_context()
+    catalyst_section = ""
+    try:
+        portfolio_news = _fetch_portfolio_news()
+        catalyst_alert = _detect_catalysts(ctx["prices"], portfolio_news)
+        if catalyst_alert:
+            catalyst_section = catalyst_alert + "\n\n"
+    except Exception as e:
+        logger.error(f"HK deep-pulse news scan failed: {e}")
+    analysis = _gpt_call(
+        system="""You are Minerva. 18:00 Berlin = HK late night / next-day leak window for Asia ADRs.
+FORMAT: Bullet points. Max 15 words per bullet.
+Focus: Xiaomi (XIACY) leaks, grey-market hints, HK/China tape read-through to US ADRs.
+
+Structure:
+🌙 HK DEEP-PULSE — LEAKS & GREY MARKET
+• [what to watch for from HK social/broker chatter — no fabrication]
+• [if no fresh leaks: say "no verified leaks — watch US futures"]
+
+📱 XIACY / CHINA ADR BRIDGE
+• [how HK sentiment might hit XIACY US session tonight]
+
+🏦 INSTITUTIONAL / FLOW
+• [block trades, ADR volume, unusual options if inferable]
+
+⚡ ACTION BEFORE US CLOSE
+• [one clear instruction for GOD]""",
+        user=f"""PORTFOLIO:
+{ctx['portfolio_text']}
+
+WATCHLIST:
+{ctx['watchlist_text']}
+
+MACRO:
+{ctx['key_moves']}""",
+        max_tokens=550,
+    )
+    msg = _build_header("🌙 HK DEEP-PULSE (XIACY / GREY MARKET)", ctx)
+    msg += catalyst_section
+    msg += analysis
+    msg += "\n\n<b>📊 LIVE MOVES</b>\n" + ctx["key_moves"]
+    msg += _build_footer()
+    return msg
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # BRIEFING: us_midday (18:00)
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -820,9 +966,10 @@ def generate_us_close() -> str:
     """23:00 — Full daily review + tomorrow prep."""
     ctx = _fetch_live_context()
     analysis = _gpt_call(
-        system="""You are Minerva. US market just closed (23:00 Berlin).
+        system=f"""You are Minerva. US market just closed (23:00 Berlin).
 FORMAT: Bullet points. Max 15 words per bullet.
 GOD's mission: ₩170,000,000,000 by 2036. ~47% CAGR required.
+{TEN_CRITERIA}
 
 Structure:
 🏁 MARKET CLOSE
@@ -836,7 +983,7 @@ Structure:
 
 📋 SCORE UPDATE
 • [any position whose ARCHITECT score should change?]
-• [positions needing attention tomorrow]
+• [which criteria changed: Graham/ROIC/PEG/margins?]
 
 🌅 TOMORROW PREP
 • [1-2 specific things to prepare]
@@ -874,10 +1021,15 @@ def generate_briefing(briefing_id: str) -> str:
         logger.info(f"Skipping {briefing_id} — weekend")
         return None
 
-    if briefing_id == "master_daily":
+    if briefing_id in ("master_daily", "morning_macro"):
         return generate_master_daily()
-    elif briefing_id == "us_premarket":
+    elif briefing_id in ("us_premarket", "us_open"):
+        # config DAILY_SCHEDULE uses us_open at 15:30 — same briefing as legacy us_premarket
         return generate_us_premarket()
+    elif briefing_id == "xiaomi_earnings":
+        return generate_xiaomi_earnings()
+    elif briefing_id == "hk_deep_pulse":
+        return generate_hk_deep_pulse()
     elif briefing_id == "us_midday":
         return generate_us_midday()
     elif briefing_id == "us_close":
@@ -888,3 +1040,7 @@ def generate_briefing(briefing_id: str) -> str:
     else:
         logger.error(f"Unknown briefing_id: {briefing_id}")
         return None
+
+
+if __name__ == "__main__":
+    run_news_pulse()

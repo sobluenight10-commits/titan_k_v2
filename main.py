@@ -25,7 +25,18 @@ from pathlib import Path
 import schedule
 import pytz
 
-from config import TIMEZONE, OPENAI_API_KEY, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, DATA_FILE
+import config as app_config
+
+from config import (
+    TIMEZONE,
+    OPENAI_API_KEY,
+    TELEGRAM_BOT_TOKEN,
+    TELEGRAM_CHAT_ID,
+    DATA_FILE,
+    IMPORTANT_KEYWORDS,
+    is_institutional_signal,
+    BLOG_FETCH_INTERVAL_MINUTES,
+)
 
 # ── Logging ───────────────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -38,6 +49,9 @@ logging.basicConfig(
     ],
 )
 logger = logging.getLogger("titan_k.main")
+
+# Institutional headline filter: IMPORTANT_KEYWORDS + is_institutional_signal live in config.py
+# (imported above). News pulse in battle_rhythm.py uses them to cut Telegram noise.
 
 # ── Process Lock (prevents duplicate bots) ────────────────────────────────────
 LOCK_FILE = Path("titan_k.lock")
@@ -214,11 +228,24 @@ def _setup_schedule():
             run_briefing, briefing_id, description
         )
 
-    # Layer 3 — 30-min news pulse during US session
+    # Layer 3 — news pulse (interval + Berlin window from config, see NEWS_PULSE_*)
     from battle_rhythm import run_news_pulse
-    schedule.every(120).minutes.do(run_news_pulse)
 
-    logger.info(f"Registered {len(DAILY_SCHEDULE)} daily + {len(WEEKLY_SCHEDULE)} weekly briefings + 30min news pulse (Berlin time)")
+    pulse_min = int(getattr(app_config, "NEWS_PULSE_INTERVAL_MINUTES", 120))
+    pulse_min = max(15, pulse_min)
+    schedule.every(pulse_min).minutes.do(run_news_pulse)
+    p_start = getattr(app_config, "NEWS_PULSE_START_HOUR", 7.0)
+    p_end = getattr(app_config, "NEWS_PULSE_END_HOUR", 23.5)
+
+    logger.info(
+        "Registered %s daily + %s weekly + news pulse every %s min "
+        "(Berlin window %s–%s)",
+        len(DAILY_SCHEDULE),
+        len(WEEKLY_SCHEDULE),
+        pulse_min,
+        p_start,
+        p_end,
+    )
 
 
 def _berlin_now():
@@ -262,10 +289,17 @@ def start_full_system():
     # Notify Telegram that Minerva is online (so user knows alarms will work)
     try:
         from telegram_bot import send_telegram
-        send_telegram(
-            "🔱 <b>Minerva ONLINE</b>\n"
-            "Send /start for commands. Olympus 06:45, Blog 07:00 Berlin. New blog → alert every 15 min."
-        )
+        lines = [
+            "🔱 <b>Minerva ONLINE</b>",
+            "Send /start for commands.",
+            "",
+            "<b>Berlin (weekdays)</b>",
+            "· 07:00 Morning · 16:30 US Open · 19:00 Interim · 23:30 US Close",
+            f"· News pulse every {int(getattr(app_config, 'NEWS_PULSE_INTERVAL_MINUTES', 120))} min "
+            f"({getattr(app_config, 'NEWS_PULSE_START_HOUR', 7)}–{getattr(app_config, 'NEWS_PULSE_END_HOUR', 23.5)}h, filtered headlines)",
+            f"· Blog RSS every {BLOG_FETCH_INTERVAL_MINUTES} min (ranto28)",
+        ]
+        send_telegram("\n".join(lines))
     except Exception as e:
         logger.warning(f"Startup Telegram ping failed: {e}")
 
